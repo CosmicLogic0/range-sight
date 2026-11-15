@@ -1,0 +1,40 @@
+plugins {
+    id 'java'
+}
+
+base {
+    archivesName = 'rangesight-paper'
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        name = 'PaperMC'
+        url = 'https://repo.papermc.io/repository/maven-public/'
+    }
+}
+
+dependencies {
+    // Compiled against the 1.13.2 API on purpose: it's the oldest "modern" API, so the same jar
+    // runs from Paper 1.12.2 (guarded code paths) up to the newest Paper (26.x).
+    compileOnly 'com.destroystokyo.paper:paper-api:1.13.2-R0.1-SNAPSHOT'
+}
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(17)
+    withSourcesJar()
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    // Java 8 bytecode so 1.12.2 / 1.16.5 servers (Java 8) can load it too.
+    options.release = 8
+}
+
+processResources {
+    def props = [version: version]
+    inputs.properties props
+    filesMatching('plugin.yml') {
+        expand props
+    }
+}

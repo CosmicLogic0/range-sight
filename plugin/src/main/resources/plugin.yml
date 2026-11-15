@@ -1,0 +1,16 @@
+name: RangeSight
+version: '${version}'
+main: com.cosmiclogic.rangesight.paper.RangeSightPlugin
+api-version: '1.13'
+author: CosmicLogic
+website: https://github.com/CosmicLogic0/range-sight
+description: See invisible game ranges with /range. Outlines are shown only to you.
+depend: [LogicLib]
+commands:
+  range:
+    description: Show or hide range outlines (only you see them).
+    usage: /range [beacon|conduit|spawner|raid|sculk|spawnchunks|all|off]
+    permission: rangesight.use
+permissions:
+  rangesight.use:
+    default: true
