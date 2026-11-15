@@ -25,7 +25,7 @@ final class SelfTest {
         Location spawn = world.getSpawnLocation();
         int x = spawn.getBlockX() + 2000;
         int z = spawn.getBlockZ() + 2000;
-        int y = 150;
+        int y = 200;
         world.getChunkAt(x >> 4, z >> 4).load(true);
 
         List<Block> placed = new ArrayList<>();
@@ -87,7 +87,10 @@ final class SelfTest {
 
         List<String> found = new ArrayList<>();
         for (RangeDrawer.Source source : drawer.findSources(world, new Location(world, x, y, z), false)) {
-            found.add(source.toString());
+            // Only count what the test built (real dungeons and mineshafts nearby have spawners too).
+            if (source.cy >= y - 60) {
+                found.add(source.toString());
+            }
         }
 
         int[] chunks = RangeDrawer.spawnChunks(world);

@@ -118,7 +118,7 @@ jobs:
           set -o pipefail
           mkdir -p logs
           cd mod && chmod +x gradlew
-          ./gradlew build --stacktrace 2>&1 | tee ../logs/mod-build.log
+          ./gradlew build --continue --stacktrace 2>&1 | tee ../logs/mod-build.log
       - uses: actions/upload-artifact@v4
         with:
           name: mod-jars

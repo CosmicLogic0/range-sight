@@ -1,5 +1,6 @@
 package com.cosmiclogic.rangesight.client;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -32,7 +33,10 @@ public final class RangeSightForgeClient {
 
     private static void onRenderLevel(RenderLevelStageEvent event) {
         if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS) {
-            RangeClient.onRender(event.getPoseStack(), event.getCamera().getPosition());
+            // Forge 52 hands over the camera rotation as a matrix, not a PoseStack.
+            PoseStack poseStack = new PoseStack();
+            poseStack.mulPose(event.getPoseStack());
+            RangeClient.onRender(poseStack, event.getCamera().getPosition());
         }
     }
 }
