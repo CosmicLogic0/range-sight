@@ -1,0 +1,17 @@
+{
+  "key.categories.rangesight": "Range Sight",
+  "key.rangesight.beacon": "Toggle beacon range",
+  "key.rangesight.conduit": "Toggle conduit range",
+  "key.rangesight.spawner": "Toggle spawner range",
+  "key.rangesight.raid": "Toggle raid range",
+  "key.rangesight.sculk": "Toggle sculk sensor and shrieker range",
+  "key.rangesight.spawn_chunks": "Toggle spawn chunks",
+  "key.rangesight.all": "Toggle all ranges",
+  "rangesight.all": "All ranges",
+  "rangesight.type.beacon": "Beacon range",
+  "rangesight.type.conduit": "Conduit range",
+  "rangesight.type.spawner": "Spawner range",
+  "rangesight.type.raid": "Raid range",
+  "rangesight.type.sculk": "Sculk range",
+  "rangesight.type.spawn_chunks": "Spawn chunks"
+}

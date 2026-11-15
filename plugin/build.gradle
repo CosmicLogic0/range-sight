@@ -18,6 +18,16 @@ dependencies {
     // Compiled against the 1.13.2 API on purpose: it's the oldest "modern" API, so the same jar
     // runs from Paper 1.12.2 (guarded code paths) up to the newest Paper (26.x).
     compileOnly 'com.destroystokyo.paper:paper-api:1.13.2-R0.1-SNAPSHOT'
+    // LogicLib for Paper (read only): CI builds it from CosmicLogic0/logiclib-paper into libs/.
+    compileOnly fileTree(dir: 'libs', include: '*.jar')
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+test {
+    useJUnitPlatform()
+    testLogging { events 'passed', 'failed'; exceptionFormat 'full' }
 }
 
 java {
