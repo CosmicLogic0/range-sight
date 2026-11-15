@@ -1,0 +1,3 @@
+# CurseForge project IDs (used by the upload workflow)
+mod=1808901
+plugin=1808906
