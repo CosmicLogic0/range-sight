@@ -1,0 +1,59 @@
+// Range Sight for Forge, Minecraft 26.x (26.1, 26.2, 26.3). Same build setup as Block Blueprint's Forge 26 port.
+// Sources: this loader's glue first, then the 26.x versions of the version-specific files (../common),
+// then the shared code of the main build (../../common). The first copy of a file wins.
+plugins {
+    id 'java'
+    id 'net.minecraftforge.gradle' version '[7.0.17,8)'
+}
+def mcv = project.minecraft_version
+version = project.mod_version
+group = 'com.cosmiclogic.rangesight'
+base { archivesName = "rangesight-forge-${mcv}" }
+java.toolchain.languageVersion = JavaLanguageVersion.of(25)
+println "Range Sight (Forge): Minecraft ${mcv}, Forge ${project.forge_version}"
+
+minecraft {
+    runs {
+        configureEach { workingDir = layout.projectDirectory.dir('run') }
+        register('client')
+    }
+}
+repositories {
+    minecraft.mavenizer(it)
+    maven fg.forgeMaven
+    maven fg.minecraftLibsMaven
+    mavenCentral()
+}
+dependencies {
+    implementation minecraft.dependency("net.minecraftforge:forge:${mcv}-${project.forge_version}")
+}
+
+def shared = '../../common/src/main'
+def gen = layout.buildDirectory.dir('gen-src'), res = layout.buildDirectory.dir('gen-res')
+tasks.register('rsSources', Sync) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    if (mcv.startsWith('26.1')) from('src/java-26.1')
+    from('src/java')
+    from('../common/java')
+    from("${shared}/java")
+    into gen
+    inputs.property 'mc', mcv
+}
+def mcRange = project.findProperty('mc_range') ?: "[${mcv}]"
+def forgeMajor = (project.forge_version.split('\\.')[0]) as int
+tasks.register('rsResources', Sync) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from('src/res')
+    from("${shared}/resources") { exclude 'pack.mcmeta' }
+    into res
+    inputs.property 'version', project.mod_version
+    inputs.property 'mcRange', mcRange
+    filesMatching('META-INF/mods.toml') { expand 'version': project.mod_version, 'mcRange': mcRange, 'forgeMajor': forgeMajor }
+}
+sourceSets.main.java.srcDirs = [gen]
+sourceSets.main.resources.srcDirs = [res]
+compileJava.dependsOn rsSources
+processResources.dependsOn rsResources
+tasks.matching { it.name == 'sourcesJar' }.configureEach { dependsOn rsSources, rsResources }
+tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8'; options.release = 25 }
+jar { manifest { attributes 'MixinConfigs': 'rangesight.mixins.json' } }

@@ -13,5 +13,6 @@
   "rangesight.type.spawner": "Spawner range",
   "rangesight.type.raid": "Raid range",
   "rangesight.type.sculk": "Sculk range",
-  "rangesight.type.spawn_chunks": "Spawn chunks"
+  "rangesight.type.spawn_chunks": "Spawn chunks",
+  "key.category.rangesight.main": "Range Sight"
 }

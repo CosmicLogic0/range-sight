@@ -1,0 +1,47 @@
+// Range Sight for NeoForge, Minecraft 26.x (26.1, 26.2, 26.3). Same build setup as Block Blueprint's NeoForge 26 port.
+// Sources: this loader's glue first, then the 26.x versions of the version-specific files (../common),
+// then the shared code of the main build (../../common). The first copy of a file wins.
+plugins {
+    id 'java'
+    id 'net.neoforged.moddev' version '2.0.148'
+}
+def mcv = project.minecraft_version
+version = project.mod_version
+group = 'com.cosmiclogic.rangesight'
+base { archivesName = "rangesight-neoforge-${mcv}" }
+java.toolchain.languageVersion = JavaLanguageVersion.of(25)
+println "Range Sight (NeoForge): Minecraft ${mcv}, NeoForge ${project.neo_version}"
+
+neoForge {
+    version = project.neo_version
+    runs { client { client() } }
+    mods { rangesight { sourceSet(sourceSets.main) } }
+}
+
+def shared = '../../common/src/main'
+def gen = layout.buildDirectory.dir('gen-src'), res = layout.buildDirectory.dir('gen-res')
+tasks.register('rsSources', Sync) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    if (mcv.startsWith('26.1')) from('src/java-26.1')
+    from('src/java')
+    from('../common/java')
+    from("${shared}/java")
+    into gen
+    inputs.property 'mc', mcv
+}
+def mcRange = project.findProperty('mc_range') ?: "[${mcv}]"
+tasks.register('rsResources', Sync) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from('src/res')
+    from("${shared}/resources") { exclude 'pack.mcmeta' }
+    into res
+    inputs.property 'version', project.mod_version
+    inputs.property 'mcRange', mcRange
+    filesMatching('META-INF/neoforge.mods.toml') { expand 'version': project.mod_version, 'mcRange': mcRange }
+}
+sourceSets.main.java.srcDirs = [gen]
+sourceSets.main.resources.srcDirs = [res]
+compileJava.dependsOn rsSources
+processResources.dependsOn rsResources
+tasks.matching { it.name in ['sourcesJar', 'neoForgeIdeSync'] }.configureEach { dependsOn rsSources, rsResources }
+tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8'; options.release = 25 }

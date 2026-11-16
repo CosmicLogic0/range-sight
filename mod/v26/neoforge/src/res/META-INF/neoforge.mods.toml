@@ -1,0 +1,29 @@
+modLoader = "javafml"
+loaderVersion = "[1,)"
+license = "All Rights Reserved"
+issueTrackerURL = "https://github.com/CosmicLogic0/range-sight/issues"
+
+[[mods]]
+modId = "rangesight"
+version = "${version}"
+displayName = "Range Sight"
+authors = "CosmicLogic"
+displayURL = "https://github.com/CosmicLogic0/range-sight"
+logoFile = "rangesight.png"
+description = """
+See invisible ranges: beacons, conduits, spawners, raids, sculk sensors and shriekers, each with its own color and toggle key.
+"""
+
+[[dependencies.rangesight]]
+modId = "neoforge"
+type = "required"
+versionRange = "[26,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.rangesight]]
+modId = "minecraft"
+type = "required"
+versionRange = "${mcRange}"
+ordering = "NONE"
+side = "BOTH"

@@ -32,6 +32,8 @@ public final class RangeConfig {
     public int scanChunks = 6;
     /** Line width in pixels. */
     public float lineWidth = 2.0f;
+    /** Automatic test only (CI): builds a beacon in single player and checks it is found. Never saved. */
+    public boolean selfTest;
 
     public RangeConfig(Path configDir) {
         this.file = configDir.resolve(RangeSight.MOD_ID + ".json");
@@ -75,6 +77,9 @@ public final class RangeConfig {
                 JsonObject root = JsonParser.parseString(Files.readString(file, StandardCharsets.UTF_8)).getAsJsonObject();
                 if (root.has("scanChunks")) {
                     scanChunks = Math.max(1, Math.min(16, root.get("scanChunks").getAsInt()));
+                }
+                if (root.has("selfTest")) {
+                    selfTest = root.get("selfTest").getAsBoolean();
                 }
                 if (root.has("lineWidth")) {
                     lineWidth = Math.max(1f, Math.min(10f, root.get("lineWidth").getAsFloat()));

@@ -194,7 +194,7 @@ jobs:
           find jars -name "rangesight-${{ matrix.loader }}-${MC}-*.jar" ! -name "*-sources.jar" ! -name "*-javadoc.jar" -exec cp {} run/mods/ \;
           ls run/mods
           cat > run/config/rangesight.json <<'EOF'
-          {"types":{"beacon":{"enabled":true},"conduit":{"enabled":true},"spawner":{"enabled":true},
+          {"selfTest":true,"types":{"beacon":{"enabled":true},"conduit":{"enabled":true},"spawner":{"enabled":true},
                     "raid":{"enabled":true},"sculk":{"enabled":true},"spawn_chunks":{"enabled":true}}}
           EOF
       - uses: actions/setup-java@v4
@@ -213,7 +213,7 @@ jobs:
           LOG=run/logs/latest.log
           grep -E "Range Sight (loaded|client ready|drawing|rendered)" "$LOG" || true
           grep -q "Range Sight client ready" "$LOG" || { echo "::error::Range Sight client did not start"; exit 1; }
-          grep -q "Range Sight drawing" "$LOG" || { echo "::error::Range Sight found nothing to draw (spawn chunks should be there)"; exit 1; }
+          grep -q "Range Sight client self-test PASS" "$LOG" || { echo "::error::client self-test did not pass"; grep "self-test" "$LOG"; exit 1; }
           grep -q "Range Sight rendered its first frame" "$LOG" || { echo "::error::Range Sight never drew a frame"; exit 1; }
           echo "PASS: client scanned and drew outlines."
       - name: Keep log
@@ -225,9 +225,159 @@ jobs:
           name: log-mod-client-${{ matrix.loader }}
           path: logs/
 
+  # ---------------------------------------------------------------- Mod on 26.x (mod/v26)
+  mod26-build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        mc: ["26.3", "26.2", "26.1.2"]
+        loader: [forge, neoforge]
+    name: mod26-build (${{ matrix.loader }} ${{ matrix.mc }})
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 25
+      - name: Find the newest ${{ matrix.loader }} for ${{ matrix.mc }}
+        id: v
+        run: |
+          if [ "${{ matrix.loader }}" = "forge" ]; then
+            F=$(curl -s https://maven.minecraftforge.net/net/minecraftforge/forge/maven-metadata.xml | grep -o "<version>${{ matrix.mc }}-[^<]*</version>" | sed 's/<[^>]*>//g; s/^${{ matrix.mc }}-//' | tail -1)
+            echo "args=-Pforge_version=$F" >> "$GITHUB_OUTPUT"
+          else
+            P="${{ matrix.mc }}"; case "$P" in *.*.*) ;; *) P="$P.0" ;; esac
+            F=$(curl -s https://maven.neoforged.net/releases/net/neoforged/neoforge/maven-metadata.xml | grep -oE "<version>$P\.[0-9]+(-beta)?</version>" | sed 's/<[^>]*>//g' | sort -V | tail -1)
+            echo "args=-Pneo_version=$F" >> "$GITHUB_OUTPUT"
+          fi
+          echo "Loader version: $F"; [ -n "$F" ] || { echo "::error::no ${{ matrix.loader }} for ${{ matrix.mc }}"; exit 1; }
+          echo "loader=$F" >> "$GITHUB_OUTPUT"
+      - name: Build
+        working-directory: mod/v26/${{ matrix.loader }}
+        run: |
+          set -o pipefail
+          mkdir -p ../../../logs
+          chmod +x gradlew
+          ./gradlew build --no-daemon --stacktrace -Pminecraft_version=${{ matrix.mc }} ${{ steps.v.outputs.args }} 2>&1 | tee ../../../logs/mod26-build-${{ matrix.loader }}-${{ matrix.mc }}.log
+      - name: Keep jar + loader version
+        run: |
+          mkdir -p out
+          find mod/v26/${{ matrix.loader }}/build/libs -name "*.jar" ! -name "*-sources.jar" -exec cp {} out/ \;
+          echo "${{ steps.v.outputs.loader }}" > out/loader-version.txt
+          ls out
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mod26-${{ matrix.loader }}-${{ matrix.mc }}
+          path: out/
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: log-mod26-build-${{ matrix.loader }}-${{ matrix.mc }}
+          path: logs/
+
+  mod26-server-test:
+    needs: mod26-build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        mc: ["26.3", "26.2", "26.1.2"]
+        loader: [forge, neoforge]
+    name: mod26-server-test (${{ matrix.loader }} ${{ matrix.mc }})
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 25
+      - uses: actions/download-artifact@v4
+        with:
+          name: mod26-${{ matrix.loader }}-${{ matrix.mc }}
+          path: jars
+      - name: Install ${{ matrix.loader }} server
+        run: |
+          F=$(cat jars/loader-version.txt)
+          mkdir -p server/mods && cd server
+          if [ "${{ matrix.loader }}" = "forge" ]; then
+            curl -fsSL -o installer.jar "https://maven.minecraftforge.net/net/minecraftforge/forge/${{ matrix.mc }}-$F/forge-${{ matrix.mc }}-$F-installer.jar"
+            java -jar installer.jar --installServer . > install.log 2>&1 || (tail -50 install.log; exit 1)
+          else
+            curl -fsSL -o installer.jar "https://maven.neoforged.net/releases/net/neoforged/neoforge/$F/neoforge-$F-installer.jar"
+            java -jar installer.jar --install-server . > install.log 2>&1 || (tail -50 install.log; exit 1)
+          fi
+          cp ../jars/*.jar mods/
+          ls; ls mods
+      - name: Start server and check Range Sight
+        run: |
+          chmod +x ci/server-test.sh
+          cd server
+          if [ -f run.sh ]; then START="bash run.sh nogui"; else START="java -jar $(ls forge-*.jar | grep -v installer | head -1) nogui"; fi
+          cd ..
+          LOADER_NAME=$([ "${{ matrix.loader }}" = "forge" ] && echo Forge || echo NeoForge)
+          ci/server-test.sh server "Range Sight loaded on ${LOADER_NAME}" -- $START
+      - name: Keep log
+        if: always()
+        run: mkdir -p logs && cp server/server.log "logs/mod26-server-${{ matrix.loader }}-${{ matrix.mc }}.log" 2>/dev/null || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: log-mod26-server-${{ matrix.loader }}-${{ matrix.mc }}
+          path: logs/
+
+  mod26-client-test:
+    needs: mod26-build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        mc: ["26.3", "26.2", "26.1.2"]
+        loader: [forge, neoforge]
+    name: mod26-client-test (${{ matrix.loader }} ${{ matrix.mc }})
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: mod26-${{ matrix.loader }}-${{ matrix.mc }}
+          path: jars
+      - name: Put Range Sight in run/mods, turn every range type on
+        run: |
+          mkdir -p run/mods run/config
+          cp jars/*.jar run/mods/
+          cat > run/config/rangesight.json <<'EOF'
+          {"selfTest":true,"types":{"beacon":{"enabled":true},"conduit":{"enabled":true},"spawner":{"enabled":true},
+                    "raid":{"enabled":true},"sculk":{"enabled":true},"spawn_chunks":{"enabled":true}}}
+          EOF
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 25
+      - name: Run the Minecraft client
+        uses: headlesshq/mc-runtime-test@5.0.0
+        with:
+          mc: ${{ matrix.mc }}
+          modloader: ${{ matrix.loader }}
+          mc-runtime-test: ${{ matrix.loader }}
+          java: 25
+      - name: Check Range Sight started in the client
+        run: |
+          LOG=run/logs/latest.log
+          grep -E "Range Sight (loaded|client ready|drawing|rendered)" "$LOG" || true
+          grep -q "Range Sight client ready" "$LOG" || { echo "::error::Range Sight client did not start"; exit 1; }
+          grep -q "Range Sight client self-test PASS" "$LOG" || { echo "::error::client self-test did not pass"; grep "self-test" "$LOG"; exit 1; }
+          grep -q "Range Sight rendered its first frame" "$LOG" || { echo "::error::Range Sight never drew a frame"; exit 1; }
+          echo "PASS: client found the test beacon and drew outlines."
+      - name: Keep log
+        if: always()
+        run: mkdir -p logs && cp run/logs/latest.log "logs/mod26-client-${{ matrix.loader }}-${{ matrix.mc }}.log" 2>/dev/null || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: log-mod26-client-${{ matrix.loader }}-${{ matrix.mc }}
+          path: logs/
+
   # ---------------------------------------------------------------- results back to the repo
   results:
-    needs: [plugin-build, paper-test, mod-build, mod-server-test, mod-client-test]
+    needs: [plugin-build, paper-test, mod-build, mod-server-test, mod-client-test, mod26-build, mod26-server-test, mod26-client-test]
     if: always()
     runs-on: ubuntu-latest
     steps:
@@ -246,12 +396,18 @@ jobs:
             echo "- mod-build: ${{ needs.mod-build.result }}"
             echo "- mod-server-test: ${{ needs.mod-server-test.result }}"
             echo "- mod-client-test: ${{ needs.mod-client-test.result }}"
+            echo "- mod26-build: ${{ needs.mod26-build.result }}"
+            echo "- mod26-server-test: ${{ needs.mod26-server-test.result }}"
+            echo "- mod26-client-test: ${{ needs.mod26-client-test.result }}"
             echo
             echo "## Self-test lines"
             grep -h "self-test" paper-*.log 2>/dev/null || true
             echo
             echo "## Range Sight lines (mod)"
-            grep -h "Range Sight" mod-*.log 2>/dev/null || true
+            for f in mod-*.log mod26-*.log; do [ -f "$f" ] && { echo "### $f"; grep -h "Range Sight \(loaded\|client\|drawing\|rendered\)" "$f" | sed 's/^.*\]: //' | head -5; }; done
+            echo
+            echo "## Build errors (if any)"
+            grep -h -A3 "error:\|What went wrong" mod26-build-*.log mod-build.log plugin-build.log 2>/dev/null | head -80 || true
           } > SUMMARY.md
           echo "${GITHUB_SHA}" > COMMIT
           git init -q -b ci-results && git config user.name ci && git config user.email ci@example.com

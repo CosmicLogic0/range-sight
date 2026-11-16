@@ -79,6 +79,7 @@ public final class RangeClient {
             ticks = SCAN_EVERY_TICKS; // scan right away when a world opens
             return;
         }
+        ClientSelfTest.tick(mc, config);
         if (changed || ++ticks >= SCAN_EVERY_TICKS) {
             ticks = 0;
             shapes = config.anyEnabled() ? RangeScanner.scan(mc, config) : Collections.emptyList();
@@ -100,6 +101,13 @@ public final class RangeClient {
             loggedFirstFrame = true;
             RangeSight.LOG.info("Range Sight rendered its first frame of outlines");
         }
+    }
+
+    /** Scan right now (used by the automatic test) and return the outlines. */
+    static List<RangeShape> rescanNow() {
+        Minecraft mc = Minecraft.getInstance();
+        shapes = config.anyEnabled() ? RangeScanner.scan(mc, config) : Collections.emptyList();
+        return shapes;
     }
 
     /** Number of outlines currently drawn (used by the automatic tests). */
