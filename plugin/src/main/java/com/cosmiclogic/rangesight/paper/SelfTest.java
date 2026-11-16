@@ -23,10 +23,11 @@ final class SelfTest {
 
     static boolean run(RangeDrawer drawer, World world, Logger log) {
         Location spawn = world.getSpawnLocation();
-        int x = spawn.getBlockX() + 2000;
-        int z = spawn.getBlockZ() + 2000;
+        // Right next to spawn, where chunks are already generated and loaded
+        // (far away chunks would have to be generated, which is slow on test machines).
+        int x = spawn.getBlockX();
+        int z = spawn.getBlockZ();
         int y = 200;
-        world.getChunkAt(x >> 4, z >> 4).load(true);
 
         List<Block> placed = new ArrayList<>();
         List<String> expected = new ArrayList<>();
@@ -45,7 +46,7 @@ final class SelfTest {
 
         // Spawner -> 16 (activation) + 4 (spawn area).
         Material spawner = material("SPAWNER", "MOB_SPAWNER");
-        set(world, x + 20, y, z, spawner, placed);
+        set(world, x + 12, y, z, spawner, placed);
         expected.add("spawner sphere 16");
         expected.add("spawner box 4");
 
@@ -53,7 +54,7 @@ final class SelfTest {
         Material conduit = material("CONDUIT");
         if (conduit != null) {
             Material prismarine = material("PRISMARINE");
-            int cx = x - 20;
+            int cx = x - 12;
             for (int dx = -2; dx <= 2; dx++) {
                 for (int dy = -2; dy <= 2; dy++) {
                     for (int dz = -2; dz <= 2; dz++) {
@@ -70,17 +71,17 @@ final class SelfTest {
         // Sculk (1.19+ for shriekers, 1.20+ for calibrated sensors).
         Material sensor = material("SCULK_SENSOR");
         if (sensor != null) {
-            set(world, x, y, z + 20, sensor, placed);
+            set(world, x, y, z + 12, sensor, placed);
             expected.add("sculk sphere 8");
         }
         Material calibrated = material("CALIBRATED_SCULK_SENSOR");
         if (calibrated != null) {
-            set(world, x, y, z - 20, calibrated, placed);
+            set(world, x, y, z - 12, calibrated, placed);
             expected.add("sculk sphere 16");
         }
         Material shrieker = material("SCULK_SHRIEKER");
         if (shrieker != null) {
-            set(world, x + 10, y, z + 10, shrieker, placed);
+            set(world, x + 8, y, z + 8, shrieker, placed);
             expected.add("sculk sphere 8");
             expected.add("sculk sphere 40");
         }
