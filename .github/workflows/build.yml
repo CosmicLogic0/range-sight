@@ -259,7 +259,12 @@ jobs:
           set -o pipefail
           mkdir -p ../../../logs
           chmod +x gradlew
-          ./gradlew build --no-daemon --stacktrace -Pminecraft_version=${{ matrix.mc }} ${{ steps.v.outputs.args }} 2>&1 | tee ../../../logs/mod26-build-${{ matrix.loader }}-${{ matrix.mc }}.log
+          LOG=../../../logs/mod26-build-${{ matrix.loader }}-${{ matrix.mc }}.log
+          # one retry: downloads from the loader mavens sometimes drop ("Connection reset")
+          ./gradlew build --no-daemon --stacktrace -Pminecraft_version=${{ matrix.mc }} ${{ steps.v.outputs.args }} > $LOG 2>&1 \
+            || { echo "retrying once"; sleep 20; ./gradlew build --no-daemon --stacktrace -Pminecraft_version=${{ matrix.mc }} ${{ steps.v.outputs.args }} > $LOG 2>&1; } \
+            || { tail -60 $LOG; exit 1; }
+          tail -5 $LOG
       - name: Keep jar + loader version
         run: |
           mkdir -p out
