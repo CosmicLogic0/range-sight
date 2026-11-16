@@ -1,0 +1,77 @@
+// Range Sight for Forge 1.16.5, 1.18.2, 1.19.2, 1.20.1, 1.21.11 and NeoForge 1.21.11.
+// One Architectury Loom project (same setup as Block Blueprint's ports/forge). Sources, first copy of a file wins:
+//   src/<era>/java   loader + version glue (keys, ticks, render hook)
+//   src/forge/java   the Forge entry point (Forge builds)
+//   src/v/<mc>/java  Mc.java: the Minecraft calls that differ between versions
+//   shared/java      RangeClient / RangeScanner / RangeRenderer for these versions
+//   ../common/...    shared code of the main build (RangeMath, RangeShape, RangeConfig, ...)
+plugins {
+    id 'dev.architectury.loom' version "${arch_loom_version}"
+}
+
+def neo = project.findProperty('loom.platform') == 'neoforge'
+def loaderName = neo ? 'neoforge' : 'forge'
+def mcv = project.minecraft_version
+version = project.mod_version
+group = 'com.cosmiclogic.rangesight'
+base { archivesName = "rangesight-${loaderName}-${mcv}" }
+
+def era = neo ? 'neoforge-1.21.11' : mcv == '1.21.11' ? 'forge-1.21.11' : mcv.startsWith('1.16') ? 'forge-1.16' : mcv.startsWith('1.18') ? 'forge-1.18' : 'forge'
+def javaVer = mcv.startsWith('1.16') ? 8 : mcv == '1.21.11' ? 21 : 17
+println "Range Sight (${loaderName}): Minecraft ${mcv}, ${loaderName} ${project.forge_version}, glue ${era}, Java ${javaVer}"
+
+loom {
+    silentMojangMappingsLicense()
+    if (era == 'forge-1.21.11') forge { mixinConfig 'rangesight.mixins.json' }
+}
+repositories {
+    mavenCentral()
+    maven { url = 'https://maven.neoforged.net/releases/' }
+}
+dependencies {
+    minecraft "com.mojang:minecraft:${mcv}"
+    mappings loom.officialMojangMappings()
+    if (neo) neoForge "net.neoforged:neoforge:${project.forge_version}"
+    else forge "net.minecraftforge:forge:${mcv}-${project.forge_version}"
+}
+
+def gen = layout.buildDirectory.dir('gen-src'), res = layout.buildDirectory.dir('gen-res')
+tasks.register('rsSources', Sync) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from("src/${era}/java")
+    if (!neo) from('src/forge/java')
+    from("src/v/${mcv}/java")
+    from('shared/java')
+    from('../common/src/main/java')
+    into gen
+    inputs.property 'era', era
+    inputs.property 'mc', mcv
+}
+def mcRange = project.findProperty('mc_range') ?: "[${mcv}]"
+def forgeMajor = (project.forge_version.split('\\.')[0]) as int
+def pack = ['1.16.5': 6, '1.18.2': 8, '1.19.2': 9, '1.20.1': 15, '1.21.11': 75][mcv] ?: 15
+tasks.register('rsResources', Sync) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from("src/${era}/res")
+    if (!neo) from('src/forge/res')
+    from('src/res')
+    from('../common/src/main/resources') { exclude 'pack.mcmeta' }
+    into res
+    inputs.property 'version', project.mod_version
+    inputs.property 'mcRange', mcRange
+    inputs.property 'pack', pack
+    filesMatching(['META-INF/mods.toml', 'META-INF/neoforge.mods.toml']) { expand 'version': project.mod_version, 'mcRange': mcRange, 'forgeMajor': forgeMajor }
+    filesMatching('pack.mcmeta') { expand 'pack': pack }
+}
+sourceSets.main.java.srcDirs = [gen]
+sourceSets.main.resources.srcDirs = [res]
+compileJava.dependsOn rsSources
+processResources.dependsOn rsResources
+tasks.matching { it.name == 'sourcesJar' }.configureEach { dependsOn rsSources, rsResources }
+
+tasks.withType(JavaCompile).configureEach {
+    options.release = javaVer; options.encoding = 'UTF-8'
+    if (javaVer < 16) { sourceCompatibility = '17'; options.compilerArgs += ['-Xlint:-options'] }   // Jabel: modern syntax, Java 8 classes
+}
+if (javaVer == 8) dependencies { annotationProcessor 'com.pkware.jabel:jabel-javac-plugin:1.0.1-1'; compileOnly 'com.pkware.jabel:jabel-javac-plugin:1.0.1-1' }
+tasks.named("test") { enabled = false }

@@ -380,9 +380,184 @@ jobs:
           name: log-mod26-client-${{ matrix.loader }}-${{ matrix.mc }}
           path: logs/
 
+  # ---------------------------------------------------------------- Mod on 1.16.5 - 1.21.11 (mod/legacy, Architectury Loom)
+  legacy-build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { mc: "1.21.11", loader: forge }
+          - { mc: "1.21.11", loader: neoforge }
+          - { mc: "1.20.1", loader: forge }
+          - { mc: "1.19.2", loader: forge }
+          - { mc: "1.18.2", loader: forge }
+          - { mc: "1.16.5", loader: forge }
+    name: legacy-build (${{ matrix.loader }} ${{ matrix.mc }})
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Find the newest ${{ matrix.loader }} + Architectury Loom
+        id: v
+        run: |
+          L=$(curl -s https://maven.architectury.dev/dev/architectury/loom/dev.architectury.loom.gradle.plugin/maven-metadata.xml | grep -o "<latest>[^<]*</latest>" | sed 's/<[^>]*>//g')
+          if [ "${{ matrix.loader }}" = "forge" ]; then
+            F=$(curl -s https://maven.minecraftforge.net/net/minecraftforge/forge/maven-metadata.xml | grep -o "<version>${{ matrix.mc }}-[^<]*</version>" | sed 's/<[^>]*>//g; s/^${{ matrix.mc }}-//' | tail -1)
+            echo "args=-Pforge_version=$F -Parch_loom_version=$L" >> "$GITHUB_OUTPUT"
+          else
+            P=$(echo "${{ matrix.mc }}" | sed 's/^1\.//'); case "$P" in *.*) ;; *) P="$P.0" ;; esac
+            F=$(curl -s https://maven.neoforged.net/releases/net/neoforged/neoforge/maven-metadata.xml | grep -oE "<version>$P\.[0-9]+(-beta)?</version>" | sed 's/<[^>]*>//g' | sort -V | tail -1)
+            echo "args=-Ploom.platform=neoforge -Pforge_version=$F -Parch_loom_version=$L" >> "$GITHUB_OUTPUT"
+          fi
+          echo "Loader $F, Loom $L"; [ -n "$F" ] || { echo "::error::no ${{ matrix.loader }} for ${{ matrix.mc }}"; exit 1; }
+          echo "loader=$F" >> "$GITHUB_OUTPUT"
+      - name: Build
+        working-directory: mod/legacy
+        run: |
+          mkdir -p ../../logs; chmod +x gradlew
+          LOG=../../logs/legacy-build-${{ matrix.loader }}-${{ matrix.mc }}.log
+          ./gradlew build --no-daemon --stacktrace -Pminecraft_version=${{ matrix.mc }} ${{ steps.v.outputs.args }} > $LOG 2>&1 \
+            || { echo "retrying once"; sleep 20; ./gradlew build --no-daemon --stacktrace -Pminecraft_version=${{ matrix.mc }} ${{ steps.v.outputs.args }} > $LOG 2>&1; } \
+            || { grep -E "error:|What went wrong" -A3 $LOG | head -80; exit 1; }
+          tail -3 $LOG
+      - name: Keep jar + loader version
+        run: |
+          mkdir -p out
+          find mod/legacy/build/libs -name "*.jar" ! -name "*-sources.jar" ! -name "*-dev*.jar" -exec cp {} out/ \;
+          echo "${{ steps.v.outputs.loader }}" > out/loader-version.txt
+          ls out
+      - uses: actions/upload-artifact@v4
+        with:
+          name: legacy-${{ matrix.loader }}-${{ matrix.mc }}
+          path: out/
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: log-legacy-build-${{ matrix.loader }}-${{ matrix.mc }}
+          path: logs/
+
+  legacy-server-test:
+    needs: legacy-build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { mc: "1.21.11", loader: forge, jar: forge, java: 21 }
+          - { mc: "1.21.11", loader: neoforge, jar: neoforge, java: 21 }
+          - { mc: "1.20.1", loader: forge, jar: forge, java: 17 }
+          - { mc: "1.20.1", loader: neoforge, jar: forge, java: 17 }
+          - { mc: "1.19.2", loader: forge, jar: forge, java: 17 }
+          - { mc: "1.18.2", loader: forge, jar: forge, java: 17 }
+          - { mc: "1.16.5", loader: forge, jar: forge, java: 8 }
+    name: legacy-server-test (${{ matrix.loader }} ${{ matrix.mc }})
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.java }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: legacy-${{ matrix.jar }}-${{ matrix.mc }}
+          path: jars
+      - name: Install ${{ matrix.loader }} ${{ matrix.mc }} server
+        run: |
+          mkdir -p server/mods && cd server
+          if [ "${{ matrix.loader }}" = "forge" ]; then
+            F=$(cat ../jars/loader-version.txt)
+            curl -fsSL -o installer.jar "https://maven.minecraftforge.net/net/minecraftforge/forge/${{ matrix.mc }}-$F/forge-${{ matrix.mc }}-$F-installer.jar"
+            java -jar installer.jar --installServer . > install.log 2>&1 || (tail -50 install.log; exit 1)
+          elif [ "${{ matrix.mc }}" = "1.20.1" ]; then
+            F=$(curl -s https://maven.neoforged.net/releases/net/neoforged/forge/maven-metadata.xml | grep -oE "<version>1\.20\.1-[^<]*</version>" | sed 's/<[^>]*>//g' | sort -V | tail -1)
+            echo "NeoForge 1.20.1: $F"
+            curl -fsSL -o installer.jar "https://maven.neoforged.net/releases/net/neoforged/forge/$F/forge-$F-installer.jar"
+            java -jar installer.jar --installServer . > install.log 2>&1 || (tail -50 install.log; exit 1)
+          else
+            F=$(cat ../jars/loader-version.txt)
+            curl -fsSL -o installer.jar "https://maven.neoforged.net/releases/net/neoforged/neoforge/$F/neoforge-$F-installer.jar"
+            java -jar installer.jar --install-server . > install.log 2>&1 || (tail -50 install.log; exit 1)
+          fi
+          find ../jars -name "*.jar" -exec cp {} mods/ \;
+          ls; ls mods
+      - name: Start server and check Range Sight
+        run: |
+          chmod +x ci/server-test.sh
+          cd server
+          if [ -f run.sh ]; then START="bash run.sh nogui"; else START="java -jar $(ls forge-*.jar | grep -v installer | head -1) nogui"; fi
+          cd ..
+          ci/server-test.sh server "Range Sight loaded on (Forge|NeoForge)" -- $START
+      - name: Keep log
+        if: always()
+        run: mkdir -p logs && cp server/server.log "logs/legacy-server-${{ matrix.loader }}-${{ matrix.mc }}.log" 2>/dev/null || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: log-legacy-server-${{ matrix.loader }}-${{ matrix.mc }}
+          path: logs/
+
+  legacy-client-test:
+    needs: legacy-build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { mc: "1.21.11", loader: forge, jar: forge, java: 21 }
+          - { mc: "1.21.11", loader: neoforge, jar: neoforge, java: 21 }
+          - { mc: "1.20.1", loader: forge, jar: forge, java: 17 }
+          - { mc: "1.20.1", loader: neoforge, jar: forge, java: 17 }
+          - { mc: "1.19.2", loader: forge, jar: forge, java: 17 }
+          - { mc: "1.18.2", loader: forge, jar: forge, java: 17 }
+          - { mc: "1.16.5", loader: forge, jar: forge, java: 8 }
+    name: legacy-client-test (${{ matrix.loader }} ${{ matrix.mc }})
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: legacy-${{ matrix.jar }}-${{ matrix.mc }}
+          path: jars
+      - name: Put Range Sight in run/mods, turn every range type on, enable the self-test
+        run: |
+          mkdir -p run/mods run/config
+          find jars -name "*.jar" -exec cp {} run/mods/ \;
+          cat > run/config/rangesight.json <<'EOF'
+          {"selfTest":true,"types":{"beacon":{"enabled":true},"conduit":{"enabled":true},"spawner":{"enabled":true},
+                    "raid":{"enabled":true},"sculk":{"enabled":true},"spawn_chunks":{"enabled":true}}}
+          EOF
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.java }}
+      - name: Run the Minecraft client
+        uses: headlesshq/mc-runtime-test@5.0.0
+        with:
+          mc: ${{ matrix.mc }}
+          modloader: ${{ matrix.loader }}
+          mc-runtime-test: ${{ matrix.loader }}
+          java: ${{ matrix.java }}
+      - name: Check Range Sight found the test beacon and drew outlines
+        run: |
+          LOG=run/logs/latest.log
+          grep -E "Range Sight (loaded|client|drawing|rendered)" "$LOG" || true
+          grep -q "Range Sight client ready" "$LOG" || { echo "::error::Range Sight client did not start"; exit 1; }
+          grep -q "Range Sight client self-test PASS" "$LOG" || { echo "::error::client self-test did not pass"; grep "self-test" "$LOG"; exit 1; }
+          grep -q "Range Sight rendered its first frame" "$LOG" || { echo "::error::Range Sight never drew a frame"; exit 1; }
+          echo "PASS"
+      - name: Keep log
+        if: always()
+        run: mkdir -p logs && cp run/logs/latest.log "logs/legacy-client-${{ matrix.loader }}-${{ matrix.mc }}.log" 2>/dev/null || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: log-legacy-client-${{ matrix.loader }}-${{ matrix.mc }}
+          path: logs/
+
   # ---------------------------------------------------------------- results back to the repo
   results:
-    needs: [plugin-build, paper-test, mod-build, mod-server-test, mod-client-test, mod26-build, mod26-server-test, mod26-client-test]
+    needs: [plugin-build, paper-test, mod-build, mod-server-test, mod-client-test, mod26-build, mod26-server-test, mod26-client-test, legacy-build, legacy-server-test, legacy-client-test]
     if: always()
     runs-on: ubuntu-latest
     steps:
@@ -404,15 +579,18 @@ jobs:
             echo "- mod26-build: ${{ needs.mod26-build.result }}"
             echo "- mod26-server-test: ${{ needs.mod26-server-test.result }}"
             echo "- mod26-client-test: ${{ needs.mod26-client-test.result }}"
+            echo "- legacy-build: ${{ needs.legacy-build.result }}"
+            echo "- legacy-server-test: ${{ needs.legacy-server-test.result }}"
+            echo "- legacy-client-test: ${{ needs.legacy-client-test.result }}"
             echo
             echo "## Self-test lines"
             grep -h "self-test" paper-*.log 2>/dev/null || true
             echo
             echo "## Range Sight lines (mod)"
-            for f in mod-*.log mod26-*.log; do [ -f "$f" ] && { echo "### $f"; grep -h "Range Sight \(loaded\|client\|drawing\|rendered\)" "$f" | sed 's/^.*\]: //' | head -5; }; done
+            for f in mod-*.log mod26-*.log legacy-*.log; do [ -f "$f" ] && { echo "### $f"; grep -h "Range Sight \(loaded\|client\|drawing\|rendered\)" "$f" | sed 's/^.*\]: //' | head -6; }; done
             echo
             echo "## Build errors (if any)"
-            grep -h -A3 "error:\|What went wrong" mod26-build-*.log mod-build.log plugin-build.log 2>/dev/null | head -80 || true
+            grep -h -A3 "error:\|What went wrong" legacy-build-*.log mod26-build-*.log mod-build.log plugin-build.log 2>/dev/null | head -80 || true
           } > SUMMARY.md
           echo "${GITHUB_SHA}" > COMMIT
           git init -q -b ci-results && git config user.name ci && git config user.email ci@example.com

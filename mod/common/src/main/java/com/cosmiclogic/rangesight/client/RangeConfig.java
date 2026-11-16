@@ -71,10 +71,11 @@ public final class RangeConfig {
         return colors.get(type);
     }
 
+    @SuppressWarnings("deprecation") // new JsonParser().parse(...) also works with the old Gson in 1.16.5
     public void load() {
         if (Files.exists(file)) {
             try {
-                JsonObject root = JsonParser.parseString(Files.readString(file, StandardCharsets.UTF_8)).getAsJsonObject();
+                JsonObject root = new JsonParser().parse(new String(Files.readAllBytes(file), StandardCharsets.UTF_8)).getAsJsonObject();
                 if (root.has("scanChunks")) {
                     scanChunks = Math.max(1, Math.min(16, root.get("scanChunks").getAsInt()));
                 }
@@ -118,7 +119,7 @@ public final class RangeConfig {
         root.add("types", types);
         try {
             Files.createDirectories(file.getParent());
-            Files.writeString(file, GSON.toJson(root), StandardCharsets.UTF_8);
+            Files.write(file, GSON.toJson(root).getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
             RangeSight.LOG.warn("Could not save {}: {}", file, e.toString());
         }
