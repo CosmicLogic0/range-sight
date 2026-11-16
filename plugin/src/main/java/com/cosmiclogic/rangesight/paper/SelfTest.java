@@ -100,7 +100,7 @@ final class SelfTest {
 
         // Clean up (top to bottom so nothing pops off).
         for (int i = placed.size() - 1; i >= 0; i--) {
-            placed.get(i).setType(Material.AIR);
+            placed.get(i).setType(Material.AIR, false);
         }
 
         List<String> missing = new ArrayList<>(expected);
@@ -125,7 +125,7 @@ final class SelfTest {
             return;
         }
         Block block = world.getBlockAt(x, y, z);
-        block.setType(type);
+        block.setType(type, false); // no block updates, so nothing reaches into neighbour chunks
         placed.add(block);
     }
 
