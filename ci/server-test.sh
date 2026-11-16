@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Starts a Minecraft server, waits for "Done (", stops it, and checks the log.
 # Usage: server-test.sh <server-dir> <expected-log-regex> -- <start command...>
-# Optional: AFTER_START="cmd1;cmd2" runs those console commands once the server is up (Range Sight self-test).
+# Optional: AFTER_START="cmd1;cmd2" runs those console commands once the server is up (Range Sight self-test),
+# then waits for the expected line before stopping.
 set -u
 DIR="$1"; EXPECT="$2"; shift 3
 cd "$DIR"
@@ -20,7 +21,12 @@ done
 sleep 5
 if [ -n "${AFTER_START:-}" ]; then
   IFS=';' read -ra CMDS <<< "$AFTER_START"
-  for c in "${CMDS[@]}"; do echo "$c" > console.in; sleep 5; done
+  for c in "${CMDS[@]}"; do echo "$c" > console.in; sleep 2; done
+  # Wait (up to 3 minutes) for the expected line or a self-test failure, instead of a fixed sleep.
+  for i in $(seq 1 180); do
+    if grep -Eq "$EXPECT|self-test FAIL" server.log; then break; fi
+    sleep 1
+  done
 fi
 echo "stop" > console.in
 for i in $(seq 1 120); do kill -0 "$PID" 2>/dev/null || break; sleep 1; done

@@ -7,13 +7,13 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.lang.reflect.Method;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 
 /**
@@ -27,26 +27,45 @@ final class SelfTest {
     }
 
     /**
-     * Loads the chunks the test needs in the background first (Paper's getChunkAtAsync, if there),
-     * so the server never waits on chunk loading, then runs the test on the main thread.
+     * Waits until every chunk the test touches is loaded (asking Paper to load them in the background
+     * when it can), so the test never makes the server wait on chunk generation. Gives up after 2 minutes.
      */
     static void start(Plugin plugin, RangeDrawer drawer, World world, Logger log) {
         Location spawn = world.getSpawnLocation();
         int scx = spawn.getBlockX() >> 4;
         int scz = spawn.getBlockZ() >> 4;
-        List<CompletableFuture<?>> loads = new ArrayList<>();
         try {
             Method async = world.getClass().getMethod("getChunkAtAsync", int.class, int.class);
             for (int cx = scx - 2; cx <= scx + 2; cx++) {
                 for (int cz = scz - 2; cz <= scz + 2; cz++) {
-                    loads.add((CompletableFuture<?>) async.invoke(world, cx, cz));
+                    async.invoke(world, cx, cz);
                 }
             }
         } catch (Throwable notPaper) {
-            loads.clear();
+            // Spigot/old Paper: spawn chunks are loaded already.
         }
-        CompletableFuture.allOf(loads.toArray(new CompletableFuture[0]))
-                .whenComplete((ok, error) -> Bukkit.getScheduler().runTask(plugin, () -> run(drawer, world, log)));
+        new BukkitRunnable() {
+            int seconds;
+
+            @Override
+            public void run() {
+                boolean ready = true;
+                for (int cx = scx - 2; cx <= scx + 2 && ready; cx++) {
+                    for (int cz = scz - 2; cz <= scz + 2 && ready; cz++) {
+                        ready = world.isChunkLoaded(cx, cz);
+                    }
+                }
+                if (ready || seconds >= 120) {
+                    cancel();
+                    if (!ready) {
+                        log.warning("Self-test: chunks near spawn still not loaded after 2 minutes, running anyway");
+                    }
+                    SelfTest.run(drawer, world, log);
+                } else if (seconds++ % 10 == 0) {
+                    log.info("Self-test: waiting for chunks near spawn to load...");
+                }
+            }
+        }.runTaskTimer(plugin, 1L, 20L);
     }
 
     static boolean run(RangeDrawer drawer, World world, Logger log) {
