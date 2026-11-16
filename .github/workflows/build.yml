@@ -93,7 +93,7 @@ jobs:
       - name: Start server, run self-test
         run: |
           chmod +x ci/server-test.sh
-          AFTER_START="range selftest" ci/server-test.sh server "Range Sight self-test PASS" -- java -Xmx1500M -jar paper.jar nogui
+          AFTER_START="range selftest;list;list" ci/server-test.sh server "Range Sight self-test PASS" -- java -Xmx1500M -jar paper.jar nogui
       - name: Keep log
         if: always()
         run: mkdir -p logs && cp server/server.log "logs/paper-${{ matrix.mc }}.log" 2>/dev/null || true

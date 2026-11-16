@@ -1,14 +1,19 @@
 package com.cosmiclogic.rangesight.paper;
 
 import com.cosmiclogic.logiclib.paper.LogicVersion;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.plugin.Plugin;
+
+import java.lang.reflect.Method;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 
 /**
@@ -19,6 +24,29 @@ import java.util.logging.Logger;
 final class SelfTest {
 
     private SelfTest() {
+    }
+
+    /**
+     * Loads the chunks the test needs in the background first (Paper's getChunkAtAsync, if there),
+     * so the server never waits on chunk loading, then runs the test on the main thread.
+     */
+    static void start(Plugin plugin, RangeDrawer drawer, World world, Logger log) {
+        Location spawn = world.getSpawnLocation();
+        int scx = spawn.getBlockX() >> 4;
+        int scz = spawn.getBlockZ() >> 4;
+        List<CompletableFuture<?>> loads = new ArrayList<>();
+        try {
+            Method async = world.getClass().getMethod("getChunkAtAsync", int.class, int.class);
+            for (int cx = scx - 2; cx <= scx + 2; cx++) {
+                for (int cz = scz - 2; cz <= scz + 2; cz++) {
+                    loads.add((CompletableFuture<?>) async.invoke(world, cx, cz));
+                }
+            }
+        } catch (Throwable notPaper) {
+            loads.clear();
+        }
+        CompletableFuture.allOf(loads.toArray(new CompletableFuture[0]))
+                .whenComplete((ok, error) -> Bukkit.getScheduler().runTask(plugin, () -> run(drawer, world, log)));
     }
 
     static boolean run(RangeDrawer drawer, World world, Logger log) {

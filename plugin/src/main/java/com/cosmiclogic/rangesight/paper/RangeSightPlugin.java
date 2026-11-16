@@ -60,7 +60,7 @@ public final class RangeSightPlugin extends JavaPlugin implements Listener {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
             if (args.length == 1 && args[0].equalsIgnoreCase("selftest")) {
-                SelfTest.run(drawer, Bukkit.getWorlds().get(0), getLogger());
+                SelfTest.start(this, drawer, Bukkit.getWorlds().get(0), getLogger());
                 return true;
             }
             LogicText.send(sender, PREFIX, "&cOnly players can use /range.");
