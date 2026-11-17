@@ -66,6 +66,7 @@ Change any key in Options → Controls → Key Binds. All ranges start off, so t
 - Client-side only. Install it on your own game; servers don't need it.
 
 ⚠️ The raid range needs to know where the raid is, which only the server knows. In this mod it works in single player and when you host a LAN world. On servers, use Range Sight Plugin.
+
 Source and bug reports: https://github.com/CosmicLogic0/range-sight
 
 ---
