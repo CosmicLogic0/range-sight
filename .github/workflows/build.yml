@@ -555,9 +555,124 @@ jobs:
           name: log-legacy-client-${{ matrix.loader }}-${{ matrix.mc }}
           path: logs/
 
+  # ---------------------------------------------------------------- Mod on Forge 1.12.2 (mod/v12, RetroFuturaGradle / CleanroomMC template)
+  v12-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: zulu
+          java-version: |
+            8
+            17
+            21
+      - name: Build
+        working-directory: mod/v12
+        run: |
+          mkdir -p ../../logs; chmod +x gradlew
+          LOG=../../logs/v12-build-forge-1.12.2.log
+          ./gradlew build --no-daemon --stacktrace > $LOG 2>&1 \
+            || { echo "retrying once"; sleep 20; ./gradlew build --no-daemon --stacktrace > $LOG 2>&1; } \
+            || { grep -E "error:|What went wrong" -A3 $LOG | head -80; exit 1; }
+          tail -3 $LOG
+      - name: Keep jar
+        run: |
+          mkdir -p out
+          find mod/v12/build/libs -name "*.jar" ! -name "*-sources.jar" ! -name "*-dev*.jar" -exec cp {} out/ \;
+          ls out
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v12-forge-1.12.2
+          path: out/
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: log-v12-build
+          path: logs/
+
+  v12-server-test:
+    needs: v12-build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 8
+      - uses: actions/download-artifact@v4
+        with:
+          name: v12-forge-1.12.2
+          path: jars
+      - name: Install Forge 1.12.2 server
+        run: |
+          F=$(curl -s https://maven.minecraftforge.net/net/minecraftforge/forge/maven-metadata.xml | grep -o "<version>1.12.2-[^<]*</version>" | sed 's/<[^>]*>//g; s/^1.12.2-//' | tail -1)
+          echo "Forge 1.12.2-$F"
+          mkdir -p server/mods && cd server
+          curl -fsSL -o installer.jar "https://maven.minecraftforge.net/net/minecraftforge/forge/1.12.2-$F/forge-1.12.2-$F-installer.jar"
+          java -jar installer.jar --installServer . > install.log 2>&1 || (tail -50 install.log; exit 1)
+          cp ../jars/*.jar mods/
+          ls; ls mods
+      - name: Start server and check Range Sight
+        run: |
+          chmod +x ci/server-test.sh
+          JAR=$(cd server && ls forge-1.12.2-*.jar | grep -v installer | head -1)
+          ci/server-test.sh server "Range Sight loaded on Forge" -- java -Xmx1500M -jar $JAR nogui
+      - name: Keep log
+        if: always()
+        run: mkdir -p logs && cp server/server.log logs/v12-server-forge-1.12.2.log 2>/dev/null || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: log-v12-server
+          path: logs/
+
+  v12-client-test:
+    needs: v12-build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: v12-forge-1.12.2
+          path: jars
+      - name: Put Range Sight in run/mods, turn every range type on, enable the self-test
+        run: |
+          mkdir -p run/mods run/config
+          cp jars/*.jar run/mods/
+          cat > run/config/rangesight.json <<'EOF'
+          {"selfTest":true,"types":{"beacon":{"enabled":true},"spawner":{"enabled":true},"spawn_chunks":{"enabled":true}}}
+          EOF
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 8
+      - name: Run the Minecraft client
+        uses: headlesshq/mc-runtime-test@5.0.0
+        with:
+          mc: "1.12.2"
+          modloader: forge
+          mc-runtime-test: forge
+          java: 8
+      - name: Check Range Sight found the test beacon and drew outlines
+        run: |
+          LOG=run/logs/latest.log
+          grep -E "Range Sight (loaded|client|drawing|rendered)" "$LOG" || true
+          grep -q "Range Sight client ready" "$LOG" || { echo "::error::Range Sight client did not start"; exit 1; }
+          grep -q "Range Sight client self-test PASS" "$LOG" || { echo "::error::client self-test did not pass"; grep "self-test" "$LOG"; exit 1; }
+          grep -q "Range Sight rendered its first frame" "$LOG" || { echo "::error::Range Sight never drew a frame"; exit 1; }
+          echo "PASS"
+      - name: Keep log
+        if: always()
+        run: mkdir -p logs && cp run/logs/latest.log logs/v12-client-forge-1.12.2.log 2>/dev/null || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: log-v12-client
+          path: logs/
+
   # ---------------------------------------------------------------- results back to the repo
   results:
-    needs: [plugin-build, paper-test, mod-build, mod-server-test, mod-client-test, mod26-build, mod26-server-test, mod26-client-test, legacy-build, legacy-server-test, legacy-client-test]
+    needs: [plugin-build, paper-test, mod-build, mod-server-test, mod-client-test, mod26-build, mod26-server-test, mod26-client-test, legacy-build, legacy-server-test, legacy-client-test, v12-build, v12-server-test, v12-client-test]
     if: always()
     runs-on: ubuntu-latest
     steps:
@@ -582,15 +697,18 @@ jobs:
             echo "- legacy-build: ${{ needs.legacy-build.result }}"
             echo "- legacy-server-test: ${{ needs.legacy-server-test.result }}"
             echo "- legacy-client-test: ${{ needs.legacy-client-test.result }}"
+            echo "- v12-build: ${{ needs.v12-build.result }}"
+            echo "- v12-server-test: ${{ needs.v12-server-test.result }}"
+            echo "- v12-client-test: ${{ needs.v12-client-test.result }}"
             echo
             echo "## Self-test lines"
             grep -h "self-test" paper-*.log 2>/dev/null || true
             echo
             echo "## Range Sight lines (mod)"
-            for f in mod-*.log mod26-*.log legacy-*.log; do [ -f "$f" ] && { echo "### $f"; grep -h "Range Sight \(loaded\|client\|drawing\|rendered\)" "$f" | sed 's/^.*\]: //' | head -6; }; done
+            for f in mod-*.log mod26-*.log legacy-*.log v12-*.log; do [ -f "$f" ] && { echo "### $f"; grep -h "Range Sight \(loaded\|client\|drawing\|rendered\)" "$f" | sed 's/^.*\]: //' | head -6; }; done
             echo
             echo "## Build errors (if any)"
-            grep -h -A3 "error:\|What went wrong" legacy-build-*.log mod26-build-*.log mod-build.log plugin-build.log 2>/dev/null | head -80 || true
+            grep -h -A3 "error:\|What went wrong" v12-build-*.log legacy-build-*.log mod26-build-*.log mod-build.log plugin-build.log 2>/dev/null | head -80 || true
           } > SUMMARY.md
           echo "${GITHUB_SHA}" > COMMIT
           git init -q -b ci-results && git config user.name ci && git config user.email ci@example.com
