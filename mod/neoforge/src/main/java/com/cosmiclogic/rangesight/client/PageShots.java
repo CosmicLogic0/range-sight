@@ -30,6 +30,7 @@ final class PageShots {
     private static boolean holding;
     private static int ticks;
     private static BlockPos beacon;
+    private static BlockPos spawner;
 
     private PageShots() {
     }
@@ -64,19 +65,19 @@ final class PageShots {
                 BlockPos p = mc.player.blockPosition();
                 server.execute(() -> build(server, p));
             } else if (ticks == 12 && beacon != null) {
-                view(server, -20, 12, -26);
+                view(server, beacon, -20, 12, -26);
             } else if (ticks == 45) {
                 RangeClient.rescanNow();
             } else if (ticks == 55) {
                 shot(mc, "rangesight-page-1.png");
             } else if (ticks == 60 && beacon != null) {
-                view(server, 30, 30, 10);
+                view(server, spawner, 9, 6, 11);
             } else if (ticks == 95) {
                 RangeClient.rescanNow();
             } else if (ticks == 105) {
                 shot(mc, "rangesight-page-2.png");
             } else if (ticks == 110 && beacon != null) {
-                view(server, -4, 6, 20);
+                view(server, beacon, -40, 38, 46);
             } else if (ticks == 145) {
                 RangeClient.rescanNow();
             } else if (ticks == 155) {
@@ -131,13 +132,22 @@ final class PageShots {
         level.setWeatherParameters(20000, 0, false, false);
         int bx = player.getX() + 12, bz = player.getZ() + 12;
         int h = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, bx, bz);
-        // clear a flat area so trees don't hide the scene
-        for (int dx = -14; dx <= 14; dx++) {
-            for (int dz = -14; dz <= 14; dz++) {
-                for (int dy = 0; dy <= 24; dy++) {
-                    level.setBlock(new BlockPos(bx + dx, h + dy, bz + dz), Blocks.AIR.defaultBlockState(), 2);
+        // clear a flat area (and the air above it) so trees don't hide the scene; fill below so it isn't floating
+        for (int dx = -24; dx <= 24; dx++) {
+            for (int dz = -24; dz <= 24; dz++) {
+                for (int dy = 0; dy <= 40; dy++) {
+                    BlockPos q = new BlockPos(bx + dx, h + dy, bz + dz);
+                    if (!level.getBlockState(q).isAir()) {
+                        level.setBlock(q, Blocks.AIR.defaultBlockState(), 2);
+                    }
                 }
                 level.setBlock(new BlockPos(bx + dx, h - 1, bz + dz), Blocks.GRASS_BLOCK.defaultBlockState(), 2);
+                for (int dy = 2; dy <= 12; dy++) {
+                    BlockPos q = new BlockPos(bx + dx, h - dy, bz + dz);
+                    if (level.getBlockState(q).isAir() || !level.getFluidState(q).isEmpty()) {
+                        level.setBlock(q, Blocks.DIRT.defaultBlockState(), 2);
+                    }
+                }
             }
         }
         BlockPos b = new BlockPos(bx, h + 4, bz);
@@ -149,7 +159,8 @@ final class PageShots {
             }
         }
         level.setBlock(b, Blocks.BEACON.defaultBlockState(), 3);
-        level.setBlock(new BlockPos(bx - 10, h, bz + 7), Blocks.SPAWNER.defaultBlockState(), 3);
+        spawner = new BlockPos(bx - 10, h, bz + 7);
+        level.setBlock(spawner, Blocks.SPAWNER.defaultBlockState(), 3);
         level.setBlock(new BlockPos(bx + 8, h, bz - 9), Blocks.SCULK_SENSOR.defaultBlockState(), 3);
         level.setBlock(new BlockPos(bx + 9, h, bz + 9), Blocks.SCULK_SHRIEKER.defaultBlockState(), 3);
         beacon = b;
@@ -160,9 +171,8 @@ final class PageShots {
         RangeSight.LOG.info("Range Sight page shots: scene built at {}", b);
     }
 
-    /** Moves the player to beacon + (dx, dy, dz), looking at the beacon. */
-    private static void view(IntegratedServer server, int dx, int dy, int dz) {
-        BlockPos b = beacon;
+    /** Moves the player to target + (dx, dy, dz), looking at the target. */
+    private static void view(IntegratedServer server, BlockPos b, int dx, int dy, int dz) {
         server.execute(() -> {
             ServerPlayer sp = server.getPlayerList().getPlayers().get(0);
             double x = b.getX() + 0.5 + dx, y = b.getY() + dy, z = b.getZ() + 0.5 + dz;

@@ -153,11 +153,11 @@ jobs:
         run: |
           mkdir -p server/mods && cd server
           if [ "${{ matrix.loader }}" = "forge" ]; then
-            curl -fsSL -o installer.jar "https://maven.minecraftforge.net/net/minecraftforge/forge/${FORGE}/forge-${FORGE}-installer.jar"
-            java -jar installer.jar --installServer . > install.log 2>&1 || (tail -50 install.log; exit 1)
+            curl -fsSL --retry 5 --retry-delay 5 --retry-all-errors -o installer.jar "https://maven.minecraftforge.net/net/minecraftforge/forge/${FORGE}/forge-${FORGE}-installer.jar"
+            { java -jar installer.jar --installServer . > install.log 2>&1 || { sleep 20; java -jar installer.jar --installServer . > install.log 2>&1; }; } || (tail -50 install.log; exit 1)
           else
-            curl -fsSL -o installer.jar "https://maven.neoforged.net/releases/net/neoforged/neoforge/${NEOFORGE}/neoforge-${NEOFORGE}-installer.jar"
-            java -jar installer.jar --install-server . > install.log 2>&1 || (tail -50 install.log; exit 1)
+            curl -fsSL --retry 5 --retry-delay 5 --retry-all-errors -o installer.jar "https://maven.neoforged.net/releases/net/neoforged/neoforge/${NEOFORGE}/neoforge-${NEOFORGE}-installer.jar"
+            { java -jar installer.jar --install-server . > install.log 2>&1 || { sleep 20; java -jar installer.jar --install-server . > install.log 2>&1; }; } || (tail -50 install.log; exit 1)
           fi
           find ../jars -name "rangesight-${{ matrix.loader }}-${MC}-*.jar" ! -name "*-sources.jar" ! -name "*-javadoc.jar" -exec cp {} mods/ \;
           ls mods
@@ -346,11 +346,11 @@ jobs:
           F=$(cat jars/loader-version.txt)
           mkdir -p server/mods && cd server
           if [ "${{ matrix.loader }}" = "forge" ]; then
-            curl -fsSL -o installer.jar "https://maven.minecraftforge.net/net/minecraftforge/forge/${{ matrix.mc }}-$F/forge-${{ matrix.mc }}-$F-installer.jar"
-            java -jar installer.jar --installServer . > install.log 2>&1 || (tail -50 install.log; exit 1)
+            curl -fsSL --retry 5 --retry-delay 5 --retry-all-errors -o installer.jar "https://maven.minecraftforge.net/net/minecraftforge/forge/${{ matrix.mc }}-$F/forge-${{ matrix.mc }}-$F-installer.jar"
+            { java -jar installer.jar --installServer . > install.log 2>&1 || { sleep 20; java -jar installer.jar --installServer . > install.log 2>&1; }; } || (tail -50 install.log; exit 1)
           else
-            curl -fsSL -o installer.jar "https://maven.neoforged.net/releases/net/neoforged/neoforge/$F/neoforge-$F-installer.jar"
-            java -jar installer.jar --install-server . > install.log 2>&1 || (tail -50 install.log; exit 1)
+            curl -fsSL --retry 5 --retry-delay 5 --retry-all-errors -o installer.jar "https://maven.neoforged.net/releases/net/neoforged/neoforge/$F/neoforge-$F-installer.jar"
+            { java -jar installer.jar --install-server . > install.log 2>&1 || { sleep 20; java -jar installer.jar --install-server . > install.log 2>&1; }; } || (tail -50 install.log; exit 1)
           fi
           cp ../jars/*.jar mods/
           ls; ls mods
@@ -510,17 +510,17 @@ jobs:
           mkdir -p server/mods && cd server
           if [ "${{ matrix.loader }}" = "forge" ]; then
             F=$(cat ../jars/loader-version.txt)
-            curl -fsSL -o installer.jar "https://maven.minecraftforge.net/net/minecraftforge/forge/${{ matrix.mc }}-$F/forge-${{ matrix.mc }}-$F-installer.jar"
-            java -jar installer.jar --installServer . > install.log 2>&1 || (tail -50 install.log; exit 1)
+            curl -fsSL --retry 5 --retry-delay 5 --retry-all-errors -o installer.jar "https://maven.minecraftforge.net/net/minecraftforge/forge/${{ matrix.mc }}-$F/forge-${{ matrix.mc }}-$F-installer.jar"
+            { java -jar installer.jar --installServer . > install.log 2>&1 || { sleep 20; java -jar installer.jar --installServer . > install.log 2>&1; }; } || (tail -50 install.log; exit 1)
           elif [ "${{ matrix.mc }}" = "1.20.1" ]; then
             F=$(curl -s https://maven.neoforged.net/releases/net/neoforged/forge/maven-metadata.xml | grep -oE "<version>1\.20\.1-[^<]*</version>" | sed 's/<[^>]*>//g' | sort -V | tail -1)
             echo "NeoForge 1.20.1: $F"
-            curl -fsSL -o installer.jar "https://maven.neoforged.net/releases/net/neoforged/forge/$F/forge-$F-installer.jar"
-            java -jar installer.jar --installServer . > install.log 2>&1 || (tail -50 install.log; exit 1)
+            curl -fsSL --retry 5 --retry-delay 5 --retry-all-errors -o installer.jar "https://maven.neoforged.net/releases/net/neoforged/forge/$F/forge-$F-installer.jar"
+            { java -jar installer.jar --installServer . > install.log 2>&1 || { sleep 20; java -jar installer.jar --installServer . > install.log 2>&1; }; } || (tail -50 install.log; exit 1)
           else
             F=$(cat ../jars/loader-version.txt)
-            curl -fsSL -o installer.jar "https://maven.neoforged.net/releases/net/neoforged/neoforge/$F/neoforge-$F-installer.jar"
-            java -jar installer.jar --install-server . > install.log 2>&1 || (tail -50 install.log; exit 1)
+            curl -fsSL --retry 5 --retry-delay 5 --retry-all-errors -o installer.jar "https://maven.neoforged.net/releases/net/neoforged/neoforge/$F/neoforge-$F-installer.jar"
+            { java -jar installer.jar --install-server . > install.log 2>&1 || { sleep 20; java -jar installer.jar --install-server . > install.log 2>&1; }; } || (tail -50 install.log; exit 1)
           fi
           find ../jars -name "*.jar" -exec cp {} mods/ \;
           ls; ls mods
@@ -651,8 +651,8 @@ jobs:
           F=$(curl -s https://maven.minecraftforge.net/net/minecraftforge/forge/maven-metadata.xml | grep -o "<version>1.12.2-[^<]*</version>" | sed 's/<[^>]*>//g; s/^1.12.2-//' | tail -1)
           echo "Forge 1.12.2-$F"
           mkdir -p server/mods && cd server
-          curl -fsSL -o installer.jar "https://maven.minecraftforge.net/net/minecraftforge/forge/1.12.2-$F/forge-1.12.2-$F-installer.jar"
-          java -jar installer.jar --installServer . > install.log 2>&1 || (tail -50 install.log; exit 1)
+          curl -fsSL --retry 5 --retry-delay 5 --retry-all-errors -o installer.jar "https://maven.minecraftforge.net/net/minecraftforge/forge/1.12.2-$F/forge-1.12.2-$F-installer.jar"
+          { java -jar installer.jar --installServer . > install.log 2>&1 || { sleep 20; java -jar installer.jar --installServer . > install.log 2>&1; }; } || (tail -50 install.log; exit 1)
           cp ../jars/*.jar mods/
           ls; ls mods
       - name: Start server and check Range Sight
