@@ -32,7 +32,7 @@ Shows how far sculk sensors, calibrated sensors and shriekers can hear, and how 
 ### 🗺️ Spawn chunks
 Shows which chunks stay loaded around world spawn (up to Minecraft 1.21.8, since newer versions no longer have spawn chunks).
 
-![Every range, its own color](https://raw.githubusercontent.com/CosmicLogic0/range-sight/main/docs/images/ranges.png)
+![Every range, its own color](https://raw.githubusercontent.com/CosmicLogic0/range-sight/main/docs/images/ranges-plugin.png)
 
 ### ⚡ Light on your server
 Range blocks near each player are looked up every few seconds, not every tick, and only the closest ones are drawn.

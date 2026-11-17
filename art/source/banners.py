@@ -167,20 +167,24 @@ def donate():
 
 
 # ---------------------------------------------------------------- range chart
-def ranges():
+def ranges(plugin=False):
     rows = [('beacon', 'Beacon', 'Effect area: 20 to 50 blocks out (by pyramid levels), up to the sky', 'Numpad 1'),
             ('conduit', 'Conduit', 'Effect sphere: 32 to 96 blocks (by prismarine frame size)', 'Numpad 2'),
             ('spawner', 'Spawner', 'Activation sphere (16) + the box mobs spawn in', 'Numpad 3'),
             ('raid', 'Raid', 'Raid area: 96 blocks around the raid center', 'Numpad 4'),
             ('sculk', 'Sculk', 'Sensor 8 · calibrated 16 · shrieker 8 + Darkness 40', 'Numpad 5'),
             ('spawn', 'Spawn chunks', 'Chunks that stay loaded (up to 1.21.8)', 'Numpad 6')]
+    if plugin:
+        cmds = ['/range beacon', '/range conduit', '/range spawner', '/range raid', '/range sculk', '/range spawnchunks']
+        rows = [(r[0], r[1], r[2], c) for r, c in zip(rows, cmds)]
     W, H = 1600 * S, (150 + 96 * len(rows) + 120) * S
     im = background(W, H, 1350 * S, H // 2, [(260, COLS['conduit']), (190, COLS['sculk']), (120, COLS['beacon'])])
     mask = Image.new('L', (W, H), 0)
     ImageDraw.Draw(mask).rounded_rectangle([0, 0, W - 1, H - 1], radius=36 * S, fill=255)
     im.putalpha(mask)
     im = panel(im, [50 * S, 120 * S, 1550 * S, H - 80 * S], 225)
-    im = shadow_text(im, (60 * S, 88 * S), 'Every range, its own color and key', font(FB, 54), WHITE, 'ls')
+    title = 'Every range, its own color' + ('' if plugin else ' and key')
+    im = shadow_text(im, (60 * S, 88 * S), title, font(FB, 54), WHITE, 'ls')
     d = ImageDraw.Draw(im)
     y = 150 * S
     for key, name, desc, k in rows:
@@ -194,10 +198,13 @@ def ranges():
                             fill=(36, 42, 74, 255), outline=(90, 100, 150, 255), width=2 * S)
         d.text((1500 * S - 20 * S - kw / 2, y + 49 * S), k, font=font(FS, 26), fill=WHITE, anchor='mm')
         y += 96 * S
-    d.text((60 * S, H - 30 * S), 'Numpad 0 turns every range on or off. Colors and keys can be changed.', font=font(FS, 26), fill=MUTED, anchor='ls')
-    finish(im, os.path.join(ART, 'features', 'ranges.png'))
+    foot = ('/range all  ·  /range off  ·  /range list. Outlines are shown only to you.' if plugin
+            else 'Numpad 0 turns every range on or off. Colors and keys can be changed.')
+    d.text((60 * S, H - 30 * S), foot, font=font(FS, 26), fill=MUTED, anchor='ls')
+    finish(im, os.path.join(ART, 'features', 'ranges-plugin.png' if plugin else 'ranges.png'))
 
 
 header()
 donate()
 ranges()
+ranges(True)
