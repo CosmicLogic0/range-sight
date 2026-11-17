@@ -3,6 +3,9 @@ package com.cosmiclogic.rangesight.client;
 import com.cosmiclogic.rangesight.RangeSight;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Screenshot;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -24,6 +27,7 @@ import java.nio.file.Path;
 final class PageShots {
 
     private static Boolean active;
+    private static boolean holding;
     private static int ticks;
     private static BlockPos beacon;
 
@@ -42,36 +46,80 @@ final class PageShots {
         if (server == null) {
             return;
         }
+        if (!holding) {
+            // Wait until the world is really shown, then keep an empty see-through screen open: the client test
+            // quits a few ticks after the last screen closes, and this gives the scene time to load and be shot.
+            if (mc.screen != null) {
+                return;
+            }
+            mc.setScreen(new HoldScreen());
+            holding = true;
+            RangeSight.LOG.info("Range Sight page shots: world shown, holding the client open");
+        }
         ticks++;
         try {
             if (ticks == 2) {
                 GLFW.glfwSetWindowSize(mc.getWindow().getWindow(), 1600, 900);
+                mc.options.hideGui = true;
                 BlockPos p = mc.player.blockPosition();
                 server.execute(() -> build(server, p));
-            } else if (ticks == 6 && beacon != null) {
+            } else if (ticks == 12 && beacon != null) {
                 view(server, -20, 12, -26);
-            } else if (ticks == 24) {
+            } else if (ticks == 45) {
                 RangeClient.rescanNow();
-                mc.options.hideGui = true;
-            } else if (ticks == 30) {
+            } else if (ticks == 55) {
                 shot(mc, "rangesight-page-1.png");
-            } else if (ticks == 32 && beacon != null) {
+            } else if (ticks == 60 && beacon != null) {
                 view(server, 30, 30, 10);
-            } else if (ticks == 50) {
+            } else if (ticks == 95) {
                 RangeClient.rescanNow();
-            } else if (ticks == 56) {
+            } else if (ticks == 105) {
                 shot(mc, "rangesight-page-2.png");
-            } else if (ticks == 58 && beacon != null) {
+            } else if (ticks == 110 && beacon != null) {
                 view(server, -4, 6, 20);
-            } else if (ticks == 76) {
+            } else if (ticks == 145) {
                 RangeClient.rescanNow();
-            } else if (ticks == 82) {
+            } else if (ticks == 155) {
                 shot(mc, "rangesight-page-3.png");
-                active = false;
+            } else if (ticks >= 165) {
+                done(mc);
             }
         } catch (Throwable t) {
             RangeSight.LOG.error("Range Sight page shots failed", t);
-            active = false;
+            done(mc);
+        }
+    }
+
+    private static void done(Minecraft mc) {
+        active = false;
+        mc.options.hideGui = false;
+        if (mc.screen instanceof HoldScreen) {
+            mc.setScreen(null);
+        }
+    }
+
+    /** Draws nothing, so the world shows through; doesn't pause the game. */
+    private static final class HoldScreen extends Screen {
+        HoldScreen() {
+            super(Component.empty());
+        }
+
+        @Override
+        public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        }
+
+        @Override
+        public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        }
+
+        @Override
+        public boolean isPauseScreen() {
+            return false;
+        }
+
+        @Override
+        public boolean shouldCloseOnEsc() {
+            return false;
         }
     }
 
