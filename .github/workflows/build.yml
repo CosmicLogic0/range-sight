@@ -225,6 +225,47 @@ jobs:
           name: log-mod-client-${{ matrix.loader }}
           path: logs/
 
+  # ---------------------------------------------------------------- Real screenshots for the CurseForge page (NeoForge 1.21.1)
+  page-shots:
+    needs: mod-build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: mod-jars
+          path: jars
+      - name: Put Range Sight in run/mods, every range on, page-shot marker
+        run: |
+          mkdir -p run/mods run/config
+          find jars -name "rangesight-neoforge-${MC}-*.jar" ! -name "*-sources.jar" ! -name "*-javadoc.jar" -exec cp {} run/mods/ \;
+          echo '{"lineWidth":3.0,"types":{"beacon":{"enabled":true},"conduit":{"enabled":true},"spawner":{"enabled":true},"raid":{"enabled":true},"sculk":{"enabled":true},"spawn_chunks":{"enabled":false}}}' > run/config/rangesight.json
+          echo on > run/config/rangesight-pageshots.txt
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Run the Minecraft client (real textures)
+        uses: headlesshq/mc-runtime-test@5.0.0
+        with:
+          mc: "1.21.1"
+          modloader: neoforge
+          mc-runtime-test: neoforge
+          java: 21
+          dummy-assets: "false"
+      - name: Keep screenshots + log
+        if: always()
+        run: |
+          mkdir -p logs
+          cp run/logs/latest.log logs/page-shots.log 2>/dev/null || true
+          cp run/screenshots/*.png logs/ 2>/dev/null || true
+          grep "page sho" logs/page-shots.log || true
+          ls -la logs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: log-page-shots
+          path: logs/
+
   # ---------------------------------------------------------------- Mod on 26.x (mod/v26)
   mod26-build:
     runs-on: ubuntu-latest
@@ -673,7 +714,7 @@ jobs:
 
   # ---------------------------------------------------------------- results back to the repo
   results:
-    needs: [plugin-build, paper-test, mod-build, mod-server-test, mod-client-test, mod26-build, mod26-server-test, mod26-client-test, legacy-build, legacy-server-test, legacy-client-test, v12-build, v12-server-test, v12-client-test]
+    needs: [plugin-build, paper-test, mod-build, mod-server-test, mod-client-test, page-shots, mod26-build, mod26-server-test, mod26-client-test, legacy-build, legacy-server-test, legacy-client-test, v12-build, v12-server-test, v12-client-test]
     if: always()
     runs-on: ubuntu-latest
     steps:
@@ -692,6 +733,7 @@ jobs:
             echo "- mod-build: ${{ needs.mod-build.result }}"
             echo "- mod-server-test: ${{ needs.mod-server-test.result }}"
             echo "- mod-client-test: ${{ needs.mod-client-test.result }}"
+            echo "- page-shots: ${{ needs.page-shots.result }}"
             echo "- mod26-build: ${{ needs.mod26-build.result }}"
             echo "- mod26-server-test: ${{ needs.mod26-server-test.result }}"
             echo "- mod26-client-test: ${{ needs.mod26-client-test.result }}"
