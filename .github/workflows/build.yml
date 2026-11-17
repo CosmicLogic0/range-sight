@@ -713,6 +713,27 @@ jobs:
           path: logs/
 
   # ---------------------------------------------------------------- results back to the repo
+  # ---------------------------------------------------------------- Release jars -> branch "dist" (only when EVERY test passed)
+  export:
+    needs: [plugin-build, paper-test, mod-build, mod-server-test, mod-client-test, mod26-build, mod26-server-test, mod26-client-test, legacy-build, legacy-server-test, legacy-client-test, v12-build, v12-server-test, v12-client-test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: art
+      - name: Collect the tested release jars
+        run: |
+          mkdir -p dist
+          ls -R art | head -100
+          find art -name "*.jar" ! -name "*-sources.jar" ! -name "*-javadoc.jar" ! -name "*-dev*.jar" ! -name "logiclib*" -exec cp {} dist/ \;
+          cd dist && ls -la && sha256sum *.jar | tee SHA256SUMS && echo "${GITHUB_SHA}" > COMMIT
+      - name: Push to branch dist
+        run: |
+          cd dist
+          git init -q -b dist && git config user.name ci && git config user.email ci@example.com
+          git add -A && git commit -qm "dist ${GITHUB_SHA}"
+          git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" dist
+
   results:
     needs: [plugin-build, paper-test, mod-build, mod-server-test, mod-client-test, page-shots, mod26-build, mod26-server-test, mod26-client-test, legacy-build, legacy-server-test, legacy-client-test, v12-build, v12-server-test, v12-client-test]
     if: always()
