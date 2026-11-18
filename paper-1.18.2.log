@@ -1,0 +1,59 @@
+Downloading mojang_1.18.2.jar
+Applying patches
+Starting org.bukkit.craftbukkit.Main
+*** Warning, you've not updated in a while! ***
+*** Please download a new build as per instructions from https://papermc.io/downloads ***
+System Info: Java 17 (OpenJDK 64-Bit Server VM 17.0.21+9) Host: Linux 7.0.0-1016-aws (amd64)
+Loading libraries, please wait...
+2026-11-18 14:45:15,450 ServerMain WARN Advanced terminal features are not available in this environment
+[14:45:18 ERROR]: Failed to load properties from file: server.properties
+[14:45:18 INFO]: Environment: authHost='https://authserver.mojang.com', accountsHost='https://api.mojang.com', sessionHost='https://sessionserver.mojang.com', servicesHost='https://api.minecraftservices.com', name='PROD'
+[14:45:18 INFO]: Found new data pack file/bukkit, loading it automatically
+[14:45:19 INFO]: Loaded 7 recipes
+[14:45:20 INFO]: Starting minecraft server version 1.18.2
+[14:45:20 INFO]: Loading properties
+[14:45:20 INFO]: This server is running Paper version git-Paper-388 (MC: 1.18.2) (Implementing API version 1.18.2-R0.1-SNAPSHOT) (Git: fc9ee65 on ver/1.18.2)
+[14:45:20 INFO]: Server Ping Player Sample Count: 12
+[14:45:20 INFO]: Using 4 threads for Netty based IO
+[14:45:20 INFO]: Default game type: SURVIVAL
+[14:45:20 INFO]: Generating keypair
+[14:45:20 INFO]: Starting Minecraft server on *:25565
+[14:45:20 INFO]: Using epoll channel type
+[14:45:20 INFO]: Paper: Using libdeflate (Linux x86_64) compression from Velocity.
+[14:45:20 INFO]: Paper: Using Java cipher from Velocity.
+[14:45:20 INFO]: [LogicLib] Loading LogicLib v0.1.0
+[14:45:20 INFO]: [RangeSight] Loading RangeSight v0.1.0
+[14:45:20 INFO]: Preparing level "world"
+[14:45:26 INFO]: Preparing start region for dimension minecraft:overworld
+[14:45:26 INFO]: Preparing spawn area: 0%
+[14:45:26 INFO]: Time elapsed: 281 ms
+[14:45:26 INFO]: Preparing start region for dimension minecraft:the_end
+[14:45:27 INFO]: Time elapsed: 345 ms
+[14:45:27 INFO]: Preparing start region for dimension minecraft:the_nether
+[14:45:27 INFO]: Time elapsed: 281 ms
+[14:45:27 INFO]: [LogicLib] Enabling LogicLib v0.1.0
+[14:45:27 INFO]: [LogicLib] LogicLib for Paper 0.1.0 running on Minecraft 1.18.2
+[14:45:27 INFO]: [RangeSight] Enabling RangeSight v0.1.0
+[14:45:27 INFO]: [RangeSight] Range Sight 0.1.0 enabled on Minecraft 1.18.2
+[14:45:27 INFO]: Running delayed init tasks
+[14:45:27 INFO]: Done (7.143s)! For help, type "help"
+[14:45:27 INFO]: Timings Reset
+[14:45:33 INFO]: [RangeSight] Self-test on Minecraft 1.18.2: expected [beacon square 50, spawner sphere 16, spawner box 4, conduit sphere 96, sculk sphere 8], found [conduit sphere 96, spawner sphere 16, spawner box 4, sculk sphere 8, beacon square 50], spawn chunks [-11, -14, 7, 4]
+[14:45:33 INFO]: [RangeSight] Range Sight self-test PASS
+[14:45:34 INFO]: Stopping the server
+[14:45:34 INFO]: Stopping server
+[14:45:34 INFO]: [RangeSight] Disabling RangeSight v0.1.0
+[14:45:34 INFO]: [LogicLib] Disabling LogicLib v0.1.0
+[14:45:35 INFO]: Saving players
+[14:45:35 INFO]: Saving worlds
+[14:45:51 INFO]: Saving chunks for level 'ServerLevel[world]'/minecraft:overworld
+[14:45:51 INFO]: Saving chunks for level 'ServerLevel[world_the_end]'/minecraft:the_end
+[14:45:51 INFO]: Saving chunks for level 'ServerLevel[world_nether]'/minecraft:the_nether
+[14:45:51 INFO]: ThreadedAnvilChunkStorage (world): All chunks are saved
+[14:45:51 INFO]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[14:45:51 INFO]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[14:45:51 INFO]: ThreadedAnvilChunkStorage: All dimensions are saved
+[14:45:51 INFO]: Flushing Chunk IO
+[14:45:51 INFO]: Closing Thread Pool
+2026-11-18 14:45:51,838 Log4j2-AsyncAppenderEventDispatcher-1-Async WARN Advanced terminal features are not available in this environment
+[14:45:51 INFO]: Closing Server

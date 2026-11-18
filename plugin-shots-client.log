@@ -1,0 +1,4 @@
+[14:47:25] [main/INFO]: ModLauncher running: args [--username, Offline, --version, neoforge-21.1.266, --gameDir, /home/runner/work/range-sight/range-sight/run, --assetsDir, /home/runner/.minecraft/assets, --assetIndex, 17, --uuid, 22689332a7fd41919600b0fe1135ee34, --accessToken, ❄❄❄❄❄❄❄❄, --clientId, , --xuid, , --userType, msa, --versionType, release, --quickPlayPath, /home/runner/.minecraft/quickPlay/java/1795013217691.json, --fml.neoForgeVersion, 21.1.266, --fml.fmlVersion, 4.0.45, --fml.mcVersion, 1.21.1, --fml.neoFormVersion, 20240808.144430, --launchTarget, forgeclient]
+[14:47:25] [main/INFO]: JVM identified as Eclipse Adoptium OpenJDK 64-Bit Server VM 21.0.13+9-LTS
+[14:47:25] [main/INFO]: ModLauncher 11.0.5+main.901c6ea8 starting: java version 21.0.13 by Eclipse Adoptium; OS Linux arch amd64 version 7.0.0-1019-azure
+[14:47:25] [main/INFO]: Loading ImmediateWindowProvider fmlearlywindow

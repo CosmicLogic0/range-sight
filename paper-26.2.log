@@ -1,0 +1,124 @@
+Downloading mojang_26.2.jar
+Applying patches
+Starting org.bukkit.craftbukkit.Main
+2026-11-18T14:45:25.272787980Z ServerMain WARN Advanced terminal features are not available in this environment
+[14:45:25 INFO]: [bootstrap] Running Java 25 (OpenJDK 64-Bit Server VM 25.0.5+8-LTS; Eclipse Adoptium Temurin-25.0.5+8) on Linux 7.0.0-1019-azure (amd64)
+[14:45:25 INFO]: [bootstrap] Loading Paper 26.2-135-ver/26.2@e4d6dfd (2026-10-25T11:18:00Z) for Minecraft 26.2
+[14:45:25 INFO]: [PluginInitializerManager] Initializing plugins...
+[14:45:26 INFO]: [PluginInitializerManager] Initialized 2 plugins
+[14:45:26 INFO]: [PluginInitializerManager] Bukkit plugins (2):
+ - LogicLib (0.1.0), RangeSight (0.1.0)
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.joml.MemUtil$MemUtilUnsafe (file:/home/runner/work/range-sight/range-sight/server/libraries/org/joml/joml/1.10.8/joml-1.10.8.jar)
+WARNING: Please consider reporting this to the maintainers of class org.joml.MemUtil$MemUtilUnsafe
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+[14:45:30 INFO]: [ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry] Initialising converters for DataConverter...
+[14:45:30 INFO]: Environment: Environment[sessionHost=https://sessionserver.mojang.com, servicesHost=https://api.minecraftservices.com, profilesHost=https://api.mojang.com, name=PROD]
+[14:45:30 INFO]: [ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry] Finished initialising converters for DataConverter in 555.4ms
+[14:45:30 INFO]: Found new data pack paper, loading it automatically
+[14:45:31 INFO]: No existing world data, creating new world
+[14:45:32 INFO]: Loaded 1585 recipes
+[14:45:32 INFO]: Loaded 1688 advancements
+[14:45:32 INFO]: Starting minecraft server version 26.2
+[14:45:32 INFO]: Loading properties
+[14:45:33 INFO]: This server is running Paper version 26.2-135-ver/26.2@e4d6dfd (2026-10-25T11:18:00Z) (Implementing API version 26.2.build.135-stable)
+[14:45:33 INFO]: [spark] This server bundles the spark profiler. For more information please visit https://docs.papermc.io/paper/profiling
+[14:45:33 INFO]: Server Ping Player Sample Count: 12
+[14:45:33 INFO]: Using 4 threads for Netty based IO
+[14:45:33 INFO]: [MoonriseCommon] Paper is using 1 worker threads, 1 I/O threads
+[14:45:33 INFO]: Default game type: SURVIVAL
+[14:45:33 INFO]: Generating keypair
+[14:45:33 INFO]: Starting Minecraft server on *:25565
+[14:45:33 INFO]: Paper: Using libdeflate (Linux x86_64) compression from Velocity.
+[14:45:33 INFO]: Paper: Using OpenSSL 3.x.x (Linux x86_64) cipher from Velocity.
+[14:45:33 INFO]: [LogicLib] Loading server plugin LogicLib v0.1.0
+[14:45:33 INFO]: [RangeSight] Loading server plugin RangeSight v0.1.0
+[14:45:33 INFO]: Preparing level "world"
+[14:45:34 INFO]: Selecting spawn point for level 'minecraft:overworld'...
+[14:45:44 INFO]: Selecting spawn point for level 'minecraft:the_nether'...
+[14:45:45 INFO]: Selecting spawn point for level 'minecraft:the_end'...
+[14:45:45 INFO]: Loading 0 persistent chunks for level 'minecraft:overworld'...
+[14:45:45 INFO]: Preparing spawn area: 100%
+[14:45:45 INFO]: Prepared spawn area in 11221 ms
+[14:45:45 INFO]: Loading 0 persistent chunks for level 'minecraft:the_nether'...
+[14:45:45 INFO]: Preparing spawn area: 100%
+[14:45:45 INFO]: Prepared spawn area in 1207 ms
+[14:45:45 INFO]: Loading 0 persistent chunks for level 'minecraft:the_end'...
+[14:45:45 INFO]: Preparing spawn area: 100%
+[14:45:45 INFO]: Prepared spawn area in 245 ms
+[14:45:45 INFO]: Done preparing level "world" (11.698s)
+[14:45:45 INFO]: [LogicLib] Enabling LogicLib v0.1.0
+[14:45:45 INFO]: [LogicLib] LogicLib for Paper 0.1.0 running on Minecraft 26.2
+[14:45:45 INFO]: [RangeSight] Enabling RangeSight v0.1.0
+[14:45:45 INFO]: [RangeSight] Range Sight 0.1.0 enabled on Minecraft 26.2
+[14:45:45 INFO]: [spark] Starting background profiler...
+[14:45:46 INFO]: Saving chunks for level 'ServerLevel[world]'/minecraft:overworld
+[14:45:46 INFO]: Saving chunks for level 'ServerLevel[world]'/minecraft:the_nether
+[14:45:46 INFO]: Saving chunks for level 'ServerLevel[world]'/minecraft:the_end
+[14:45:46 INFO]: ThreadedAnvilChunkStorage (world): All chunks are saved
+[14:45:46 INFO]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[14:45:46 INFO]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[14:45:46 INFO]: ThreadedAnvilChunkStorage: All dimensions are saved
+[14:45:46 INFO]: Running delayed init tasks
+[14:45:46 INFO]: Done (22.913s)! For help, type "help"
+[14:45:46 INFO]: *************************************************************************************
+[14:45:46 INFO]: This is the first time you're starting this server.
+[14:45:46 INFO]: It's recommended you read our 'Getting Started' documentation for guidance.
+[14:45:46 INFO]: View this and more helpful information here: https://docs.papermc.io/paper/next-steps
+[14:45:46 INFO]: *************************************************************************************
+[14:45:47 WARN]: *************************************************************************************
+[14:45:47 WARN]: You are running the latest build for your Minecraft version (26.2)
+[14:45:47 WARN]: However, you are 2 releases behind the latest stable release (26.3)!
+[14:45:47 WARN]: It is recommended that you update as soon as possible
+[14:45:47 WARN]: https://papermc.io/downloads/paper
+[14:45:47 WARN]: *************************************************************************************
+[14:45:52 INFO]: [RangeSight] Self-test: waiting for chunks near spawn to load...
+[14:46:02 INFO]: [RangeSight] Self-test: waiting for chunks near spawn to load...
+[14:46:12 INFO]: [RangeSight] Self-test: waiting for chunks near spawn to load...
+[14:46:22 INFO]: [RangeSight] Self-test: waiting for chunks near spawn to load...
+[14:46:32 INFO]: [RangeSight] Self-test: waiting for chunks near spawn to load...
+[14:46:42 INFO]: [RangeSight] Self-test: waiting for chunks near spawn to load...
+[14:46:52 INFO]: [RangeSight] Self-test: waiting for chunks near spawn to load...
+[14:47:02 INFO]: [RangeSight] Self-test: waiting for chunks near spawn to load...
+[14:47:12 INFO]: [RangeSight] Self-test: waiting for chunks near spawn to load...
+[14:47:22 INFO]: [RangeSight] Self-test: waiting for chunks near spawn to load...
+[14:47:32 INFO]: [RangeSight] Self-test: waiting for chunks near spawn to load...
+[14:47:42 INFO]: [RangeSight] Self-test: waiting for chunks near spawn to load...
+[14:47:52 WARN]: [RangeSight] Self-test: chunks near spawn still not loaded after 2 minutes, running anyway
+[14:47:52 INFO]: [RangeSight] Self-test on Minecraft 26.2: expected [beacon square 50, spawner sphere 16, spawner box 4, conduit sphere 96, sculk sphere 8, sculk sphere 16, sculk sphere 8, sculk sphere 40], found [conduit sphere 96, sculk sphere 16, sculk sphere 8, sculk sphere 40, sculk sphere 8, spawner sphere 16, spawner box 4, beacon square 50], spawn chunks none
+[14:47:52 INFO]: [RangeSight] Range Sight self-test PASS
+[14:47:53 INFO]: Stopping the server
+[14:47:53 INFO]: Stopping server
+[14:47:53 INFO]: [RangeSight] Disabling RangeSight v0.1.0
+[14:47:53 INFO]: [LogicLib] Disabling LogicLib v0.1.0
+[14:47:53 INFO]: Saving players
+[14:47:53 INFO]: Saving worlds
+[14:47:53 INFO]: Saving chunks for level 'ServerLevel[world]'/minecraft:overworld
+[14:47:53 INFO]: [ChunkHolderManager] Waiting 60s for chunk system to halt for world 'minecraft:overworld'
+[14:47:53 INFO]: [ChunkHolderManager] Halted chunk system for world 'minecraft:overworld'
+[14:47:53 INFO]: [ChunkHolderManager] Saving all chunkholders for world 'minecraft:overworld'
+[14:47:53 INFO]: [ChunkHolderManager] Saved 2 block chunks, 2 entity chunks, 0 poi chunks in world 'minecraft:overworld' in 0.01s
+[14:47:53 INFO]: [ChunkHolderManager] Waiting 60s for chunk I/O to halt for world 'minecraft:overworld'
+[14:47:53 INFO]: [ChunkHolderManager] Halted I/O scheduler for world 'minecraft:overworld'
+[14:47:53 INFO]: Saving chunks for level 'ServerLevel[world]'/minecraft:the_nether
+[14:47:53 INFO]: [ChunkHolderManager] Waiting 60s for chunk system to halt for world 'minecraft:the_nether'
+[14:47:53 INFO]: [ChunkHolderManager] Halted chunk system for world 'minecraft:the_nether'
+[14:47:53 INFO]: [ChunkHolderManager] Saving all chunkholders for world 'minecraft:the_nether'
+[14:47:53 INFO]: [ChunkHolderManager] Saved 0 block chunks, 0 entity chunks, 0 poi chunks in world 'minecraft:the_nether' in 0.00s
+[14:47:53 INFO]: [ChunkHolderManager] Waiting 60s for chunk I/O to halt for world 'minecraft:the_nether'
+[14:47:53 INFO]: [ChunkHolderManager] Halted I/O scheduler for world 'minecraft:the_nether'
+[14:47:53 INFO]: Saving chunks for level 'ServerLevel[world]'/minecraft:the_end
+[14:47:53 INFO]: [ChunkHolderManager] Waiting 60s for chunk system to halt for world 'minecraft:the_end'
+[14:47:53 INFO]: [ChunkHolderManager] Halted chunk system for world 'minecraft:the_end'
+[14:47:53 INFO]: [ChunkHolderManager] Saving all chunkholders for world 'minecraft:the_end'
+[14:47:53 INFO]: [ChunkHolderManager] Saved 0 block chunks, 0 entity chunks, 0 poi chunks in world 'minecraft:the_end' in 0.00s
+[14:47:53 INFO]: [ChunkHolderManager] Waiting 60s for chunk I/O to halt for world 'minecraft:the_end'
+[14:47:53 INFO]: [ChunkHolderManager] Halted I/O scheduler for world 'minecraft:the_end'
+[14:47:53 INFO]: ThreadedAnvilChunkStorage (world): All chunks are saved
+[14:47:53 INFO]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[14:47:53 INFO]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[14:47:53 INFO]: ThreadedAnvilChunkStorage: All dimensions are saved
+[14:47:53 INFO]: Waiting for all RegionFile I/O tasks to complete...
+[14:47:53 INFO]: All RegionFile I/O tasks to complete
+[14:47:53 INFO]: [MoonriseCommon] Awaiting termination of worker pool for up to 60s...
+[14:47:53 INFO]: [MoonriseCommon] Awaiting termination of I/O pool for up to 60s...

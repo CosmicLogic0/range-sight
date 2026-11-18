@@ -1,0 +1,89 @@
+Downloading https://services.gradle.org/distributions/gradle-9.5.1-bin.zip
+.............10%.............20%..............30%.............40%.............50%..............60%.............70%..............80%.............90%.............100%
+
+Welcome to Gradle 9.5.1!
+
+Here are the highlights of this release:
+ - Task provenance in reports and failure messages
+ - Type-safe accessors for precompiled Kotlin Settings plugins
+
+For more details see https://docs.gradle.org/9.5.1/release-notes.html
+
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.5.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+> Configure project :
+Architectury Loom: 1.17.493
+Range Sight (forge): Minecraft 1.18.2, forge 40.3.12, glue forge-1.18, Java 17
+:merging mappings (InstallerTools, srg + mojmap)
+:merged mappings (InstallerTools, srg + mojmap) in 5s
+:downloading minecraft libraries, this may take a while...
+:executing 10 MCP steps
+:step 1/10 - downloadClient
+:downloadClient done in 619242ns
+:step 2/10 - downloadServer
+:downloadServer done in 11643ns
+:step 3/10 - extractServer with net.minecraftforge:installertools:1.2.10:fatjar
+:extractServer done in 211ms
+:step 4/10 - downloadClientMappings
+:downloadClientMappings done in 226ms
+:step 5/10 - mergeMappings with net.minecraftforge:installertools:1.2.0:fatjar
+:mergeMappings done in 1s
+:step 6/10 - stripClient
+:stripClient done in 519ms
+:step 7/10 - stripServer
+:stripServer done in 306ms
+:step 8/10 - merge with net.minecraftforge:mergetool:1.1.3:fatjar
+:merge done in 1s
+:downloading minecraft libraries, this may take a while...
+:step 9/10 - listLibraries
+:listLibraries done in 684901ns
+:step 10/10 - rename with net.minecraftforge:ForgeAutoRenamingTool:0.1.17:all
+:rename done in 4s
+:patching jars
+:patched jars in 9s
+:access transforming minecraft
+[14:45:56] [main/INFO]: Access Transformer processor running version 8.0.5+67+master.d58c7dfe
+[14:45:56] [main/INFO]: Command line arguments [--inJar, /home/runner/.gradle/caches/fabric-loom/1.18.2/forge/1.18.2-40.3.12/minecraft-merged-srg-patched.jar, --outJar, /home/runner/.gradle/caches/fabric-loom/1.18.2/forge/1.18.2-40.3.12/minecraft-merged-srg-at-patched.jar, --atFile, /tmp/at-conf17164980545662541022.cfg]
+[14:45:56] [main/INFO]: Reading from /home/runner/.gradle/caches/fabric-loom/1.18.2/forge/1.18.2-40.3.12/minecraft-merged-srg-patched.jar
+[14:45:56] [main/INFO]: Writing to /home/runner/.gradle/caches/fabric-loom/1.18.2/forge/1.18.2-40.3.12/minecraft-merged-srg-at-patched.jar
+[14:45:56] [main/INFO]: Transformer file /tmp/at-conf17164980545662541022.cfg
+[14:45:56] [main/WARN]: Found existing output jar /home/runner/.gradle/caches/fabric-loom/1.18.2/forge/1.18.2-40.3.12/minecraft-merged-srg-at-patched.jar, overwriting
+[14:45:58] [main/INFO]: JAR transformation complete /home/runner/.gradle/caches/fabric-loom/1.18.2/forge/1.18.2-40.3.12/minecraft-merged-srg-at-patched.jar
+:access transformed minecraft in 3s
+:remapping minecraft (TinyRemapper, srg -> official)
+
+> Task :rsSources
+
+> Task :compileJava
+/home/runner/work/range-sight/range-sight/mod/legacy/build/gen-src/com/cosmiclogic/rangesight/client/RangeSightForgeClient.java:27: warning: [removal] RenderLevelLastEvent in net.minecraftforge.client.event has been deprecated and marked for removal
+        MinecraftForge.EVENT_BUS.addListener((RenderLevelLastEvent e) ->
+                                              ^
+1 warning
+
+> Task :rsResources
+> Task :processResources
+> Task :classes
+> Task :jar
+> Task :processIncludeJars
+> Task :compileTestJava NO-SOURCE
+> Task :processTestResources NO-SOURCE
+> Task :testClasses UP-TO-DATE
+> Task :test SKIPPED
+> Task :validateAccessWidener NO-SOURCE
+> Task :check UP-TO-DATE
+> Task :remapJar
+> Task :remapSourcesJar SKIPPED
+> Task :assemble
+> Task :build
+
+[Incubating] Problems report is available at: file:///home/runner/work/range-sight/range-sight/mod/legacy/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.5.1/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 2m 8s
+7 actionable tasks: 7 executed

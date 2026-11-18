@@ -1,0 +1,75 @@
+Downloading mojang_1.19.2.jar
+Applying patches
+Starting org.bukkit.craftbukkit.Main
+*** Warning, you've not updated in a while! ***
+*** Please download a new build as per instructions from https://papermc.io/downloads ***
+System Info: Java 17 (OpenJDK 64-Bit Server VM 17.0.21+9) Host: Linux 7.0.0-1019-azure (amd64)
+Loading libraries, please wait...
+2026-11-18 14:45:01,660 ServerMain WARN Advanced terminal features are not available in this environment
+[14:45:05 INFO]: Building unoptimized datafixer
+[14:45:05 ERROR]: Failed to load properties from file: server.properties
+[14:45:06 INFO]: Environment: authHost='https://authserver.mojang.com', accountsHost='https://api.mojang.com', sessionHost='https://sessionserver.mojang.com', servicesHost='https://api.minecraftservices.com', name='PROD'
+[14:45:06 INFO]: Found new data pack file/bukkit, loading it automatically
+[14:45:07 INFO]: Loaded 7 recipes
+[14:45:09 INFO]: Starting minecraft server version 1.19.2
+[14:45:09 INFO]: Loading properties
+[14:45:09 INFO]: This server is running Paper version git-Paper-307 (MC: 1.19.2) (Implementing API version 1.19.2-R0.1-SNAPSHOT) (Git: 476ef25)
+[14:45:09 INFO]: Server Ping Player Sample Count: 12
+[14:45:09 INFO]: Using 4 threads for Netty based IO
+[14:45:09 INFO]: [ChunkTaskScheduler] Chunk system is using 1 I/O threads, 1 worker threads, and gen parallelism of 1 threads
+[14:45:09 INFO]: Default game type: SURVIVAL
+[14:45:09 INFO]: Generating keypair
+[14:45:09 INFO]: Starting Minecraft server on *:25565
+[14:45:09 INFO]: Using epoll channel type
+[14:45:09 INFO]: Paper: Using libdeflate (Linux x86_64) compression from Velocity.
+[14:45:09 INFO]: Paper: Using OpenSSL 3.0.x (Linux x86_64) cipher from Velocity.
+[14:45:10 INFO]: [LogicLib] Loading LogicLib v0.1.0
+[14:45:10 INFO]: [RangeSight] Loading RangeSight v0.1.0
+[14:45:10 INFO]: Preparing level "world"
+[14:45:24 INFO]: Preparing start region for dimension minecraft:overworld
+[14:45:24 INFO]: Time elapsed: 132 ms
+[14:45:24 INFO]: Preparing start region for dimension minecraft:the_nether
+[14:45:24 INFO]: Time elapsed: 89 ms
+[14:45:24 INFO]: Preparing start region for dimension minecraft:the_end
+[14:45:24 INFO]: Time elapsed: 76 ms
+[14:45:24 INFO]: [LogicLib] Enabling LogicLib v0.1.0
+[14:45:24 INFO]: [LogicLib] LogicLib for Paper 0.1.0 running on Minecraft 1.19.2
+[14:45:24 INFO]: [RangeSight] Enabling RangeSight v0.1.0
+[14:45:24 INFO]: [RangeSight] Range Sight 0.1.0 enabled on Minecraft 1.19.2
+[14:45:24 INFO]: Running delayed init tasks
+[14:45:24 INFO]: Done (15.604s)! For help, type "help"
+[14:45:24 INFO]: Timings Reset
+[14:45:30 INFO]: [RangeSight] Self-test: waiting for chunks near spawn to load...
+[14:45:40 INFO]: [RangeSight] Self-test: waiting for chunks near spawn to load...
+[14:45:50 INFO]: [RangeSight] Self-test: waiting for chunks near spawn to load...
+[14:46:00 INFO]: [RangeSight] Self-test: waiting for chunks near spawn to load...
+[14:46:04 INFO]: [RangeSight] Self-test on Minecraft 1.19.2: expected [beacon square 50, spawner sphere 16, spawner box 4, conduit sphere 96, sculk sphere 8, sculk sphere 8, sculk sphere 40], found [conduit sphere 96, sculk sphere 8, sculk sphere 40, spawner sphere 16, spawner box 4, sculk sphere 8, beacon square 50], spawn chunks [-5, -15, 13, 3]
+[14:46:04 INFO]: [RangeSight] Range Sight self-test PASS
+[14:46:05 INFO]: Stopping the server
+[14:46:05 INFO]: Stopping server
+[14:46:05 INFO]: [RangeSight] Disabling RangeSight v0.1.0
+[14:46:05 INFO]: [LogicLib] Disabling LogicLib v0.1.0
+[14:46:05 INFO]: Saving players
+[14:46:05 INFO]: Saving worlds
+[14:46:05 INFO]: Saving chunks for level 'ServerLevel[world]'/minecraft:overworld
+[14:46:05 INFO]: [ChunkHolderManager] Waiting 60s for chunk system to halt for world 'world'
+[14:46:05 INFO]: [ChunkHolderManager] Halted chunk system for world 'world'
+[14:46:05 INFO]: [ChunkHolderManager] Saving all chunkholders for world 'world'
+[14:46:06 INFO]: [ChunkHolderManager] Saved 1849 block chunks, 361 entity chunks, 3 poi chunks in world 'world' in 1.14s
+[14:46:06 INFO]: ThreadedAnvilChunkStorage (world): All chunks are saved
+[14:46:06 INFO]: Saving chunks for level 'ServerLevel[world_nether]'/minecraft:the_nether
+[14:46:06 INFO]: [ChunkHolderManager] Waiting 60s for chunk system to halt for world 'world_nether'
+[14:46:06 INFO]: [ChunkHolderManager] Halted chunk system for world 'world_nether'
+[14:46:06 INFO]: [ChunkHolderManager] Saving all chunkholders for world 'world_nether'
+[14:46:07 INFO]: [ChunkHolderManager] Saved 2025 block chunks, 529 entity chunks, 0 poi chunks in world 'world_nether' in 1.04s
+[14:46:07 INFO]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[14:46:07 INFO]: Saving chunks for level 'ServerLevel[world_the_end]'/minecraft:the_end
+[14:46:07 INFO]: [ChunkHolderManager] Waiting 60s for chunk system to halt for world 'world_the_end'
+[14:46:07 INFO]: [ChunkHolderManager] Halted chunk system for world 'world_the_end'
+[14:46:07 INFO]: [ChunkHolderManager] Saving all chunkholders for world 'world_the_end'
+[14:46:07 INFO]: [ChunkHolderManager] Saved 2025 block chunks, 529 entity chunks, 0 poi chunks in world 'world_the_end' in 0.37s
+[14:46:08 INFO]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[14:46:08 INFO]: ThreadedAnvilChunkStorage: All dimensions are saved
+[14:46:08 INFO]: Flushing Chunk IO
+[14:46:08 INFO]: Closing Thread Pool
+[14:46:08 INFO]: Closing Server

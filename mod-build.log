@@ -1,0 +1,1046 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.10/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :buildSrc:extractPluginRequests
+> Task :buildSrc:generatePluginAdapters
+> Task :buildSrc:compileJava
+> Task :buildSrc:compileGroovy NO-SOURCE
+> Task :buildSrc:compileGroovyPlugins
+> Task :buildSrc:pluginDescriptors
+> Task :buildSrc:processResources
+> Task :buildSrc:classes
+> Task :buildSrc:jar
+
+> Configure project :forge
+Neither the 'eclipse' nor the 'idea' plugins were found, but IDE resource copy has been enabled.
+
+> Task :common:createMinecraftArtifacts
+Performing periodic cache maintenance on /home/runner/.gradle/caches/neoformruntime
+Cleaning intermediate results cache in /home/runner/.gradle/caches/neoformruntime/intermediate_results
+ Maximum age: 744h
+ Maximum cache size: 1 GiB
+ [0;2;3m44 files found[0m
+ [0;2;3m259 MiB overall size[0m
+ [0;2;3m0 expired keys found[0m
+Loaded 72 artifacts from /home/runner/work/range-sight/range-sight/mod/common/build/tmp/createMinecraftArtifacts/nfrt_artifact_manifest.properties
+[1m*** Started working on [4mdownloadJson[0m[0m
+ [1m[92m✓[0m Completed [4mdownloadJson[0m in 0.01s
+[1m*** Started working on [4mdownloadServer[0m[0m
+[1m*** Started working on [4mdownloadClientMappings[0m[0m
+[1m*** Started working on [4mdownloadClient[0m[0m
+[1m*** Started working on [4mlistLibraries[0m[0m
+ [1m[92m♻[0m Used cache of [4mlistLibraries[0m in 0.00s
+ [1m[92m✓[0m Completed [4mdownloadClient[0m in 0.03s
+ [1m[92m✓[0m Completed [4mdownloadClientMappings[0m in 0.03s
+ [1m[92m✓[0m Completed [4mdownloadServer[0m in 0.03s
+[1m*** Started working on [4mmergeMappings[0m[0m
+ [1m[92m♻[0m Used cache of [4mmergeMappings[0m in 0.00s
+[1m*** Started working on [4mstripClient[0m[0m
+ [1m[92m♻[0m Used cache of [4mstripClient[0m in 0.00s
+[1m*** Started working on [4mextractServer[0m[0m
+ [1m[92m♻[0m Used cache of [4mextractServer[0m in 0.00s
+[1m*** Started working on [4mstripServer[0m[0m
+ [1m[92m♻[0m Used cache of [4mstripServer[0m in 0.00s
+[1m*** Started working on [4mmerge[0m[0m
+ [1m[92m♻[0m Used cache of [4mmerge[0m in 0.00s
+[1m*** Started working on [4mrename[0m[0m
+ [1m[92m♻[0m Used cache of [4mrename[0m in 0.00s
+[1m*** Started working on [4mdecompile[0m[0m
+ [1m[92m♻[0m Used cache of [4mdecompile[0m in 0.00s
+[1m*** Started working on [4minject[0m[0m
+ [1m[92m♻[0m Used cache of [4minject[0m in 0.00s
+[1m*** Started working on [4mpatch[0m[0m
+ [1m[92m♻[0m Used cache of [4mpatch[0m in 0.00s
+[1m*** Started working on [4mtransformSources[0m[0m
+ [1m[92m♻[0m Used cache of [4mtransformSources[0m in 0.00s
+[1m*** Started working on [4mrecompile[0m[0m
+ [1m[92m♻[0m Used cache of [4mrecompile[0m in 0.00s
+[1m*** Started working on [4mmergeWithSources[0m[0m
+ [1m[92m♻[0m Used cache of [4mmergeWithSources[0m in 0.00s
+Total runtime: 0.66s
+
+
+> Task :common:compileJava
+> Task :common:processResources
+> Task :common:classes
+> Task :common:jarJar NO-SOURCE
+> Task :common:jar
+
+> Task :common:javadoc
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeClient.java:50: warning: no @return
+    public static List<KeyMapping> keys() {
+                                   ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeClient.java:119: warning: no @return
+    public static int shapeCount() {
+                      ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeClient.java:39: warning: no comment
+    public static void init(Path configDir) {
+                       ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeClient.java:56: warning: no comment
+    public static void onClientTick() {
+                       ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeClient.java:93: warning: no comment
+    public static void onRender(PoseStack poseStack, Vec3 camera) {
+                       ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeConfig.java:38: warning: no comment
+    public RangeConfig(Path configDir) {
+           ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeConfig.java:49: warning: no comment
+    public boolean anyEnabled() {
+                   ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeConfig.java:70: warning: no comment
+    public int color(RangeType type) {
+               ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeConfig.java:45: warning: no comment
+    public boolean isEnabled(RangeType type) {
+                   ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeConfig.java:75: warning: no comment
+    public void load() {
+                ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeConfig.java:108: warning: no comment
+    public void save() {
+                ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeConfig.java:62: warning: no comment
+    public void setAll(boolean on) {
+                ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeConfig.java:53: warning: no comment
+    public void setEnabled(RangeType type, boolean on) {
+                ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:13: warning: no @param for levels
+    public static int beaconRange(int levels) {
+                      ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:13: warning: no @return
+    public static int beaconRange(int levels) {
+                      ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:18: warning: no @param for frameBlocks
+    public static int conduitRange(int frameBlocks) {
+                      ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:18: warning: no @return
+    public static int conduitRange(int frameBlocks) {
+                      ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:23: warning: no @param for dx
+    public static boolean isConduitFramePosition(int dx, int dy, int dz) {
+                          ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:23: warning: no @param for dy
+    public static boolean isConduitFramePosition(int dx, int dy, int dz) {
+                          ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:23: warning: no @param for dz
+    public static boolean isConduitFramePosition(int dx, int dy, int dz) {
+                          ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:23: warning: no @return
+    public static boolean isConduitFramePosition(int dx, int dy, int dz) {
+                          ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:39: warning: no @param for calibrated
+    public static int sculkSensorRange(boolean calibrated) {
+                      ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:39: warning: no @return
+    public static int sculkSensorRange(boolean calibrated) {
+                      ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:57: warning: no @param for sphereRadius
+    public static double sliceRadius(double sphereRadius, double dy) {
+                         ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:57: warning: no @param for dy
+    public static double sliceRadius(double sphereRadius, double dy) {
+                         ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:57: warning: no @return
+    public static double sliceRadius(double sphereRadius, double dy) {
+                         ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:71: warning: no @return
+    public static int[] spawnChunks(int[] version, int spawnX, int spawnZ, int gameruleRadius) {
+                        ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:51: warning: no comment
+    public static final int SPAWNER_DEFAULT_SPAWN_RANGE = 4;
+                            ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeRenderer.java:23: warning: no main description
+     * @param poseStack the level pose stack (camera rotation applied, not the camera position)
+       ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeRenderer.java:27: warning: no @param for shapes
+    public static void render(PoseStack poseStack, Vec3 camera, List<RangeShape> shapes, float lineWidth, double playerY) {
+                       ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeRenderer.java:27: warning: no @param for lineWidth
+    public static void render(PoseStack poseStack, Vec3 camera, List<RangeShape> shapes, float lineWidth, double playerY) {
+                       ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeScanner.java:50: warning: no comment
+    public static List<RangeShape> scan(Minecraft mc, RangeConfig config) {
+                                   ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:39: warning: no @param for type
+    public static RangeShape box(RangeType type, int color, double x1, double y1, double z1, double x2, double y2, double z2) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:39: warning: no @param for color
+    public static RangeShape box(RangeType type, int color, double x1, double y1, double z1, double x2, double y2, double z2) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:39: warning: no @param for x1
+    public static RangeShape box(RangeType type, int color, double x1, double y1, double z1, double x2, double y2, double z2) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:39: warning: no @param for y1
+    public static RangeShape box(RangeType type, int color, double x1, double y1, double z1, double x2, double y2, double z2) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:39: warning: no @param for z1
+    public static RangeShape box(RangeType type, int color, double x1, double y1, double z1, double x2, double y2, double z2) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:39: warning: no @param for x2
+    public static RangeShape box(RangeType type, int color, double x1, double y1, double z1, double x2, double y2, double z2) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:39: warning: no @param for y2
+    public static RangeShape box(RangeType type, int color, double x1, double y1, double z1, double x2, double y2, double z2) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:39: warning: no @param for z2
+    public static RangeShape box(RangeType type, int color, double x1, double y1, double z1, double x2, double y2, double z2) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:39: warning: no @return
+    public static RangeShape box(RangeType type, int color, double x1, double y1, double z1, double x2, double y2, double z2) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:51: warning: no @param for type
+    public static RangeShape column(RangeType type, int color, double x1, double z1, double x2, double z2, double minY, double maxY) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:51: warning: no @param for color
+    public static RangeShape column(RangeType type, int color, double x1, double z1, double x2, double z2, double minY, double maxY) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:51: warning: no @param for x1
+    public static RangeShape column(RangeType type, int color, double x1, double z1, double x2, double z2, double minY, double maxY) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:51: warning: no @param for z1
+    public static RangeShape column(RangeType type, int color, double x1, double z1, double x2, double z2, double minY, double maxY) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:51: warning: no @param for x2
+    public static RangeShape column(RangeType type, int color, double x1, double z1, double x2, double z2, double minY, double maxY) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:51: warning: no @param for z2
+    public static RangeShape column(RangeType type, int color, double x1, double z1, double x2, double z2, double minY, double maxY) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:51: warning: no @param for minY
+    public static RangeShape column(RangeType type, int color, double x1, double z1, double x2, double z2, double minY, double maxY) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:51: warning: no @param for maxY
+    public static RangeShape column(RangeType type, int color, double x1, double z1, double x2, double z2, double minY, double maxY) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:51: warning: no @return
+    public static RangeShape column(RangeType type, int color, double x1, double z1, double x2, double z2, double minY, double maxY) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:57: warning: no @param for type
+    public static RangeShape sphere(RangeType type, int color, double cx, double cy, double cz, double radius) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:57: warning: no @param for color
+    public static RangeShape sphere(RangeType type, int color, double cx, double cy, double cz, double radius) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:57: warning: no @param for cx
+    public static RangeShape sphere(RangeType type, int color, double cx, double cy, double cz, double radius) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:57: warning: no @param for cy
+    public static RangeShape sphere(RangeType type, int color, double cx, double cy, double cz, double radius) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:57: warning: no @param for cz
+    public static RangeShape sphere(RangeType type, int color, double cx, double cy, double cz, double radius) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:57: warning: no @param for radius
+    public static RangeShape sphere(RangeType type, int color, double cx, double cy, double cz, double radius) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:57: warning: no @return
+    public static RangeShape sphere(RangeType type, int color, double cx, double cy, double cz, double radius) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:78: warning: no @param for x
+    public double distanceSq(double x, double y, double z) {
+                  ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:78: warning: no @param for y
+    public double distanceSq(double x, double y, double z) {
+                  ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:78: warning: no @param for z
+    public double distanceSq(double x, double y, double z) {
+                  ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:78: warning: no @return
+    public double distanceSq(double x, double y, double z) {
+                  ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:98: warning: no @param for y
+    public double[] playerRing(double y) {
+                    ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:98: warning: no @return
+    public double[] playerRing(double y) {
+                    ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:13: warning: no comment
+    public enum Kind { BOX, COLUMN, SPHERE }
+           ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:22: warning: no comment
+    public final double a, b, c, d, minY, maxY;
+                        ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:22: warning: no comment
+    public final double a, b, c, d, minY, maxY;
+                           ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:22: warning: no comment
+    public final double a, b, c, d, minY, maxY;
+                              ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:20: warning: no comment
+    public final int color;
+                     ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:22: warning: no comment
+    public final double a, b, c, d, minY, maxY;
+                                 ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:18: warning: no comment
+    public final Kind kind;
+                      ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:22: warning: no comment
+    public final double a, b, c, d, minY, maxY;
+                                          ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:22: warning: no comment
+    public final double a, b, c, d, minY, maxY;
+                                    ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:19: warning: no comment
+    public final double[] segments;
+                          ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:17: warning: no comment
+    public final RangeType type;
+                           ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:13: warning: no comment
+    public enum Kind { BOX, COLUMN, SPHERE }
+                       ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:13: warning: no comment
+    public enum Kind { BOX, COLUMN, SPHERE }
+                            ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:13: warning: no comment
+    public enum Kind { BOX, COLUMN, SPHERE }
+                                    ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeSight.java:17: warning: no @param for loader
+    public static void init(String loader) {
+                       ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeSight.java:11: warning: no comment
+    public static final Logger LOG = LoggerFactory.getLogger(MOD_NAME);
+                               ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeSight.java:9: warning: no comment
+    public static final String MOD_ID = "rangesight";
+                               ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeSight.java:10: warning: no comment
+    public static final String MOD_NAME = "Range Sight";
+                               ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:26: warning: no comment
+    public String keyName() {
+                  ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:30: warning: no comment
+    public String labelKey() {
+                  ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:9: warning: no comment
+    BEACON("beacon", 0xFF55FFFF, 321),
+    ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:10: warning: no comment
+    CONDUIT("conduit", 0xFF3C8CFF, 322),
+    ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:12: warning: no comment
+    RAID("raid", 0xFFFF9933, 324),
+    ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:13: warning: no comment
+    SCULK("sculk", 0xFF1ED9C8, 325),
+    ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:14: warning: no comment
+    SPAWN_CHUNKS("spawn_chunks", 0xFFFFE14D, 326);
+    ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:11: warning: no comment
+    SPAWNER("spawner", 0xFFFF5050, 323),
+    ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:17: warning: no comment
+    public final int defaultColor;
+                     ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:18: warning: no comment
+    public final int defaultKey;
+                     ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:16: warning: no comment
+    public final String id;
+                        ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:35: warning: no comment
+    public static final String KEY_ALL = "key." + RangeSight.MOD_ID + ".all";
+                               ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:36: warning: no comment
+    public static final int KEY_ALL_DEFAULT = 320; // numpad 0
+                            ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:34: warning: no comment
+    public static final String KEY_CATEGORY = "key.categories." + RangeSight.MOD_ID;
+                               ^
+95 warnings
+
+> Task :common:javadocJar
+> Task :common:sourcesJar
+> Task :common:assemble
+> Task :common:compileTestJava NO-SOURCE
+> Task :common:processTestResources NO-SOURCE
+> Task :common:testClasses UP-TO-DATE
+> Task :common:test NO-SOURCE
+> Task :common:check UP-TO-DATE
+> Task :common:build
+
+> Task :forge:compileJava
+/home/runner/work/range-sight/range-sight/mod/forge/src/main/java/com/cosmiclogic/rangesight/RangeSightForge.java:16: warning: [removal] get() in FMLJavaModLoadingContext has been deprecated and marked for removal
+            RangeSightForgeClient.init(FMLJavaModLoadingContext.get().getModEventBus());
+                                                               ^
+/home/runner/work/range-sight/range-sight/mod/forge/src/main/java/com/cosmiclogic/rangesight/client/RangeSightForgeClient.java:38: warning: [removal] getPoseStack() in RenderLevelStageEvent has been deprecated and marked for removal
+            poseStack.mulPose(event.getPoseStack());
+                                   ^
+2 warnings
+
+> Task :forge:processResources
+> Task :forge:classes
+> Task :forge:jar
+
+> Task :forge:javadoc
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeClient.java:50: warning: no @return
+    public static List<KeyMapping> keys() {
+                                   ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeClient.java:119: warning: no @return
+    public static int shapeCount() {
+                      ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeClient.java:39: warning: no comment
+    public static void init(Path configDir) {
+                       ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeClient.java:56: warning: no comment
+    public static void onClientTick() {
+                       ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeClient.java:93: warning: no comment
+    public static void onRender(PoseStack poseStack, Vec3 camera) {
+                       ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeConfig.java:38: warning: no comment
+    public RangeConfig(Path configDir) {
+           ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeConfig.java:49: warning: no comment
+    public boolean anyEnabled() {
+                   ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeConfig.java:70: warning: no comment
+    public int color(RangeType type) {
+               ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeConfig.java:45: warning: no comment
+    public boolean isEnabled(RangeType type) {
+                   ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeConfig.java:75: warning: no comment
+    public void load() {
+                ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeConfig.java:108: warning: no comment
+    public void save() {
+                ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeConfig.java:62: warning: no comment
+    public void setAll(boolean on) {
+                ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeConfig.java:53: warning: no comment
+    public void setEnabled(RangeType type, boolean on) {
+                ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:13: warning: no @param for levels
+    public static int beaconRange(int levels) {
+                      ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:13: warning: no @return
+    public static int beaconRange(int levels) {
+                      ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:18: warning: no @param for frameBlocks
+    public static int conduitRange(int frameBlocks) {
+                      ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:18: warning: no @return
+    public static int conduitRange(int frameBlocks) {
+                      ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:23: warning: no @param for dx
+    public static boolean isConduitFramePosition(int dx, int dy, int dz) {
+                          ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:23: warning: no @param for dy
+    public static boolean isConduitFramePosition(int dx, int dy, int dz) {
+                          ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:23: warning: no @param for dz
+    public static boolean isConduitFramePosition(int dx, int dy, int dz) {
+                          ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:23: warning: no @return
+    public static boolean isConduitFramePosition(int dx, int dy, int dz) {
+                          ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:39: warning: no @param for calibrated
+    public static int sculkSensorRange(boolean calibrated) {
+                      ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:39: warning: no @return
+    public static int sculkSensorRange(boolean calibrated) {
+                      ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:57: warning: no @param for sphereRadius
+    public static double sliceRadius(double sphereRadius, double dy) {
+                         ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:57: warning: no @param for dy
+    public static double sliceRadius(double sphereRadius, double dy) {
+                         ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:57: warning: no @return
+    public static double sliceRadius(double sphereRadius, double dy) {
+                         ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:71: warning: no @return
+    public static int[] spawnChunks(int[] version, int spawnX, int spawnZ, int gameruleRadius) {
+                        ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:51: warning: no comment
+    public static final int SPAWNER_DEFAULT_SPAWN_RANGE = 4;
+                            ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeRenderer.java:23: warning: no main description
+     * @param poseStack the level pose stack (camera rotation applied, not the camera position)
+       ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeRenderer.java:27: warning: no @param for shapes
+    public static void render(PoseStack poseStack, Vec3 camera, List<RangeShape> shapes, float lineWidth, double playerY) {
+                       ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeRenderer.java:27: warning: no @param for lineWidth
+    public static void render(PoseStack poseStack, Vec3 camera, List<RangeShape> shapes, float lineWidth, double playerY) {
+                       ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeScanner.java:50: warning: no comment
+    public static List<RangeShape> scan(Minecraft mc, RangeConfig config) {
+                                   ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:39: warning: no @param for type
+    public static RangeShape box(RangeType type, int color, double x1, double y1, double z1, double x2, double y2, double z2) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:39: warning: no @param for color
+    public static RangeShape box(RangeType type, int color, double x1, double y1, double z1, double x2, double y2, double z2) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:39: warning: no @param for x1
+    public static RangeShape box(RangeType type, int color, double x1, double y1, double z1, double x2, double y2, double z2) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:39: warning: no @param for y1
+    public static RangeShape box(RangeType type, int color, double x1, double y1, double z1, double x2, double y2, double z2) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:39: warning: no @param for z1
+    public static RangeShape box(RangeType type, int color, double x1, double y1, double z1, double x2, double y2, double z2) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:39: warning: no @param for x2
+    public static RangeShape box(RangeType type, int color, double x1, double y1, double z1, double x2, double y2, double z2) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:39: warning: no @param for y2
+    public static RangeShape box(RangeType type, int color, double x1, double y1, double z1, double x2, double y2, double z2) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:39: warning: no @param for z2
+    public static RangeShape box(RangeType type, int color, double x1, double y1, double z1, double x2, double y2, double z2) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:39: warning: no @return
+    public static RangeShape box(RangeType type, int color, double x1, double y1, double z1, double x2, double y2, double z2) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:51: warning: no @param for type
+    public static RangeShape column(RangeType type, int color, double x1, double z1, double x2, double z2, double minY, double maxY) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:51: warning: no @param for color
+    public static RangeShape column(RangeType type, int color, double x1, double z1, double x2, double z2, double minY, double maxY) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:51: warning: no @param for x1
+    public static RangeShape column(RangeType type, int color, double x1, double z1, double x2, double z2, double minY, double maxY) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:51: warning: no @param for z1
+    public static RangeShape column(RangeType type, int color, double x1, double z1, double x2, double z2, double minY, double maxY) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:51: warning: no @param for x2
+    public static RangeShape column(RangeType type, int color, double x1, double z1, double x2, double z2, double minY, double maxY) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:51: warning: no @param for z2
+    public static RangeShape column(RangeType type, int color, double x1, double z1, double x2, double z2, double minY, double maxY) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:51: warning: no @param for minY
+    public static RangeShape column(RangeType type, int color, double x1, double z1, double x2, double z2, double minY, double maxY) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:51: warning: no @param for maxY
+    public static RangeShape column(RangeType type, int color, double x1, double z1, double x2, double z2, double minY, double maxY) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:51: warning: no @return
+    public static RangeShape column(RangeType type, int color, double x1, double z1, double x2, double z2, double minY, double maxY) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:57: warning: no @param for type
+    public static RangeShape sphere(RangeType type, int color, double cx, double cy, double cz, double radius) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:57: warning: no @param for color
+    public static RangeShape sphere(RangeType type, int color, double cx, double cy, double cz, double radius) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:57: warning: no @param for cx
+    public static RangeShape sphere(RangeType type, int color, double cx, double cy, double cz, double radius) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:57: warning: no @param for cy
+    public static RangeShape sphere(RangeType type, int color, double cx, double cy, double cz, double radius) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:57: warning: no @param for cz
+    public static RangeShape sphere(RangeType type, int color, double cx, double cy, double cz, double radius) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:57: warning: no @param for radius
+    public static RangeShape sphere(RangeType type, int color, double cx, double cy, double cz, double radius) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:57: warning: no @return
+    public static RangeShape sphere(RangeType type, int color, double cx, double cy, double cz, double radius) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:78: warning: no @param for x
+    public double distanceSq(double x, double y, double z) {
+                  ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:78: warning: no @param for y
+    public double distanceSq(double x, double y, double z) {
+                  ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:78: warning: no @param for z
+    public double distanceSq(double x, double y, double z) {
+                  ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:78: warning: no @return
+    public double distanceSq(double x, double y, double z) {
+                  ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:98: warning: no @param for y
+    public double[] playerRing(double y) {
+                    ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:98: warning: no @return
+    public double[] playerRing(double y) {
+                    ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:13: warning: no comment
+    public enum Kind { BOX, COLUMN, SPHERE }
+           ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:22: warning: no comment
+    public final double a, b, c, d, minY, maxY;
+                        ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:22: warning: no comment
+    public final double a, b, c, d, minY, maxY;
+                           ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:22: warning: no comment
+    public final double a, b, c, d, minY, maxY;
+                              ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:20: warning: no comment
+    public final int color;
+                     ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:22: warning: no comment
+    public final double a, b, c, d, minY, maxY;
+                                 ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:18: warning: no comment
+    public final Kind kind;
+                      ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:22: warning: no comment
+    public final double a, b, c, d, minY, maxY;
+                                          ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:22: warning: no comment
+    public final double a, b, c, d, minY, maxY;
+                                    ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:19: warning: no comment
+    public final double[] segments;
+                          ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:17: warning: no comment
+    public final RangeType type;
+                           ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:13: warning: no comment
+    public enum Kind { BOX, COLUMN, SPHERE }
+                       ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:13: warning: no comment
+    public enum Kind { BOX, COLUMN, SPHERE }
+                            ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:13: warning: no comment
+    public enum Kind { BOX, COLUMN, SPHERE }
+                                    ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeSight.java:17: warning: no @param for loader
+    public static void init(String loader) {
+                       ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeSight.java:11: warning: no comment
+    public static final Logger LOG = LoggerFactory.getLogger(MOD_NAME);
+                               ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeSight.java:9: warning: no comment
+    public static final String MOD_ID = "rangesight";
+                               ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeSight.java:10: warning: no comment
+    public static final String MOD_NAME = "Range Sight";
+                               ^
+/home/runner/work/range-sight/range-sight/mod/forge/src/main/java/com/cosmiclogic/rangesight/RangeSightForge.java:10: warning: no comment
+public class RangeSightForge {
+       ^
+/home/runner/work/range-sight/range-sight/mod/forge/src/main/java/com/cosmiclogic/rangesight/RangeSightForge.java:12: warning: no comment
+    public RangeSightForge() {
+           ^
+/home/runner/work/range-sight/range-sight/mod/forge/src/main/java/com/cosmiclogic/rangesight/client/RangeSightForgeClient.java:17: warning: no comment
+    public static void init(IEventBus modBus) {
+                       ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:26: warning: no comment
+    public String keyName() {
+                  ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:30: warning: no comment
+    public String labelKey() {
+                  ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:9: warning: no comment
+    BEACON("beacon", 0xFF55FFFF, 321),
+    ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:10: warning: no comment
+    CONDUIT("conduit", 0xFF3C8CFF, 322),
+    ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:12: warning: no comment
+    RAID("raid", 0xFFFF9933, 324),
+    ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:13: warning: no comment
+    SCULK("sculk", 0xFF1ED9C8, 325),
+    ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:14: warning: no comment
+    SPAWN_CHUNKS("spawn_chunks", 0xFFFFE14D, 326);
+    ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:11: warning: no comment
+    SPAWNER("spawner", 0xFFFF5050, 323),
+    ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:17: warning: no comment
+    public final int defaultColor;
+                     ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:18: warning: no comment
+    public final int defaultKey;
+                     ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:16: warning: no comment
+    public final String id;
+                        ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:35: warning: no comment
+    public static final String KEY_ALL = "key." + RangeSight.MOD_ID + ".all";
+                               ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:36: warning: no comment
+    public static final int KEY_ALL_DEFAULT = 320; // numpad 0
+                            ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:34: warning: no comment
+    public static final String KEY_CATEGORY = "key.categories." + RangeSight.MOD_ID;
+                               ^
+98 warnings
+
+> Task :forge:javadocJar
+> Task :forge:sourcesJar
+> Task :forge:assemble
+> Task :forge:compileTestJava NO-SOURCE
+> Task :forge:processTestResources NO-SOURCE
+> Task :forge:testClasses UP-TO-DATE
+> Task :forge:test NO-SOURCE
+> Task :forge:check UP-TO-DATE
+> Task :forge:build
+
+> Task :neoforge:createMinecraftArtifacts
+Loaded 110 artifacts from /home/runner/work/range-sight/range-sight/mod/neoforge/build/tmp/createMinecraftArtifacts/nfrt_artifact_manifest.properties
+[1m*** Started working on [4mdownloadJson[0m[0m
+ [1m[92m✓[0m Completed [4mdownloadJson[0m in 0.01s
+[1m*** Started working on [4mdownloadServer[0m[0m
+[1m*** Started working on [4mdownloadClientMappings[0m[0m
+[1m*** Started working on [4mdownloadClient[0m[0m
+[1m*** Started working on [4mlistLibraries[0m[0m
+ [1m[92m♻[0m Used cache of [4mlistLibraries[0m in 0.00s
+ [1m[92m✓[0m Completed [4mdownloadServer[0m in 0.03s
+ [1m[92m✓[0m Completed [4mdownloadClient[0m in 0.03s
+ [1m[92m✓[0m Completed [4mdownloadClientMappings[0m in 0.03s
+[1m*** Started working on [4mmergeMappings[0m[0m
+ [1m[92m♻[0m Used cache of [4mmergeMappings[0m in 0.00s
+[1m*** Started working on [4mstripClient[0m[0m
+ [1m[92m♻[0m Used cache of [4mstripClient[0m in 0.00s
+[1m*** Started working on [4mextractServer[0m[0m
+ [1m[92m♻[0m Used cache of [4mextractServer[0m in 0.00s
+[1m*** Started working on [4mstripServer[0m[0m
+ [1m[92m♻[0m Used cache of [4mstripServer[0m in 0.00s
+[1m*** Started working on [4mmerge[0m[0m
+ [1m[92m♻[0m Used cache of [4mmerge[0m in 0.00s
+[1m*** Started working on [4mrename[0m[0m
+ [1m[92m♻[0m Used cache of [4mrename[0m in 0.00s
+[1m*** Started working on [4mdecompile[0m[0m
+ [1m[92m♻[0m Used cache of [4mdecompile[0m in 0.00s
+[1m*** Started working on [4minject[0m[0m
+ [1m[92m♻[0m Used cache of [4minject[0m in 0.00s
+[1m*** Started working on [4mpatch[0m[0m
+ [1m[92m♻[0m Used cache of [4mpatch[0m in 0.00s
+[1m*** Started working on [4mapplyNeoforgePatches[0m[0m
+ [1m[92m♻[0m Used cache of [4mapplyNeoforgePatches[0m in 0.00s
+[1m*** Started working on [4mtransformSources[0m[0m
+ [1m[92m♻[0m Used cache of [4mtransformSources[0m in 0.00s
+[1m*** Started working on [4mrecompile[0m[0m
+ [1m[92m♻[0m Used cache of [4mrecompile[0m in 0.00s
+[1m*** Started working on [4msourcesWithNeoForge[0m[0m
+ [1m[92m♻[0m Used cache of [4msourcesWithNeoForge[0m in 0.00s
+[1m*** Started working on [4mcompiledWithNeoForge[0m[0m
+ [1m[92m♻[0m Used cache of [4mcompiledWithNeoForge[0m in 0.00s
+[1m*** Started working on [4msourcesAndCompiledWithNeoForge[0m[0m
+ [1m[92m♻[0m Used cache of [4msourcesAndCompiledWithNeoForge[0m in 0.00s
+Total runtime: 0.78s
+
+
+> Task :neoforge:compileJava
+> Task :neoforge:processResources
+> Task :neoforge:classes
+> Task :neoforge:jarJar NO-SOURCE
+> Task :neoforge:jar
+
+> Task :neoforge:javadoc
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeClient.java:50: warning: no @return
+    public static List<KeyMapping> keys() {
+                                   ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeClient.java:119: warning: no @return
+    public static int shapeCount() {
+                      ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeClient.java:39: warning: no comment
+    public static void init(Path configDir) {
+                       ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeClient.java:56: warning: no comment
+    public static void onClientTick() {
+                       ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeClient.java:93: warning: no comment
+    public static void onRender(PoseStack poseStack, Vec3 camera) {
+                       ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeConfig.java:38: warning: no comment
+    public RangeConfig(Path configDir) {
+           ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeConfig.java:49: warning: no comment
+    public boolean anyEnabled() {
+                   ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeConfig.java:70: warning: no comment
+    public int color(RangeType type) {
+               ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeConfig.java:45: warning: no comment
+    public boolean isEnabled(RangeType type) {
+                   ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeConfig.java:75: warning: no comment
+    public void load() {
+                ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeConfig.java:108: warning: no comment
+    public void save() {
+                ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeConfig.java:62: warning: no comment
+    public void setAll(boolean on) {
+                ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeConfig.java:53: warning: no comment
+    public void setEnabled(RangeType type, boolean on) {
+                ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:13: warning: no @param for levels
+    public static int beaconRange(int levels) {
+                      ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:13: warning: no @return
+    public static int beaconRange(int levels) {
+                      ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:18: warning: no @param for frameBlocks
+    public static int conduitRange(int frameBlocks) {
+                      ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:18: warning: no @return
+    public static int conduitRange(int frameBlocks) {
+                      ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:23: warning: no @param for dx
+    public static boolean isConduitFramePosition(int dx, int dy, int dz) {
+                          ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:23: warning: no @param for dy
+    public static boolean isConduitFramePosition(int dx, int dy, int dz) {
+                          ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:23: warning: no @param for dz
+    public static boolean isConduitFramePosition(int dx, int dy, int dz) {
+                          ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:23: warning: no @return
+    public static boolean isConduitFramePosition(int dx, int dy, int dz) {
+                          ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:39: warning: no @param for calibrated
+    public static int sculkSensorRange(boolean calibrated) {
+                      ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:39: warning: no @return
+    public static int sculkSensorRange(boolean calibrated) {
+                      ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:57: warning: no @param for sphereRadius
+    public static double sliceRadius(double sphereRadius, double dy) {
+                         ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:57: warning: no @param for dy
+    public static double sliceRadius(double sphereRadius, double dy) {
+                         ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:57: warning: no @return
+    public static double sliceRadius(double sphereRadius, double dy) {
+                         ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:71: warning: no @return
+    public static int[] spawnChunks(int[] version, int spawnX, int spawnZ, int gameruleRadius) {
+                        ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeMath.java:51: warning: no comment
+    public static final int SPAWNER_DEFAULT_SPAWN_RANGE = 4;
+                            ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeRenderer.java:23: warning: no main description
+     * @param poseStack the level pose stack (camera rotation applied, not the camera position)
+       ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeRenderer.java:27: warning: no @param for shapes
+    public static void render(PoseStack poseStack, Vec3 camera, List<RangeShape> shapes, float lineWidth, double playerY) {
+                       ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeRenderer.java:27: warning: no @param for lineWidth
+    public static void render(PoseStack poseStack, Vec3 camera, List<RangeShape> shapes, float lineWidth, double playerY) {
+                       ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeScanner.java:50: warning: no comment
+    public static List<RangeShape> scan(Minecraft mc, RangeConfig config) {
+                                   ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:39: warning: no @param for type
+    public static RangeShape box(RangeType type, int color, double x1, double y1, double z1, double x2, double y2, double z2) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:39: warning: no @param for color
+    public static RangeShape box(RangeType type, int color, double x1, double y1, double z1, double x2, double y2, double z2) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:39: warning: no @param for x1
+    public static RangeShape box(RangeType type, int color, double x1, double y1, double z1, double x2, double y2, double z2) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:39: warning: no @param for y1
+    public static RangeShape box(RangeType type, int color, double x1, double y1, double z1, double x2, double y2, double z2) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:39: warning: no @param for z1
+    public static RangeShape box(RangeType type, int color, double x1, double y1, double z1, double x2, double y2, double z2) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:39: warning: no @param for x2
+    public static RangeShape box(RangeType type, int color, double x1, double y1, double z1, double x2, double y2, double z2) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:39: warning: no @param for y2
+    public static RangeShape box(RangeType type, int color, double x1, double y1, double z1, double x2, double y2, double z2) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:39: warning: no @param for z2
+    public static RangeShape box(RangeType type, int color, double x1, double y1, double z1, double x2, double y2, double z2) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:39: warning: no @return
+    public static RangeShape box(RangeType type, int color, double x1, double y1, double z1, double x2, double y2, double z2) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:51: warning: no @param for type
+    public static RangeShape column(RangeType type, int color, double x1, double z1, double x2, double z2, double minY, double maxY) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:51: warning: no @param for color
+    public static RangeShape column(RangeType type, int color, double x1, double z1, double x2, double z2, double minY, double maxY) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:51: warning: no @param for x1
+    public static RangeShape column(RangeType type, int color, double x1, double z1, double x2, double z2, double minY, double maxY) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:51: warning: no @param for z1
+    public static RangeShape column(RangeType type, int color, double x1, double z1, double x2, double z2, double minY, double maxY) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:51: warning: no @param for x2
+    public static RangeShape column(RangeType type, int color, double x1, double z1, double x2, double z2, double minY, double maxY) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:51: warning: no @param for z2
+    public static RangeShape column(RangeType type, int color, double x1, double z1, double x2, double z2, double minY, double maxY) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:51: warning: no @param for minY
+    public static RangeShape column(RangeType type, int color, double x1, double z1, double x2, double z2, double minY, double maxY) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:51: warning: no @param for maxY
+    public static RangeShape column(RangeType type, int color, double x1, double z1, double x2, double z2, double minY, double maxY) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:51: warning: no @return
+    public static RangeShape column(RangeType type, int color, double x1, double z1, double x2, double z2, double minY, double maxY) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:57: warning: no @param for type
+    public static RangeShape sphere(RangeType type, int color, double cx, double cy, double cz, double radius) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:57: warning: no @param for color
+    public static RangeShape sphere(RangeType type, int color, double cx, double cy, double cz, double radius) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:57: warning: no @param for cx
+    public static RangeShape sphere(RangeType type, int color, double cx, double cy, double cz, double radius) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:57: warning: no @param for cy
+    public static RangeShape sphere(RangeType type, int color, double cx, double cy, double cz, double radius) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:57: warning: no @param for cz
+    public static RangeShape sphere(RangeType type, int color, double cx, double cy, double cz, double radius) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:57: warning: no @param for radius
+    public static RangeShape sphere(RangeType type, int color, double cx, double cy, double cz, double radius) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:57: warning: no @return
+    public static RangeShape sphere(RangeType type, int color, double cx, double cy, double cz, double radius) {
+                             ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:78: warning: no @param for x
+    public double distanceSq(double x, double y, double z) {
+                  ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:78: warning: no @param for y
+    public double distanceSq(double x, double y, double z) {
+                  ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:78: warning: no @param for z
+    public double distanceSq(double x, double y, double z) {
+                  ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:78: warning: no @return
+    public double distanceSq(double x, double y, double z) {
+                  ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:98: warning: no @param for y
+    public double[] playerRing(double y) {
+                    ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:98: warning: no @return
+    public double[] playerRing(double y) {
+                    ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:13: warning: no comment
+    public enum Kind { BOX, COLUMN, SPHERE }
+           ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:22: warning: no comment
+    public final double a, b, c, d, minY, maxY;
+                        ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:22: warning: no comment
+    public final double a, b, c, d, minY, maxY;
+                           ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:22: warning: no comment
+    public final double a, b, c, d, minY, maxY;
+                              ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:20: warning: no comment
+    public final int color;
+                     ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:22: warning: no comment
+    public final double a, b, c, d, minY, maxY;
+                                 ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:18: warning: no comment
+    public final Kind kind;
+                      ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:22: warning: no comment
+    public final double a, b, c, d, minY, maxY;
+                                          ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:22: warning: no comment
+    public final double a, b, c, d, minY, maxY;
+                                    ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:19: warning: no comment
+    public final double[] segments;
+                          ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:17: warning: no comment
+    public final RangeType type;
+                           ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:13: warning: no comment
+    public enum Kind { BOX, COLUMN, SPHERE }
+                       ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:13: warning: no comment
+    public enum Kind { BOX, COLUMN, SPHERE }
+                            ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/client/RangeShape.java:13: warning: no comment
+    public enum Kind { BOX, COLUMN, SPHERE }
+                                    ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeSight.java:17: warning: no @param for loader
+    public static void init(String loader) {
+                       ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeSight.java:11: warning: no comment
+    public static final Logger LOG = LoggerFactory.getLogger(MOD_NAME);
+                               ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeSight.java:9: warning: no comment
+    public static final String MOD_ID = "rangesight";
+                               ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeSight.java:10: warning: no comment
+    public static final String MOD_NAME = "Range Sight";
+                               ^
+/home/runner/work/range-sight/range-sight/mod/neoforge/src/main/java/com/cosmiclogic/rangesight/RangeSightNeoForge.java:9: warning: no comment
+public class RangeSightNeoForge {
+       ^
+/home/runner/work/range-sight/range-sight/mod/neoforge/src/main/java/com/cosmiclogic/rangesight/RangeSightNeoForge.java:11: warning: no comment
+    public RangeSightNeoForge(IEventBus modBus, Dist dist) {
+           ^
+/home/runner/work/range-sight/range-sight/mod/neoforge/src/main/java/com/cosmiclogic/rangesight/client/RangeSightNeoForgeClient.java:17: warning: no comment
+    public static void init(IEventBus modBus) {
+                       ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:26: warning: no comment
+    public String keyName() {
+                  ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:30: warning: no comment
+    public String labelKey() {
+                  ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:9: warning: no comment
+    BEACON("beacon", 0xFF55FFFF, 321),
+    ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:10: warning: no comment
+    CONDUIT("conduit", 0xFF3C8CFF, 322),
+    ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:12: warning: no comment
+    RAID("raid", 0xFFFF9933, 324),
+    ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:13: warning: no comment
+    SCULK("sculk", 0xFF1ED9C8, 325),
+    ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:14: warning: no comment
+    SPAWN_CHUNKS("spawn_chunks", 0xFFFFE14D, 326);
+    ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:11: warning: no comment
+    SPAWNER("spawner", 0xFFFF5050, 323),
+    ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:17: warning: no comment
+    public final int defaultColor;
+                     ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:18: warning: no comment
+    public final int defaultKey;
+                     ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:16: warning: no comment
+    public final String id;
+                        ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:35: warning: no comment
+    public static final String KEY_ALL = "key." + RangeSight.MOD_ID + ".all";
+                               ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:36: warning: no comment
+    public static final int KEY_ALL_DEFAULT = 320; // numpad 0
+                            ^
+/home/runner/work/range-sight/range-sight/mod/common/src/main/java/com/cosmiclogic/rangesight/RangeType.java:34: warning: no comment
+    public static final String KEY_CATEGORY = "key.categories." + RangeSight.MOD_ID;
+                               ^
+98 warnings
+
+> Task :neoforge:javadocJar
+> Task :neoforge:sourcesJar
+> Task :neoforge:assemble
+> Task :neoforge:compileTestJava NO-SOURCE
+> Task :neoforge:processTestResources NO-SOURCE
+> Task :neoforge:testClasses UP-TO-DATE
+> Task :neoforge:test NO-SOURCE
+> Task :neoforge:check UP-TO-DATE
+> Task :neoforge:build
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run-1795013061109.json
+
+BUILD SUCCESSFUL in 25s
+27 actionable tasks: 27 executed
