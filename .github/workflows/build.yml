@@ -225,7 +225,8 @@ jobs:
           name: log-mod-client-${{ matrix.loader }}
           path: logs/
 
-  # ---------------------------------------------------------------- Real screenshots for the CurseForge page (NeoForge 1.21.1)
+  # ---------------------------------------------------------------- Real gallery screenshots (NeoForge 1.21.1 client, Superflat)
+  # Mod: the client test's new world is made Classic Flat by the CI-only PageShots helper (marker file "mod").
   page-shots:
     needs: mod-build
     runs-on: ubuntu-latest
@@ -234,12 +235,12 @@ jobs:
         with:
           name: mod-jars
           path: jars
-      - name: Put Range Sight in run/mods, every range on, page-shot marker
+      - name: Put Range Sight in run/mods, page-shot marker
         run: |
           mkdir -p run/mods run/config
           find jars -name "rangesight-neoforge-${MC}-*.jar" ! -name "*-sources.jar" ! -name "*-javadoc.jar" -exec cp {} run/mods/ \;
-          echo '{"lineWidth":3.0,"types":{"beacon":{"enabled":true},"conduit":{"enabled":true},"spawner":{"enabled":true},"raid":{"enabled":true},"sculk":{"enabled":true},"spawn_chunks":{"enabled":false}}}' > run/config/rangesight.json
-          echo on > run/config/rangesight-pageshots.txt
+          echo '{"lineWidth":3.0}' > run/config/rangesight.json
+          echo mod > run/config/rangesight-pageshots.txt
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -264,6 +265,73 @@ jobs:
         if: always()
         with:
           name: log-page-shots
+          path: logs/
+
+  # Plugin: a Superflat Paper 1.21.1 server with Range Sight Plugin + LogicLib Plugin; the client joins it (marker "plugin").
+  plugin-shots:
+    needs: [mod-build, plugin-build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: mod-jars
+          path: jars
+      - uses: actions/download-artifact@v4
+        with:
+          name: plugin-jars
+          path: pjars
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Start a Superflat Paper server
+        run: |
+          mkdir -p server/plugins && cd server
+          bash ../ci/get-paper.sh 1.21.1
+          find ../pjars -name "*.jar" ! -name "*-sources.jar" -exec cp {} plugins/ \;
+          ls plugins
+          echo "eula=true" > eula.txt
+          printf 'online-mode=false\nlevel-type=minecraft\\:flat\ngenerate-structures=false\ndifficulty=peaceful\nspawn-protection=0\ngamemode=creative\nallow-flight=true\nview-distance=12\nenforce-secure-profile=false\nspawn-monsters=false\nspawn-animals=false\n' > server.properties
+          python3 - <<'PY'
+          import hashlib, json, uuid
+          h = bytearray(hashlib.md5(b"OfflinePlayer:Offline").digest())
+          h[6] = (h[6] & 0x0f) | 0x30; h[8] = (h[8] & 0x3f) | 0x80
+          u = str(uuid.UUID(bytes=bytes(h)))
+          json.dump([{"uuid": u, "name": "Offline", "level": 4, "bypassesPlayerLimit": False}], open("ops.json", "w"))
+          print("op", u)
+          PY
+          nohup java -Xmx2G -jar paper.jar nogui > server.log 2>&1 &
+          for i in $(seq 1 180); do grep -q "Done (" server.log && break; sleep 1; done
+          tail -5 server.log
+      - name: Put Range Sight (mod off) in run/mods, plugin-shot marker
+        run: |
+          mkdir -p run/mods run/config
+          find jars -name "rangesight-neoforge-${MC}-*.jar" ! -name "*-sources.jar" ! -name "*-javadoc.jar" -exec cp {} run/mods/ \;
+          echo '{"types":{"beacon":{"enabled":false},"conduit":{"enabled":false},"spawner":{"enabled":false},"raid":{"enabled":false},"sculk":{"enabled":false},"spawn_chunks":{"enabled":false}}}' > run/config/rangesight.json
+          echo "plugin 127.0.0.1:25565" > run/config/rangesight-pageshots.txt
+      - name: Run the Minecraft client, joining the Paper server
+        uses: headlesshq/mc-runtime-test@5.0.0
+        with:
+          mc: "1.21.1"
+          modloader: neoforge
+          mc-runtime-test: neoforge
+          java: 21
+          dummy-assets: "false"
+          headlessmc-command: '--jvm "-Djava.awt.headless=true -DMcRuntimeGameTest=false"'
+      - name: Keep screenshots + logs
+        if: always()
+        run: |
+          mkdir -p logs
+          cp run/logs/latest.log logs/plugin-shots-client.log 2>/dev/null || true
+          cp server/server.log logs/plugin-shots-server.log 2>/dev/null || true
+          cp run/screenshots/*.png logs/ 2>/dev/null || true
+          grep "page sho" logs/plugin-shots-client.log || true
+          ls -la logs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: log-plugin-shots
           path: logs/
 
   # ---------------------------------------------------------------- Mod on 26.x (mod/v26)
@@ -735,7 +803,7 @@ jobs:
           git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" dist
 
   results:
-    needs: [plugin-build, paper-test, mod-build, mod-server-test, mod-client-test, page-shots, mod26-build, mod26-server-test, mod26-client-test, legacy-build, legacy-server-test, legacy-client-test, v12-build, v12-server-test, v12-client-test]
+    needs: [plugin-build, paper-test, mod-build, mod-server-test, mod-client-test, page-shots, plugin-shots, mod26-build, mod26-server-test, mod26-client-test, legacy-build, legacy-server-test, legacy-client-test, v12-build, v12-server-test, v12-client-test]
     if: always()
     runs-on: ubuntu-latest
     steps:
@@ -755,6 +823,7 @@ jobs:
             echo "- mod-server-test: ${{ needs.mod-server-test.result }}"
             echo "- mod-client-test: ${{ needs.mod-client-test.result }}"
             echo "- page-shots: ${{ needs.page-shots.result }}"
+            echo "- plugin-shots: ${{ needs.plugin-shots.result }}"
             echo "- mod26-build: ${{ needs.mod26-build.result }}"
             echo "- mod26-server-test: ${{ needs.mod26-server-test.result }}"
             echo "- mod26-client-test: ${{ needs.mod26-client-test.result }}"

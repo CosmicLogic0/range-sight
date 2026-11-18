@@ -104,6 +104,11 @@ public final class RangeClient {
     }
 
     /** Scan right now (used by the automatic test) and return the outlines. */
+    /** CI page screenshots only. */
+    static RangeConfig config() {
+        return config;
+    }
+
     static List<RangeShape> rescanNow() {
         Minecraft mc = Minecraft.getInstance();
         shapes = config.anyEnabled() ? RangeScanner.scan(mc, config) : Collections.emptyList();
