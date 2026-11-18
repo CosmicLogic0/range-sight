@@ -4,7 +4,7 @@ Run: python3 banners.py <art dir>"""
 import math, sys, os
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
-ART = sys.argv[1]
+ART = sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 S = 2  # supersample
 BG = (17, 20, 38)
 GRID = (30, 35, 62)
@@ -204,7 +204,8 @@ def ranges(plugin=False):
     finish(im, os.path.join(ART, 'features', 'ranges-plugin.png' if plugin else 'ranges.png'))
 
 
-header()
-donate()
-ranges()
-ranges(True)
+if __name__ == '__main__':
+    header()
+    donate()
+    ranges()
+    ranges(True)

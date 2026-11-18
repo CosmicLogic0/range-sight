@@ -181,6 +181,7 @@ final class PageShots {
         STEPS.add(mc -> {
             server(mc, level -> {
                 world(level);
+                level.getServer().getPlayerList().setViewDistance(16);
                 pyramid(level, beacon);
                 level.setBlock(spawner, Blocks.SPAWNER.defaultBlockState(), 3);
                 level.setBlock(sensor, Blocks.SCULK_SENSOR.defaultBlockState(), 3);
@@ -195,11 +196,11 @@ final class PageShots {
             return 20;
         });
         shot("all-ranges", EnumSet.of(RangeType.BEACON, RangeType.SPAWNER, RangeType.SCULK), beacon.offset(-44, 22, -50), beacon.offset(2, -6, 6));
-        shot("beacon-outside", EnumSet.of(RangeType.BEACON), beacon.offset(-92, 34, -92), beacon.offset(0, 6, 0));
-        shot("beacon-inside", EnumSet.of(RangeType.BEACON), beacon.offset(-36, -3, -22), beacon.offset(0, -2, 0));
+        shot("beacon-outside", EnumSet.of(RangeType.BEACON), beacon.offset(-74, 28, -66), beacon.offset(0, 8, 0));
+        shot("beacon-inside", EnumSet.of(RangeType.BEACON), beacon.offset(-20, -2, -15), beacon.offset(0, 1, 0));
         shot("spawner", EnumSet.of(RangeType.SPAWNER), spawner.offset(-14, 9, -22), spawner);
         shot("sculk", EnumSet.of(RangeType.SCULK), calibrated.offset(-46, 30, -40), calibrated.offset(-4, 0, 4));
-        shot("spawn-chunks", EnumSet.of(RangeType.SPAWN_CHUNKS), p.offset(-6, 78, -70), p);
+        shot("spawn-chunks", EnumSet.of(RangeType.SPAWN_CHUNKS), p.offset(-46, 34, -60), p.offset(0, 6, 0));
         STEPS.add(mc -> {
             view(mc, tank.offset(-34, 12, -38), tank);
             return 120; // new chunks load
@@ -292,6 +293,7 @@ final class PageShots {
         build.add("gamerule doWeatherCycle false");
         build.add("gamerule doMobSpawning false");
         build.add("gamemode creative");
+        build.add("gamerule sendCommandFeedback false");
         for (int l = 1; l <= 4; l++) {
             build.add(fill(beacon.offset(-l, -l, -l), beacon.offset(l, -l, l), "iron_block"));
         }
@@ -311,13 +313,13 @@ final class PageShots {
             }
             return 40;
         });
-        pshot("all-ranges", "all", beacon.offset(-44, 22, -50), beacon.offset(2, -6, 6));
-        pshot("beacon", "beacon", beacon.offset(-62, 26, -58), beacon.offset(0, 2, 0));
-        pshot("spawner", "spawner", spawner.offset(-14, 9, -22), spawner);
-        pshot("sculk", "sculk", calibrated.offset(-40, 26, -36), calibrated.offset(-4, 0, 4));
-        pshot("conduit", "conduit", tank.offset(-30, 14, -34), tank);
-        pshot("spawn-chunks", "spawnchunks", p.offset(-6, 78, -70), p);
-        pshot("particles-close", "spawner", spawner.offset(-6, 3, -9), spawner.offset(0, 2, 0));
+        pshot("all-ranges", "all", beacon.offset(-34, 16, -38), beacon.offset(0, -4, 6));
+        pshot("beacon", "beacon", beacon.offset(-40, 16, -40), beacon.offset(0, 2, 0));
+        pshot("spawner", "spawner", spawner.offset(-16, 7, -18), spawner);
+        pshot("sculk", "sculk", calibrated.offset(-28, 16, -26), calibrated.offset(-4, 0, 4));
+        pshot("conduit", "conduit", tank.offset(-22, 9, -24), tank);
+        pshot("spawn-chunks", "spawnchunks", p.offset(-46, 34, -60), p.offset(0, 6, 0));
+        pshot("particles-close", "spawner", spawner.offset(-8, 4, -10), spawner.offset(0, 3, 0));
         // chat close-ups with a large GUI so the text fills the picture
         STEPS.add(mc -> {
             command(mc, "range off");
@@ -404,6 +406,8 @@ final class PageShots {
                 sp.teleportTo(server.overworld(), x, y, z, yaw, pitch);
             });
         } else {
+            mc.player.getAbilities().flying = true;
+            mc.player.onUpdateAbilities();
             command(mc, String.format(Locale.ROOT, "tp @s %.1f %.1f %.1f %.1f %.1f", x, y, z, yaw, pitch));
         }
     }

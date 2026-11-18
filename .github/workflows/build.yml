@@ -239,8 +239,9 @@ jobs:
         run: |
           mkdir -p run/mods run/config
           find jars -name "rangesight-neoforge-${MC}-*.jar" ! -name "*-sources.jar" ! -name "*-javadoc.jar" -exec cp {} run/mods/ \;
-          echo '{"lineWidth":3.0}' > run/config/rangesight.json
+          echo '{"lineWidth":5.0}' > run/config/rangesight.json
           echo mod > run/config/rangesight-pageshots.txt
+          printf 'renderDistance:16\nsimulationDistance:12\ngraphicsMode:1\ntutorialStep:none\nskipMultiplayerWarning:true\njoinedFirstServer:true\nonboardAccessibility:false\nnarrator:0\n' > run/options.txt
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -292,7 +293,7 @@ jobs:
           find ../pjars -name "*.jar" ! -name "*-sources.jar" -exec cp {} plugins/ \;
           ls plugins
           echo "eula=true" > eula.txt
-          printf 'online-mode=false\nlevel-type=minecraft\\:flat\ngenerate-structures=false\ndifficulty=peaceful\nspawn-protection=0\ngamemode=creative\nallow-flight=true\nview-distance=12\nenforce-secure-profile=false\nspawn-monsters=false\nspawn-animals=false\n' > server.properties
+          printf 'online-mode=false\nlevel-type=minecraft\\:flat\ngenerate-structures=false\ndifficulty=peaceful\nspawn-protection=0\ngamemode=creative\nallow-flight=true\nview-distance=16\nenforce-secure-profile=false\nspawn-monsters=false\nspawn-animals=false\n' > server.properties
           python3 - <<'PY'
           import hashlib, json, uuid
           h = bytearray(hashlib.md5(b"OfflinePlayer:Offline").digest())
@@ -310,6 +311,7 @@ jobs:
           find jars -name "rangesight-neoforge-${MC}-*.jar" ! -name "*-sources.jar" ! -name "*-javadoc.jar" -exec cp {} run/mods/ \;
           echo '{"types":{"beacon":{"enabled":false},"conduit":{"enabled":false},"spawner":{"enabled":false},"raid":{"enabled":false},"sculk":{"enabled":false},"spawn_chunks":{"enabled":false}}}' > run/config/rangesight.json
           echo "plugin 127.0.0.1:25565" > run/config/rangesight-pageshots.txt
+          printf 'renderDistance:16\nsimulationDistance:12\ngraphicsMode:1\ntutorialStep:none\nskipMultiplayerWarning:true\njoinedFirstServer:true\nonboardAccessibility:false\nnarrator:0\n' > run/options.txt
       - name: Run the Minecraft client, joining the Paper server
         uses: headlesshq/mc-runtime-test@5.0.0
         with:
