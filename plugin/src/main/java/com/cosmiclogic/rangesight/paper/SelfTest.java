@@ -70,20 +70,37 @@ final class SelfTest {
         }.runTaskTimer(plugin, 1L, 20L);
     }
 
-    /** Adds (or removes) a plugin chunk ticket, which loads the chunk and keeps it loaded. Falls back to a plain load. */
+    /**
+     * Adds (or removes) a plugin chunk ticket, which keeps the chunk loaded. The chunk is first loaded in the
+     * background (Paper's getChunkAtAsync) and the ticket is added once it is ready, because adding a ticket to a
+     * chunk that isn't generated yet makes some versions (1.20.1) generate it on the main thread and freeze the
+     * server for 30+ seconds. Falls back to a plain load where neither exists (1.13).
+     */
     private static void holdChunk(World world, int cx, int cz, Plugin plugin, boolean hold) {
+        if (!hold) {
+            ticket(world, cx, cz, plugin, false);
+            return;
+        }
         try {
-            Method ticket = world.getClass().getMethod(hold ? "addPluginChunkTicket" : "removePluginChunkTicket",
-                    int.class, int.class, Plugin.class);
-            ticket.invoke(world, cx, cz, plugin);
-            if (hold) {
-                world.getChunkAt(cx, cz); // tickets don't load by themselves on every version
-            }
-        } catch (Throwable old) {
-            // 1.13: no tickets; spawn chunks near spawn are loaded already.
-            if (hold) {
+            Method async = world.getClass().getMethod("getChunkAtAsync", int.class, int.class);
+            Object future = async.invoke(world, cx, cz);
+            ((java.util.concurrent.CompletableFuture<?>) future).thenAccept(chunk ->
+                    Bukkit.getScheduler().runTask(plugin, () -> ticket(world, cx, cz, plugin, true)));
+        } catch (Throwable noAsync) {
+            if (!ticket(world, cx, cz, plugin, true)) {
                 world.loadChunk(cx, cz);
             }
+        }
+    }
+
+    private static boolean ticket(World world, int cx, int cz, Plugin plugin, boolean add) {
+        try {
+            Method ticket = world.getClass().getMethod(add ? "addPluginChunkTicket" : "removePluginChunkTicket",
+                    int.class, int.class, Plugin.class);
+            ticket.invoke(world, cx, cz, plugin);
+            return true;
+        } catch (Throwable old) {
+            return false;
         }
     }
 

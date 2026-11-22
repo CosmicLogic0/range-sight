@@ -27,6 +27,8 @@ public final class RangeClient {
     private static KeyMapping allKey;
     private static volatile List<RangeShape> shapes = Collections.emptyList();
     private static int ticks = SCAN_EVERY_TICKS;
+    /** The world the outlines belong to; a new world or dimension clears them right away. */
+    private static Object shapesLevel;
     private static boolean loggedFirstDraw;
     private static boolean loggedFirstFrame;
 
@@ -83,6 +85,11 @@ public final class RangeClient {
             ticks = SCAN_EVERY_TICKS;
             return;
         }
+        if (mc.level != shapesLevel) {
+            shapesLevel = mc.level;
+            shapes = Collections.emptyList(); // never draw the old dimension's outlines in the new one
+            ticks = SCAN_EVERY_TICKS;
+        }
         showHints(mc);
         ClientSelfTest.tick(mc, config);
         if (changed || ++ticks >= SCAN_EVERY_TICKS) {
@@ -131,6 +138,11 @@ public final class RangeClient {
     }
 
     /** Scan right now (used by the automatic test) and return the outlines. */
+    /** The outlines drawn right now (automatic test). */
+    static List<RangeShape> current() {
+        return shapes;
+    }
+
     static List<RangeShape> rescanNow() {
         Minecraft mc = Minecraft.getInstance();
         shapes = config.anyEnabled() ? RangeScanner.scan(mc, config) : Collections.<RangeShape>emptyList();

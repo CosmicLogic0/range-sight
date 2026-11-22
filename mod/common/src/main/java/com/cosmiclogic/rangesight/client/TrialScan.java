@@ -3,6 +3,8 @@ package com.cosmiclogic.rangesight.client;
 import com.cosmiclogic.rangesight.RangeMath;
 import com.cosmiclogic.rangesight.RangeType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.TrialSpawnerBlockEntity;
 import net.minecraft.world.level.block.entity.vault.VaultBlockEntity;
@@ -39,6 +41,15 @@ final class TrialScan {
                 ? number(call(call(be, "getTrialSpawner"), "getRequiredPlayerRange"), RangeMath.TRIAL_SPAWNER_DEFAULT_RANGE)
                 : number(call(call(be, "getConfig"), "activationRange"), RangeMath.VAULT_DEFAULT_RANGE);
         out.add(RangeShape.sphere(RangeType.TRIAL, config.color(RangeType.TRIAL), x, y, z, range));
+        return true;
+    }
+
+    /** Self-test only: places a trial spawner at {@code at} and a vault 6 blocks east of it. */
+    static boolean placeForTest(Object level, Object at) {
+        ServerLevel l = (ServerLevel) level;
+        BlockPos p = (BlockPos) at;
+        l.setBlock(p, Blocks.TRIAL_SPAWNER.defaultBlockState(), 3);
+        l.setBlock(p.offset(6, 0, 0), Blocks.VAULT.defaultBlockState(), 3);
         return true;
     }
 

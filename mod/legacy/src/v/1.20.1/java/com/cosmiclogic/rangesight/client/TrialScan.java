@@ -13,4 +13,8 @@ final class TrialScan {
     static boolean add(Object blockEntity, RangeConfig config, List<RangeShape> out) {
         return false;
     }
+
+    static boolean placeForTest(Object level, Object at) {
+        return false;
+    }
 }

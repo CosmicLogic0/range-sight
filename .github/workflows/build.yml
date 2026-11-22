@@ -104,6 +104,7 @@ jobs:
           grep -q "scan-chunks: 4" server/plugins/RangeSight/config.yml || { echo "fresh config.yml not written"; exit 1; }
           if grep -E "(ERROR|SEVERE)\]: \[RangeSight\]" server/server.log; then echo "Range Sight logged an error"; exit 1; fi
           grep "long-distance particles" server/server.log
+          if grep -q "has not responded for" server/server.log; then echo "the server froze (watchdog)"; exit 1; fi
       - name: Keep log
         if: always()
         run: mkdir -p logs && cp server/server.log "logs/paper-${{ matrix.mc }}.log" 2>/dev/null || true
@@ -388,7 +389,7 @@ jobs:
           LOG=../../../logs/mod26-build-${{ matrix.loader }}-${{ matrix.mc }}.log
           # one retry: downloads from the loader mavens sometimes drop ("Connection reset")
           ./gradlew build --no-daemon --stacktrace -Pminecraft_version=${{ matrix.mc }} ${{ steps.v.outputs.args }} > $LOG 2>&1 \
-            || { echo "retrying once"; sleep 20; ./gradlew build --no-daemon --stacktrace -Pminecraft_version=${{ matrix.mc }} ${{ steps.v.outputs.args }} > $LOG 2>&1; } \
+            || { echo "retrying once"; sleep 75; ./gradlew build --no-daemon --stacktrace -Pminecraft_version=${{ matrix.mc }} ${{ steps.v.outputs.args }} > $LOG 2>&1; } \
             || { tail -60 $LOG; exit 1; }
           tail -5 $LOG
       - name: Keep jar + loader version
@@ -550,7 +551,7 @@ jobs:
           mkdir -p ../../logs; chmod +x gradlew
           LOG=../../logs/legacy-build-${{ matrix.loader }}-${{ matrix.mc }}.log
           ./gradlew build --no-daemon --stacktrace -Pminecraft_version=${{ matrix.mc }} ${{ steps.v.outputs.args }} > $LOG 2>&1 \
-            || { echo "retrying once"; sleep 20; ./gradlew build --no-daemon --stacktrace -Pminecraft_version=${{ matrix.mc }} ${{ steps.v.outputs.args }} > $LOG 2>&1; } \
+            || { echo "retrying once"; sleep 75; ./gradlew build --no-daemon --stacktrace -Pminecraft_version=${{ matrix.mc }} ${{ steps.v.outputs.args }} > $LOG 2>&1; } \
             || { grep -E "error:|What went wrong" -A3 $LOG | head -80; exit 1; }
           tail -3 $LOG
       - name: Keep jar + loader version
@@ -704,7 +705,7 @@ jobs:
           mkdir -p ../../logs; chmod +x gradlew
           LOG=../../logs/v12-build-forge-1.12.2.log
           ./gradlew build --no-daemon --stacktrace > $LOG 2>&1 \
-            || { echo "retrying once"; sleep 20; ./gradlew build --no-daemon --stacktrace > $LOG 2>&1; } \
+            || { echo "retrying once"; sleep 75; ./gradlew build --no-daemon --stacktrace > $LOG 2>&1; } \
             || { grep -E "error:|What went wrong" -A3 $LOG | head -80; exit 1; }
           tail -3 $LOG
       - name: Keep jar

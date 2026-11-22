@@ -56,6 +56,8 @@ public final class RangeClient12 {
     private static KeyBinding allKey;
     private static volatile List<RangeShape> shapes = Collections.emptyList();
     private static int ticks = SCAN_EVERY_TICKS;
+    /** The world the outlines belong to; a new world or dimension clears them right away. */
+    private static Object shapesLevel;
     private static boolean loggedFirstDraw;
     private static boolean loggedFirstFrame;
     static final int[] VERSION = {1, 12, 2};
@@ -136,6 +138,11 @@ public final class RangeClient12 {
             shapes = Collections.emptyList();
             ticks = SCAN_EVERY_TICKS;
             return;
+        }
+        if (mc.world != shapesLevel) {
+            shapesLevel = mc.world;
+            shapes = Collections.emptyList(); // never draw the old dimension's outlines in the new one
+            ticks = SCAN_EVERY_TICKS;
         }
         showHints(mc);
         selfTest(mc);
