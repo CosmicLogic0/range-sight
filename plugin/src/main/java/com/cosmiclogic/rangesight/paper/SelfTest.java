@@ -34,15 +34,12 @@ final class SelfTest {
         Location spawn = world.getSpawnLocation();
         int scx = spawn.getBlockX() >> 4;
         int scz = spawn.getBlockZ() >> 4;
-        try {
-            Method async = world.getClass().getMethod("getChunkAtAsync", int.class, int.class);
-            for (int cx = scx - 2; cx <= scx + 2; cx++) {
-                for (int cz = scz - 2; cz <= scz + 2; cz++) {
-                    async.invoke(world, cx, cz);
-                }
+        // Keep the test's chunks loaded with a plugin ticket (1.14+). Since 1.21.9 there are no spawn chunks, so
+        // without a ticket Paper unloads them again right away and the test would wait for nothing.
+        for (int cx = scx - 2; cx <= scx + 2; cx++) {
+            for (int cz = scz - 2; cz <= scz + 2; cz++) {
+                holdChunk(world, cx, cz, plugin, true);
             }
-        } catch (Throwable notPaper) {
-            // Spigot/old Paper: spawn chunks are loaded already.
         }
         new BukkitRunnable() {
             int seconds;
@@ -61,11 +58,33 @@ final class SelfTest {
                         log.warning("Self-test: chunks near spawn still not loaded after 2 minutes, running anyway");
                     }
                     SelfTest.run(drawer, world, log);
+                    for (int cx = scx - 2; cx <= scx + 2; cx++) {
+                        for (int cz = scz - 2; cz <= scz + 2; cz++) {
+                            holdChunk(world, cx, cz, plugin, false);
+                        }
+                    }
                 } else if (seconds++ % 10 == 0) {
                     log.info("Self-test: waiting for chunks near spawn to load...");
                 }
             }
         }.runTaskTimer(plugin, 1L, 20L);
+    }
+
+    /** Adds (or removes) a plugin chunk ticket, which loads the chunk and keeps it loaded. Falls back to a plain load. */
+    private static void holdChunk(World world, int cx, int cz, Plugin plugin, boolean hold) {
+        try {
+            Method ticket = world.getClass().getMethod(hold ? "addPluginChunkTicket" : "removePluginChunkTicket",
+                    int.class, int.class, Plugin.class);
+            ticket.invoke(world, cx, cz, plugin);
+            if (hold) {
+                world.getChunkAt(cx, cz); // tickets don't load by themselves on every version
+            }
+        } catch (Throwable old) {
+            // 1.13: no tickets; spawn chunks near spawn are loaded already.
+            if (hold) {
+                world.loadChunk(cx, cz);
+            }
+        }
     }
 
     static boolean run(RangeDrawer drawer, World world, Logger log) {
@@ -133,8 +152,20 @@ final class SelfTest {
             expected.add("sculk sphere 40");
         }
 
+        // Trial spawner (default 14) and vault (4), 1.21+.
+        Material trial = material("TRIAL_SPAWNER");
+        if (trial != null) {
+            set(world, x - 8, y, z - 8, trial, placed);
+            expected.add("trial sphere " + RangeDrawer.TRIAL_SPAWNER_DEFAULT_RANGE);
+        }
+        Material vault = material("VAULT");
+        if (vault != null) {
+            set(world, x - 8, y, z + 8, vault, placed);
+            expected.add("trial sphere " + RangeDrawer.VAULT_ACTIVATION_RANGE);
+        }
+
         List<String> found = new ArrayList<>();
-        for (RangeDrawer.Source source : drawer.findSources(world, new Location(world, x, y, z), false)) {
+        for (RangeDrawer.Source source : drawer.findSources(world, new Location(world, x, y, z), false, null)) {
             // Only count what the test built (real dungeons and mineshafts nearby have spawners too).
             if (source.cy >= y - 60) {
                 found.add(source.toString());

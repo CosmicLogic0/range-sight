@@ -1,0 +1,22 @@
+# Range Sight Plugin settings. After changing this file, run /range reload (or restart the server).
+# If this file gets a typo, LogicLib keeps it as config.yml.broken-<date> and writes a fresh one.
+
+# How many chunks around each player to look for beacons, spawners, etc. (1-8)
+scan-chunks: 4
+# Draw at most this many range outlines per player (1-40).
+max-outlines: 12
+# Look for range blocks again every this many seconds (outlines are redrawn every second).
+rescan-seconds: 3
+# Send outlines as long-distance particles, so players see them more than 32 blocks away.
+# Needs LogicLib Plugin 0.2.0+. Turn off if players with weak computers see too many particles.
+far-particles: true
+
+# Outline colors as #RRGGBB.
+colors:
+  beacon: '#55FFFF'
+  conduit: '#3C8CFF'
+  spawner: '#FF5050'
+  raid: '#FF9933'
+  sculk: '#1ED9C8'
+  spawnchunks: '#FFE14D'
+  trial: '#B06CFF'

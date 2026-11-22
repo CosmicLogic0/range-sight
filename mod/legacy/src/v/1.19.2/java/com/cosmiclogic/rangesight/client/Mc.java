@@ -33,6 +33,19 @@ final class Mc {
         return new KeyMapping(name, InputConstants.Type.KEYSYM, key, RangeType.KEY_CATEGORY);
     }
 
+    /** A chat line (not the action bar) from a translation key with one text argument. */
+    static void chat(Minecraft mc, String key, String arg, boolean warning) {
+        if (mc.player != null) {
+            mc.player.displayClientMessage(Component.translatable(key, Component.literal(arg).withStyle(warning ? ChatFormatting.WHITE : ChatFormatting.YELLOW))
+                    .withStyle(warning ? ChatFormatting.GOLD : ChatFormatting.GRAY), false);
+        }
+    }
+
+    /** The key's current binding as text, e.g. "Num 0". */
+    static String keyText(KeyMapping key) {
+        return key.getTranslatedKeyMessage().getString();
+    }
+
     static void say(Minecraft mc, String labelKey, boolean on) {
         if (mc.player != null) {
             mc.player.displayClientMessage(Component.empty()

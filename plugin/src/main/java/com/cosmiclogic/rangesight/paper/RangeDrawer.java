@@ -13,6 +13,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -27,13 +28,11 @@ import java.util.UUID;
  */
 final class RangeDrawer {
 
-    /** Look for blocks this many chunks around the player. */
-    private static final int SCAN_CHUNKS = 4;
-    /** Rescan blocks every this many milliseconds (outlines are still redrawn every second). */
-    private static final long RESCAN_MS = 3000;
-    /** Never draw more than this many sources per player, to protect the server and the player. */
-    private static final int MAX_SOURCES = 12;
     private static final double LINE_STEP = 0.5;
+    /** Trial spawner default "required_player_range" (vanilla 1.21). */
+    static final int TRIAL_SPAWNER_DEFAULT_RANGE = 14;
+    /** Vault: a player within this many blocks makes it "active" (vanilla 1.21). */
+    static final int VAULT_ACTIVATION_RANGE = 4;
 
     private static final Set<String> BEACON_BASE = new HashSet<>(Arrays.asList(
             "IRON_BLOCK", "GOLD_BLOCK", "EMERALD_BLOCK", "DIAMOND_BLOCK", "NETHERITE_BLOCK"));
@@ -42,9 +41,15 @@ final class RangeDrawer {
 
     private final RangeSightPlugin plugin;
     private final Map<UUID, Scan> scans = new HashMap<>();
+    private volatile PluginSettings settings = new PluginSettings();
 
     RangeDrawer(RangeSightPlugin plugin) {
         this.plugin = plugin;
+    }
+
+    void settings(PluginSettings settings) {
+        this.settings = settings;
+        scans.clear();
     }
 
     void draw(Player player, Set<RangeType> types) {
@@ -54,8 +59,9 @@ final class RangeDrawer {
 
         Scan scan = scans.get(player.getUniqueId());
         long now = System.currentTimeMillis();
-        if (scan == null || now - scan.time > RESCAN_MS || !scan.world.equals(world.getName())) {
-            scan = new Scan(world.getName(), now, findSources(world, player.getLocation(), types.contains(RangeType.RAID)));
+        boolean raids = types.contains(RangeType.RAID);
+        if (scan == null || now - scan.time > settings.rescanMs || !scan.world.equals(world.getName()) || !scan.types.equals(types)) {
+            scan = new Scan(world.getName(), now, findSources(world, player.getLocation(), raids, types), types);
             scans.put(player.getUniqueId(), scan);
         }
 
@@ -66,17 +72,18 @@ final class RangeDrawer {
             switch (s.kind) {
                 case SQUARE:
                     if (y >= s.minY) {
-                        square(player, world, s.x1, s.z1, s.x2, s.z2, y, s.type.color);
+                        square(player, world, s.x1, s.z1, s.x2, s.z2, y, s.type.color, settings.farParticles);
                     }
                     break;
                 case SPHERE:
                     double r = RangeMath.sliceRadius(s.radius, y - s.cy);
                     if (r > 0.5) {
-                        LogicParticles.circle(player, new Location(world, s.cx, y, s.cz), r, s.color != null ? s.color : s.type.color);
+                        LogicParticles.circle(player, new Location(world, s.cx, y, s.cz), r, s.color != null ? s.color : s.type.color,
+                                settings.farParticles);
                     }
                     break;
                 case BOX:
-                    LogicParticles.box(player, s.x1, s.minY, s.z1, s.x2, s.maxY, s.z2, s.type.color);
+                    LogicParticles.box(player, s.x1, s.minY, s.z1, s.x2, s.maxY, s.z2, s.type.color, settings.farParticles);
                     break;
                 default:
                     break;
@@ -86,7 +93,8 @@ final class RangeDrawer {
         if (types.contains(RangeType.SPAWN_CHUNKS)) {
             int[] chunks = spawnChunks(world);
             if (chunks != null) {
-                square(player, world, chunks[0] * 16, chunks[1] * 16, (chunks[2] + 1) * 16, (chunks[3] + 1) * 16, y, RangeType.SPAWN_CHUNKS.color);
+                square(player, world, chunks[0] * 16, chunks[1] * 16, (chunks[2] + 1) * 16, (chunks[3] + 1) * 16, y,
+                        RangeType.SPAWN_CHUNKS.color, settings.farParticles);
             }
         }
     }
@@ -95,25 +103,27 @@ final class RangeDrawer {
         scans.remove(player);
     }
 
-    private static void square(Player player, World world, double x1, double z1, double x2, double z2, double y, Color color) {
+    private static void square(Player player, World world, double x1, double z1, double x2, double z2, double y, Color color,
+                               boolean far) {
         Location a = new Location(world, x1, y, z1);
         Location b = new Location(world, x2, y, z1);
         Location c = new Location(world, x2, y, z2);
         Location d = new Location(world, x1, y, z2);
-        LogicParticles.line(player, a, b, LINE_STEP, color);
-        LogicParticles.line(player, b, c, LINE_STEP, color);
-        LogicParticles.line(player, c, d, LINE_STEP, color);
-        LogicParticles.line(player, d, a, LINE_STEP, color);
+        LogicParticles.line(player, a, b, LINE_STEP, color, far);
+        LogicParticles.line(player, b, c, LINE_STEP, color, far);
+        LogicParticles.line(player, c, d, LINE_STEP, color, far);
+        LogicParticles.line(player, d, a, LINE_STEP, color, far);
     }
 
-    /** All range sources near a location, nearest first (at most {@link #MAX_SOURCES}). */
-    List<Source> findSources(World world, Location at, boolean raids) {
+    /** All range sources near a location for the given types, nearest first (at most max-outlines). */
+    List<Source> findSources(World world, Location at, boolean raids, Set<RangeType> types) {
+        PluginSettings settings = this.settings;
         int pcx = at.getBlockX() >> 4;
         int pcz = at.getBlockZ() >> 4;
         List<Source> found = new ArrayList<>();
 
-        for (int cx = pcx - SCAN_CHUNKS; cx <= pcx + SCAN_CHUNKS; cx++) {
-            for (int cz = pcz - SCAN_CHUNKS; cz <= pcz + SCAN_CHUNKS; cz++) {
+        for (int cx = pcx - settings.scanChunks; cx <= pcx + settings.scanChunks; cx++) {
+            for (int cz = pcz - settings.scanChunks; cz <= pcz + settings.scanChunks; cz++) {
                 if (!world.isChunkLoaded(cx, cz)) {
                     continue;
                 }
@@ -126,8 +136,12 @@ final class RangeDrawer {
             addRaids(world, found);
         }
 
+        if (types != null) {
+            found.removeIf(s -> !types.contains(s.type)); // only what the player asked for counts toward the limit
+        }
         found.sort((a, b) -> Double.compare(a.distanceSq(at), b.distanceSq(at)));
-        return found.size() > MAX_SOURCES ? new ArrayList<>(found.subList(0, MAX_SOURCES)) : found;
+        int max = settings.maxOutlines;
+        return found.size() > max ? new ArrayList<>(found.subList(0, max)) : found;
     }
 
     private void addSource(World world, BlockState state, List<Source> out) {
@@ -168,6 +182,23 @@ final class RangeDrawer {
                         x + 0.5 + spawnRange, y + 2, z + 0.5 + spawnRange));
                 break;
             }
+            case "TRIAL_SPAWNER": {
+                int range = TRIAL_SPAWNER_DEFAULT_RANGE;
+                try {
+                    // Paper 1.21+: org.bukkit.block.TrialSpawner#getRequiredPlayerRange (newer than our compile API).
+                    Object value = state.getClass().getMethod("getRequiredPlayerRange").invoke(state);
+                    if (value instanceof Integer && (Integer) value > 0) {
+                        range = (Integer) value;
+                    }
+                } catch (Throwable ignored) {
+                    // Keep the vanilla default.
+                }
+                out.add(Source.sphere(RangeType.TRIAL, x + 0.5, y + 0.5, z + 0.5, range, null));
+                break;
+            }
+            case "VAULT":
+                out.add(Source.sphere(RangeType.TRIAL, x + 0.5, y + 0.5, z + 0.5, VAULT_ACTIVATION_RANGE, null));
+                break;
             case "SCULK_SENSOR":
             case "CALIBRATED_SCULK_SENSOR":
                 out.add(Source.sphere(RangeType.SCULK, x + 0.5, y + 0.5, z + 0.5,
@@ -270,11 +301,13 @@ final class RangeDrawer {
         final String world;
         final long time;
         final List<Source> sources;
+        final Set<RangeType> types;
 
-        Scan(String world, long time, List<Source> sources) {
+        Scan(String world, long time, List<Source> sources, Set<RangeType> types) {
             this.world = world;
             this.time = time;
             this.sources = sources;
+            this.types = types.isEmpty() ? EnumSet.noneOf(RangeType.class) : EnumSet.copyOf(types);
         }
     }
 

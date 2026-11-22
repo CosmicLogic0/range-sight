@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.Blocks;
 import java.util.List;
 
 /**
- * Automatic test (only when config/rangesight.json has "selfTest": true, which CI sets):
+ * Automatic test (only when config/rangesight-selftest.txt exists, which CI creates):
  * in a single player world, builds a full 4-level iron beacon pyramid above the player,
  * then checks that Range Sight finds the beacon's 50-block range. Logs PASS or FAIL.
  */
@@ -37,6 +37,7 @@ final class ClientSelfTest {
             if (++ticks < 40) {
                 return; // let the world settle for 2 seconds
             }
+            config.setAll(true); // the test may start from a broken (reset) config with every range off
             BlockPos beacon = mc.player.blockPosition().offset(3, 7, 3);
             ResourceKey<Level> dim = mc.level.dimension();
             server.execute(() -> {

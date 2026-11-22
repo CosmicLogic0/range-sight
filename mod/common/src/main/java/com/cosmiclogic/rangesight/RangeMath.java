@@ -101,4 +101,21 @@ public final class RangeMath {
         }
         return v[2] >= patch;
     }
+
+    /** Compares two versions like {1, 21, 1}: negative if a is older than b, 0 if equal, positive if newer. */
+    public static int compare(int[] a, int[] b) {
+        for (int i = 0; i < 3; i++) {
+            int x = i < a.length ? a[i] : 0;
+            int y = i < b.length ? b[i] : 0;
+            if (x != y) {
+                return x < y ? -1 : 1;
+            }
+        }
+        return 0;
+    }
+
+    /** Trial spawner: default "required_player_range" in vanilla. */
+    public static final int TRIAL_SPAWNER_DEFAULT_RANGE = 14;
+    /** Vault: a player this close makes it "active" (vanilla default activation range). */
+    public static final double VAULT_DEFAULT_RANGE = 4.0;
 }

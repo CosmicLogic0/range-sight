@@ -119,3 +119,8 @@ publishing {
         }
     }
 }
+
+// Keep javadoc's real checks (broken links, bad HTML) but don't warn about every method without a comment.
+tasks.withType(Javadoc).configureEach {
+    options.addStringOption('Xdoclint:all,-missing', '-quiet')
+}

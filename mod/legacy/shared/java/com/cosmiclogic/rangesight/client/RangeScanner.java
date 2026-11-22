@@ -70,6 +70,9 @@ public final class RangeScanner {
     }
 
     private static void addBlockEntity(ClientLevel level, BlockEntity be, RangeConfig config, List<RangeShape> out) {
+        if (TrialScan.add(be, config, out)) {
+            return; // trial spawner or vault (1.21+)
+        }
         BlockPos p = be.getBlockPos();
         double x = p.getX() + 0.5;
         double y = p.getY() + 0.5;

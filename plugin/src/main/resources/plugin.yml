@@ -9,8 +9,12 @@ depend: [LogicLib]
 commands:
   range:
     description: Show or hide range outlines (only you see them).
-    usage: /range [beacon|conduit|spawner|raid|sculk|spawnchunks|all|off]
+    usage: /range [beacon|conduit|spawner|raid|sculk|spawnchunks|trial|all|off|list|help]
     permission: rangesight.use
 permissions:
   rangesight.use:
+    description: Use /range to see ranges.
     default: true
+  rangesight.admin:
+    description: Use /range reload.
+    default: op

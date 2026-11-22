@@ -39,7 +39,8 @@ public final class RangeClient {
     public static void init(Path configDir) {
         config = new RangeConfig(configDir);
         config.load();
-        for (RangeType type : RangeType.values()) {
+        // Only the ranges this Minecraft version has get a key (and a row in the settings screen).
+        for (RangeType type : RangeType.availableTypes(RangeScanner.MC_VERSION)) {
             TYPE_KEYS.put(type, new KeyMapping(type.keyName(), InputConstants.Type.KEYSYM, type.defaultKey, RangeType.KEY_CATEGORY));
         }
         allKey = new KeyMapping(RangeType.KEY_ALL, InputConstants.Type.KEYSYM, RangeType.KEY_ALL_DEFAULT, RangeType.KEY_CATEGORY);
@@ -79,6 +80,7 @@ public final class RangeClient {
             ticks = SCAN_EVERY_TICKS; // scan right away when a world opens
             return;
         }
+        showHints(mc);
         ClientSelfTest.tick(mc, config);
         if (changed || ++ticks >= SCAN_EVERY_TICKS) {
             ticks = 0;
@@ -103,12 +105,12 @@ public final class RangeClient {
         }
     }
 
-    /** Scan right now (used by the automatic test) and return the outlines. */
-    /** CI page screenshots only. */
+    /** CI tests and page screenshots only. */
     static RangeConfig config() {
         return config;
     }
 
+    /** Scan right now (used by the automatic test) and return the outlines. */
     static List<RangeShape> rescanNow() {
         Minecraft mc = Minecraft.getInstance();
         shapes = config.anyEnabled() ? RangeScanner.scan(mc, config) : Collections.emptyList();
@@ -128,6 +130,22 @@ public final class RangeClient {
             }
         }
         return n;
+    }
+
+    /** Once per install: how to use Range Sight. Once per broken config: where the old file went. */
+    private static void showHints(Minecraft mc) {
+        if (!config.hintShown && mc.player.tickCount > 40) {
+            config.hintShown = true;
+            config.save();
+            mc.player.displayClientMessage(Component.translatable(RangeSight.MOD_ID + ".hint",
+                    allKey.getTranslatedKeyMessage().copy().withStyle(ChatFormatting.YELLOW))
+                    .withStyle(ChatFormatting.GRAY), false);
+        }
+        if (config.brokenFileNote != null && mc.player.tickCount > 40) {
+            mc.player.displayClientMessage(Component.translatable(RangeSight.MOD_ID + ".broken_config",
+                    Component.literal(config.brokenFileNote).withStyle(ChatFormatting.WHITE)).withStyle(ChatFormatting.GOLD), false);
+            config.brokenFileNote = null;
+        }
     }
 
     private static void say(Minecraft mc, Component what, boolean on) {

@@ -58,6 +58,7 @@ public final class RangeClient12 {
     private static int ticks = SCAN_EVERY_TICKS;
     private static boolean loggedFirstDraw;
     private static boolean loggedFirstFrame;
+    static final int[] VERSION = {1, 12, 2};
     private static int selfTestStage;
     private static int selfTestTicks;
 
@@ -67,7 +68,8 @@ public final class RangeClient12 {
     public static void preInit(Path configDir) {
         config = new RangeConfig(configDir);
         config.load();
-        for (RangeType type : RangeType.values()) {
+        // Only ranges 1.12.2 has (no conduits, raids, sculk or trial spawners yet) get a key.
+        for (RangeType type : RangeType.availableTypes(VERSION)) {
             TYPE_KEYS.put(type, new KeyBinding(type.keyName(), lwjgl2Key(type.defaultKey), RangeType.KEY_CATEGORY));
         }
         allKey = new KeyBinding(RangeType.KEY_ALL, lwjgl2Key(RangeType.KEY_ALL_DEFAULT), RangeType.KEY_CATEGORY);
@@ -92,6 +94,8 @@ public final class RangeClient12 {
             case 324: return 75;
             case 325: return 76;
             case 326: return 77;  // numpad 6
+            case 327: return 71;  // numpad 7
+            case 330: return 83;  // numpad . (decimal)
             default: return 0;
         }
     }
@@ -133,6 +137,7 @@ public final class RangeClient12 {
             ticks = SCAN_EVERY_TICKS;
             return;
         }
+        showHints(mc);
         selfTest(mc);
         if (changed || ++ticks >= SCAN_EVERY_TICKS) {
             ticks = 0;
@@ -142,6 +147,27 @@ public final class RangeClient12 {
                 RangeSight.LOG.info("Range Sight drawing " + shapes.size() + " outlines");
             }
         }
+    }
+
+    /** Once per install: how to use Range Sight. Once per broken config: where the old file went. */
+    private static void showHints(Minecraft mc) {
+        if (!config.hintShown && mc.player.ticksExisted > 40) {
+            config.hintShown = true;
+            config.save();
+            chat(mc, RangeSight.MOD_ID + ".hint", allKey.getDisplayName(), false);
+        }
+        if (config.brokenFileNote != null && mc.player.ticksExisted > 40) {
+            chat(mc, RangeSight.MOD_ID + ".broken_config", config.brokenFileNote, true);
+            config.brokenFileNote = null;
+        }
+    }
+
+    private static void chat(Minecraft mc, String key, String arg, boolean warning) {
+        TextComponentString value = new TextComponentString(arg);
+        value.setStyle(new Style().setColor(warning ? TextFormatting.WHITE : TextFormatting.YELLOW));
+        TextComponentTranslation msg = new TextComponentTranslation(key, value);
+        msg.setStyle(new Style().setColor(warning ? TextFormatting.GOLD : TextFormatting.GRAY));
+        mc.player.sendMessage(msg);
     }
 
     private static void say(Minecraft mc, String key, boolean on) {
@@ -291,7 +317,7 @@ public final class RangeClient12 {
     }
 
     // ---------------------------------------------------------------- CI self-test
-    /** Only with "selfTest": true in config (CI): builds a beacon pyramid in single player and checks it is found. */
+    /** Only with config/rangesight-selftest.txt (CI): builds a beacon pyramid in single player and checks it is found. */
     private static void selfTest(Minecraft mc) {
         if (!config.selfTest || selfTestStage >= 2) {
             return;
@@ -304,6 +330,7 @@ public final class RangeClient12 {
             if (++selfTestTicks < 40) {
                 return;
             }
+            config.setAll(true); // the test may start from a broken (reset) config with every range off
             final BlockPos beacon = new BlockPos(MathHelper.floor(mc.player.posX) + 3, MathHelper.floor(mc.player.posY) + 7, MathHelper.floor(mc.player.posZ) + 3);
             final int dim = mc.world.provider.getDimension();
             server.addScheduledTask(() -> {

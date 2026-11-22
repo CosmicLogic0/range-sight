@@ -41,7 +41,7 @@ public final class RangeClient {
         // 1.21.9+: key categories are registered objects. The keyboard type is the first one (KEYSYM, later KEYBOARD).
         KeyMapping.Category category = KeyMapping.Category.register(Identifier.fromNamespaceAndPath(RangeSight.MOD_ID, "main"));
         InputConstants.Type keyboard = InputConstants.Type.values()[0];
-        for (RangeType type : RangeType.values()) {
+        for (RangeType type : RangeType.availableTypes(RangeScanner.MC_VERSION)) {
             TYPE_KEYS.put(type, new KeyMapping(type.keyName(), keyboard, type.defaultKey, category));
         }
         allKey = new KeyMapping(RangeType.KEY_ALL, keyboard, RangeType.KEY_ALL_DEFAULT, category);
@@ -81,6 +81,7 @@ public final class RangeClient {
             ticks = SCAN_EVERY_TICKS; // scan right away when a world opens
             return;
         }
+        showHints(mc);
         ClientSelfTest.tick(mc, config);
         if (changed || ++ticks >= SCAN_EVERY_TICKS) {
             ticks = 0;
@@ -126,6 +127,26 @@ public final class RangeClient {
             }
         }
         return n;
+    }
+
+    /** Once per install: how to use Range Sight. Once per broken config: where the old file went. */
+    private static void showHints(Minecraft mc) {
+        if (!config.hintShown && mc.player.tickCount > 40) {
+            config.hintShown = true;
+            config.save();
+            mc.player.sendSystemMessage(Component.translatable(RangeSight.MOD_ID + ".hint",
+                    allKey.getTranslatedKeyMessage().copy().withStyle(ChatFormatting.YELLOW)).withStyle(ChatFormatting.GRAY));
+        }
+        if (config.brokenFileNote != null && mc.player.tickCount > 40) {
+            mc.player.sendSystemMessage(Component.translatable(RangeSight.MOD_ID + ".broken_config",
+                    Component.literal(config.brokenFileNote).withStyle(ChatFormatting.WHITE)).withStyle(ChatFormatting.GOLD));
+            config.brokenFileNote = null;
+        }
+    }
+
+    /** CI tests only. */
+    static RangeConfig config() {
+        return config;
     }
 
     private static void say(Minecraft mc, Component what, boolean on) {

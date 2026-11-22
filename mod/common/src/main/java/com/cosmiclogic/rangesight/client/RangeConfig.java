@@ -32,8 +32,12 @@ public final class RangeConfig {
     public int scanChunks = 6;
     /** Line width in pixels. */
     public float lineWidth = 2.0f;
-    /** Automatic test only (CI): builds a beacon in single player and checks it is found. Never saved. */
+    /** Automatic test only (CI): config/rangesight-selftest.txt exists (or old "selfTest": true). Never saved. */
     public boolean selfTest;
+    /** The one-time "how to use" chat message has been shown. */
+    public boolean hintShown;
+    /** Set when the file had a mistake and was kept as a .broken copy (shown once in chat). */
+    public String brokenFileNote;
 
     public RangeConfig(Path configDir) {
         this.file = configDir.resolve(RangeSight.MOD_ID + ".json");
@@ -73,14 +77,18 @@ public final class RangeConfig {
 
     @SuppressWarnings("deprecation") // new JsonParser().parse(...) also works with the old Gson in 1.16.5
     public void load() {
+        selfTest = Files.exists(file.resolveSibling(RangeSight.MOD_ID + "-selftest.txt"));
         if (Files.exists(file)) {
             try {
                 JsonObject root = new JsonParser().parse(new String(Files.readAllBytes(file), StandardCharsets.UTF_8)).getAsJsonObject();
                 if (root.has("scanChunks")) {
                     scanChunks = Math.max(1, Math.min(16, root.get("scanChunks").getAsInt()));
                 }
-                if (root.has("selfTest")) {
-                    selfTest = root.get("selfTest").getAsBoolean();
+                if (root.has("selfTest") && root.get("selfTest").getAsBoolean()) {
+                    selfTest = true;
+                }
+                if (root.has("hintShown")) {
+                    hintShown = root.get("hintShown").getAsBoolean();
                 }
                 if (root.has("lineWidth")) {
                     lineWidth = Math.max(1f, Math.min(10f, root.get("lineWidth").getAsFloat()));
@@ -99,16 +107,36 @@ public final class RangeConfig {
                     }
                 }
             } catch (Exception e) {
-                RangeSight.LOG.warn("Could not read {}, using defaults: {}", file, e.toString());
+                // Never throw the player's file away: keep it next to the new one so they can fix it.
+                keepBrokenFile(e);
             }
         }
         save();
+    }
+
+    private void keepBrokenFile(Exception problem) {
+        enabled.clear();
+        for (RangeType type : RangeType.values()) {
+            colors.put(type, type.defaultColor);
+        }
+        Path backup = file.resolveSibling(file.getFileName() + ".broken-"
+                + new java.text.SimpleDateFormat("yyyyMMdd-HHmmss", Locale.ROOT).format(new java.util.Date()));
+        try {
+            Files.move(file, backup);
+            brokenFileNote = backup.getFileName().toString();
+            RangeSight.LOG.warn("Range Sight: config/{} has a mistake ({}). Using the default settings; your file was kept as config/{}",
+                    file.getFileName(), problem.getMessage(), backup.getFileName());
+        } catch (IOException e) {
+            RangeSight.LOG.warn("Range Sight: config/{} has a mistake ({}) and could not be set aside ({}); using defaults",
+                    file.getFileName(), problem.getMessage(), e.toString());
+        }
     }
 
     public void save() {
         JsonObject root = new JsonObject();
         root.addProperty("scanChunks", scanChunks);
         root.addProperty("lineWidth", lineWidth);
+        root.addProperty("hintShown", hintShown);
         JsonObject types = new JsonObject();
         for (RangeType type : RangeType.values()) {
             JsonObject t = new JsonObject();

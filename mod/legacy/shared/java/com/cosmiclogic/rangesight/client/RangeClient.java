@@ -36,7 +36,8 @@ public final class RangeClient {
     public static void init(Path configDir) {
         config = new RangeConfig(configDir);
         config.load();
-        for (RangeType type : RangeType.values()) {
+        // Only the ranges this Minecraft version has get a key.
+        for (RangeType type : RangeType.availableTypes(Mc.VERSION)) {
             TYPE_KEYS.put(type, Mc.newKey(type.keyName(), type.defaultKey));
         }
         allKey = Mc.newKey(RangeType.KEY_ALL, RangeType.KEY_ALL_DEFAULT);
@@ -82,6 +83,7 @@ public final class RangeClient {
             ticks = SCAN_EVERY_TICKS;
             return;
         }
+        showHints(mc);
         ClientSelfTest.tick(mc, config);
         if (changed || ++ticks >= SCAN_EVERY_TICKS) {
             ticks = 0;
@@ -108,6 +110,24 @@ public final class RangeClient {
             loggedFirstFrame = true;
             RangeSight.LOG.info("Range Sight rendered its first frame of outlines");
         }
+    }
+
+    /** Once per install: how to use Range Sight. Once per broken config: where the old file went. */
+    private static void showHints(Minecraft mc) {
+        if (!config.hintShown && mc.player.tickCount > 40) {
+            config.hintShown = true;
+            config.save();
+            Mc.chat(mc, RangeSight.MOD_ID + ".hint", Mc.keyText(allKey), false);
+        }
+        if (config.brokenFileNote != null && mc.player.tickCount > 40) {
+            Mc.chat(mc, RangeSight.MOD_ID + ".broken_config", config.brokenFileNote, true);
+            config.brokenFileNote = null;
+        }
+    }
+
+    /** CI tests only. */
+    static RangeConfig config() {
+        return config;
     }
 
     /** Scan right now (used by the automatic test) and return the outlines. */

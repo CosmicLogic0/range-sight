@@ -90,10 +90,20 @@ jobs:
           bash ../ci/get-paper.sh "${{ matrix.mc }}"
           find ../jars -name "*.jar" ! -name "*-sources.jar" -exec cp {} plugins/ \;
           ls plugins
+          # Edge case: a server owner broke config.yml. The plugin must keep their file, start with defaults, and work.
+          mkdir -p plugins/RangeSight
+          printf 'scan-chunks: [4\ncolors:\n  beacon: oops\n' > plugins/RangeSight/config.yml
       - name: Start server, run self-test
         run: |
           chmod +x ci/server-test.sh
           AFTER_START="range selftest" ci/server-test.sh server "Range Sight self-test PASS" -- java -Xmx1500M -jar paper.jar nogui
+      - name: Broken config.yml was kept, defaults used, no errors from Range Sight
+        run: |
+          grep -q "Your file was kept as config.yml.broken" server/server.log || { echo "broken config.yml was not kept"; exit 1; }
+          ls server/plugins/RangeSight/
+          grep -q "scan-chunks: 4" server/plugins/RangeSight/config.yml || { echo "fresh config.yml not written"; exit 1; }
+          if grep -E "(ERROR|SEVERE)\]: \[RangeSight\]" server/server.log; then echo "Range Sight logged an error"; exit 1; fi
+          grep "long-distance particles" server/server.log
       - name: Keep log
         if: always()
         run: mkdir -p logs && cp server/server.log "logs/paper-${{ matrix.mc }}.log" 2>/dev/null || true
@@ -193,10 +203,9 @@ jobs:
           mkdir -p run/mods run/config
           find jars -name "rangesight-${{ matrix.loader }}-${MC}-*.jar" ! -name "*-sources.jar" ! -name "*-javadoc.jar" -exec cp {} run/mods/ \;
           ls run/mods
-          cat > run/config/rangesight.json <<'EOF'
-          {"selfTest":true,"types":{"beacon":{"enabled":true},"conduit":{"enabled":true},"spawner":{"enabled":true},
-                    "raid":{"enabled":true},"sculk":{"enabled":true},"spawn_chunks":{"enabled":true}}}
-          EOF
+          # Edge case: a broken config file. The mod must keep it (as .broken-<date>), start with defaults and work.
+          printf '{"types":{"beacon":{"enabled":tru' > run/config/rangesight.json
+          echo on > run/config/rangesight-selftest.txt
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -214,6 +223,7 @@ jobs:
           grep -E "Range Sight (loaded|client ready|drawing|rendered)" "$LOG" || true
           grep -q "Range Sight client ready" "$LOG" || { echo "::error::Range Sight client did not start"; exit 1; }
           grep -q "Range Sight client self-test PASS" "$LOG" || { echo "::error::client self-test did not pass"; grep "self-test" "$LOG"; exit 1; }
+          grep -q "has a mistake" "$LOG" && ls "$(dirname "$LOG")/../config/" | grep -q "rangesight.json.broken-" || { echo "::error::broken config was not kept"; exit 1; }
           grep -q "Range Sight rendered its first frame" "$LOG" || { echo "::error::Range Sight never drew a frame"; exit 1; }
           echo "PASS: client scanned and drew outlines."
       - name: Keep log
@@ -354,12 +364,17 @@ jobs:
       - name: Find the newest ${{ matrix.loader }} for ${{ matrix.mc }}
         id: v
         run: |
+          # Last tested versions, used only if the newest one can't be downloaded.
+          case "${{ matrix.loader }}-${{ matrix.mc }}" in
+            forge-26.1.2) LAST=64.1.6 ;; forge-26.2) LAST=65.1.6 ;; forge-26.3) LAST=66.1.9 ;;
+            neoforge-26.1.2) LAST=26.1.2.129 ;; neoforge-26.2) LAST=26.2.0.95 ;; neoforge-26.3) LAST=26.3.0.115 ;; *) LAST= ;;
+          esac
           if [ "${{ matrix.loader }}" = "forge" ]; then
-            F=$(curl -s https://maven.minecraftforge.net/net/minecraftforge/forge/maven-metadata.xml | grep -o "<version>${{ matrix.mc }}-[^<]*</version>" | sed 's/<[^>]*>//g; s/^${{ matrix.mc }}-//' | tail -1)
+            F=$(bash ci/loader-version.sh forge "${{ matrix.mc }}" "$LAST")
             echo "args=-Pforge_version=$F" >> "$GITHUB_OUTPUT"
           else
             P="${{ matrix.mc }}"; case "$P" in *.*.*) ;; *) P="$P.0" ;; esac
-            F=$(curl -s https://maven.neoforged.net/releases/net/neoforged/neoforge/maven-metadata.xml | grep -oE "<version>$P\.[0-9]+(-beta)?</version>" | sed 's/<[^>]*>//g' | sort -V | tail -1)
+            F=$(bash ci/loader-version.sh neoforge "$P" "$LAST")
             echo "args=-Pneo_version=$F" >> "$GITHUB_OUTPUT"
           fi
           echo "Loader version: $F"; [ -n "$F" ] || { echo "::error::no ${{ matrix.loader }} for ${{ matrix.mc }}"; exit 1; }
@@ -459,10 +474,9 @@ jobs:
         run: |
           mkdir -p run/mods run/config
           cp jars/*.jar run/mods/
-          cat > run/config/rangesight.json <<'EOF'
-          {"selfTest":true,"types":{"beacon":{"enabled":true},"conduit":{"enabled":true},"spawner":{"enabled":true},
-                    "raid":{"enabled":true},"sculk":{"enabled":true},"spawn_chunks":{"enabled":true}}}
-          EOF
+          # Edge case: a broken config file. The mod must keep it (as .broken-<date>), start with defaults and work.
+          printf '{"types":{"beacon":{"enabled":tru' > run/config/rangesight.json
+          echo on > run/config/rangesight-selftest.txt
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -480,6 +494,7 @@ jobs:
           grep -E "Range Sight (loaded|client ready|drawing|rendered)" "$LOG" || true
           grep -q "Range Sight client ready" "$LOG" || { echo "::error::Range Sight client did not start"; exit 1; }
           grep -q "Range Sight client self-test PASS" "$LOG" || { echo "::error::client self-test did not pass"; grep "self-test" "$LOG"; exit 1; }
+          grep -q "has a mistake" "$LOG" && ls "$(dirname "$LOG")/../config/" | grep -q "rangesight.json.broken-" || { echo "::error::broken config was not kept"; exit 1; }
           grep -q "Range Sight rendered its first frame" "$LOG" || { echo "::error::Range Sight never drew a frame"; exit 1; }
           echo "PASS: client found the test beacon and drew outlines."
       - name: Keep log
@@ -515,12 +530,16 @@ jobs:
         id: v
         run: |
           L=$(curl -s https://maven.architectury.dev/dev/architectury/loom/dev.architectury.loom.gradle.plugin/maven-metadata.xml | grep -o "<latest>[^<]*</latest>" | sed 's/<[^>]*>//g')
+          case "${{ matrix.loader }}-${{ matrix.mc }}" in
+            forge-1.16.5) LAST=36.0.0 ;; forge-1.18.2) LAST=40.3.12 ;; forge-1.19.2) LAST=43.5.2 ;;
+            forge-1.20.1) LAST=47.4.29 ;; forge-1.21.11) LAST=61.2.5 ;; *) LAST= ;;
+          esac
           if [ "${{ matrix.loader }}" = "forge" ]; then
-            F=$(curl -s https://maven.minecraftforge.net/net/minecraftforge/forge/maven-metadata.xml | grep -o "<version>${{ matrix.mc }}-[^<]*</version>" | sed 's/<[^>]*>//g; s/^${{ matrix.mc }}-//' | tail -1)
+            F=$(bash ci/loader-version.sh forge "${{ matrix.mc }}" "$LAST")
             echo "args=-Pforge_version=$F -Parch_loom_version=$L" >> "$GITHUB_OUTPUT"
           else
             P=$(echo "${{ matrix.mc }}" | sed 's/^1\.//'); case "$P" in *.*) ;; *) P="$P.0" ;; esac
-            F=$(curl -s https://maven.neoforged.net/releases/net/neoforged/neoforge/maven-metadata.xml | grep -oE "<version>$P\.[0-9]+(-beta)?</version>" | sed 's/<[^>]*>//g' | sort -V | tail -1)
+            F=$(bash ci/loader-version.sh neoforge "$P" "$LAST")
             echo "args=-Ploom.platform=neoforge -Pforge_version=$F -Parch_loom_version=$L" >> "$GITHUB_OUTPUT"
           fi
           echo "Loader $F, Loom $L"; [ -n "$F" ] || { echo "::error::no ${{ matrix.loader }} for ${{ matrix.mc }}"; exit 1; }
@@ -583,7 +602,7 @@ jobs:
             curl -fsSL --retry 5 --retry-delay 5 --retry-all-errors -o installer.jar "https://maven.minecraftforge.net/net/minecraftforge/forge/${{ matrix.mc }}-$F/forge-${{ matrix.mc }}-$F-installer.jar"
             { java -jar installer.jar --installServer . > install.log 2>&1 || { sleep 20; java -jar installer.jar --installServer . > install.log 2>&1; }; } || (tail -50 install.log; exit 1)
           elif [ "${{ matrix.mc }}" = "1.20.1" ]; then
-            F=$(curl -s https://maven.neoforged.net/releases/net/neoforged/forge/maven-metadata.xml | grep -oE "<version>1\.20\.1-[^<]*</version>" | sed 's/<[^>]*>//g' | sort -V | tail -1)
+            F=$(bash ../ci/loader-version.sh neoforge-legacy 1.20.1 "")
             echo "NeoForge 1.20.1: $F"
             curl -fsSL --retry 5 --retry-delay 5 --retry-all-errors -o installer.jar "https://maven.neoforged.net/releases/net/neoforged/forge/$F/forge-$F-installer.jar"
             { java -jar installer.jar --installServer . > install.log 2>&1 || { sleep 20; java -jar installer.jar --installServer . > install.log 2>&1; }; } || (tail -50 install.log; exit 1)
@@ -634,10 +653,9 @@ jobs:
         run: |
           mkdir -p run/mods run/config
           find jars -name "*.jar" -exec cp {} run/mods/ \;
-          cat > run/config/rangesight.json <<'EOF'
-          {"selfTest":true,"types":{"beacon":{"enabled":true},"conduit":{"enabled":true},"spawner":{"enabled":true},
-                    "raid":{"enabled":true},"sculk":{"enabled":true},"spawn_chunks":{"enabled":true}}}
-          EOF
+          # Edge case: a broken config file. The mod must keep it (as .broken-<date>), start with defaults and work.
+          printf '{"types":{"beacon":{"enabled":tru' > run/config/rangesight.json
+          echo on > run/config/rangesight-selftest.txt
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -655,6 +673,7 @@ jobs:
           grep -E "Range Sight (loaded|client|drawing|rendered)" "$LOG" || true
           grep -q "Range Sight client ready" "$LOG" || { echo "::error::Range Sight client did not start"; exit 1; }
           grep -q "Range Sight client self-test PASS" "$LOG" || { echo "::error::client self-test did not pass"; grep "self-test" "$LOG"; exit 1; }
+          grep -q "has a mistake" "$LOG" && ls "$(dirname "$LOG")/../config/" | grep -q "rangesight.json.broken-" || { echo "::error::broken config was not kept"; exit 1; }
           grep -q "Range Sight rendered its first frame" "$LOG" || { echo "::error::Range Sight never drew a frame"; exit 1; }
           echo "PASS"
       - name: Keep log
@@ -751,9 +770,9 @@ jobs:
         run: |
           mkdir -p run/mods run/config
           cp jars/*.jar run/mods/
-          cat > run/config/rangesight.json <<'EOF'
-          {"selfTest":true,"types":{"beacon":{"enabled":true},"spawner":{"enabled":true},"spawn_chunks":{"enabled":true}}}
-          EOF
+          # Edge case: a broken config file. The mod must keep it (as .broken-<date>), start with defaults and work.
+          printf '{"types":{"beacon":{"enabled":tru' > run/config/rangesight.json
+          echo on > run/config/rangesight-selftest.txt
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -771,6 +790,7 @@ jobs:
           grep -E "Range Sight (loaded|client|drawing|rendered)" "$LOG" || true
           grep -q "Range Sight client ready" "$LOG" || { echo "::error::Range Sight client did not start"; exit 1; }
           grep -q "Range Sight client self-test PASS" "$LOG" || { echo "::error::client self-test did not pass"; grep "self-test" "$LOG"; exit 1; }
+          grep -q "has a mistake" "$LOG" && ls "$(dirname "$LOG")/../config/" | grep -q "rangesight.json.broken-" || { echo "::error::broken config was not kept"; exit 1; }
           grep -q "Range Sight rendered its first frame" "$LOG" || { echo "::error::Range Sight never drew a frame"; exit 1; }
           echo "PASS"
       - name: Keep log
