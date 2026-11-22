@@ -193,10 +193,10 @@ final class PageShots {
                 sp.getAbilities().flying = true;
                 sp.onUpdateAbilities();
             });
-            return 20;
+            return 260; // let every chunk in view distance load, so no world edge shows
         });
-        shot("all-ranges", EnumSet.of(RangeType.BEACON, RangeType.SPAWNER, RangeType.SCULK), beacon.offset(-44, 22, -50), beacon.offset(2, -6, 6));
-        shot("beacon-outside", EnumSet.of(RangeType.BEACON), beacon.offset(-74, 28, -66), beacon.offset(0, 8, 0));
+        shot("all-ranges", EnumSet.of(RangeType.BEACON, RangeType.SPAWNER, RangeType.SCULK), beacon.offset(-40, 15, -46), beacon.offset(2, -4, 6));
+        shot("beacon-outside", EnumSet.of(RangeType.BEACON), beacon.offset(-74, 16, -66), beacon.offset(0, 10, 0));
         shot("beacon-inside", EnumSet.of(RangeType.BEACON), beacon.offset(-20, -2, -15), beacon.offset(0, 1, 0));
         shot("spawner", EnumSet.of(RangeType.SPAWNER), spawner.offset(-14, 9, -22), spawner);
         shot("sculk", EnumSet.of(RangeType.SCULK), calibrated.offset(-46, 30, -40), calibrated.offset(-4, 0, 4));
@@ -311,14 +311,14 @@ final class PageShots {
             for (String c : build) {
                 command(mc, c);
             }
-            return 40;
+            return 200;
         });
-        pshot("all-ranges", "all", beacon.offset(-34, 16, -38), beacon.offset(0, -4, 6));
-        pshot("beacon", "beacon", beacon.offset(-40, 16, -40), beacon.offset(0, 2, 0));
-        pshot("spawner", "spawner", spawner.offset(-16, 7, -18), spawner);
-        pshot("sculk", "sculk", calibrated.offset(-28, 16, -26), calibrated.offset(-4, 0, 4));
-        pshot("conduit", "conduit", tank.offset(-22, 9, -24), tank);
-        pshot("spawn-chunks", "spawnchunks", p.offset(-46, 34, -60), p.offset(0, 6, 0));
+        pshot("all-ranges", "all", beacon.offset(-12, 7, -8), beacon.offset(-2, -4, 10));
+        pshot("beacon", "beacon", beacon.offset(-58, 6, -26), beacon.offset(-50, 2, 8));
+        pshot("spawner", "spawner", spawner.offset(-11, 5, -13), spawner.offset(0, 1, 0));
+        pshot("sculk", "sculk", calibrated.offset(-14, 6, -12), calibrated.offset(-2, 0, 2));
+        pshot("conduit", "conduit", tank.offset(-18, 6, -20), tank);
+        pshot("spawn-chunks", "spawnchunks", p.offset(-30, 6, -36), p.offset(-20, 2, -8));
         pshot("particles-close", "spawner", spawner.offset(-8, 4, -10), spawner.offset(0, 3, 0));
         // chat close-ups with a large GUI so the text fills the picture
         STEPS.add(mc -> {
