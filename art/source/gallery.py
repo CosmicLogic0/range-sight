@@ -118,6 +118,16 @@ def chart(plugin=False):
     finish(im, 'p02-commands.png' if plugin else 'm02-ranges.png')
 
 
+def arrow(d, a, b, col, w=5, head=18, both=False):
+    d.line([a, b], fill=col, width=w * S)
+    for (p, q) in ([(a, b)] + ([(b, a)] if both else [])):
+        ang = math.atan2(q[1] - p[1], q[0] - p[0])
+        hs = head * S
+        l = (q[0] - hs * math.cos(ang - 0.45), q[1] - hs * math.sin(ang - 0.45))
+        r = (q[0] - hs * math.cos(ang + 0.45), q[1] - hs * math.sin(ang + 0.45))
+        d.polygon([q, l, r], fill=col)
+
+
 # ------------------------------------------------------------------ explainers (mod)
 def iso_block(d, cx, cy, s, top, left, right, edge=(70, 76, 92, 255)):
     h = s * 0.5
@@ -136,7 +146,7 @@ def beacon_levels():
     xs = [270, 690, 1110, 1560]
     for i, levels in enumerate([1, 2, 3, 4]):
         cx = xs[i] * S
-        base = 690 * S
+        base = 620 * S
         s = 26 * S
         # pyramid, top level first drawn last
         for lv in range(levels, 0, -1):
@@ -152,9 +162,11 @@ def beacon_levels():
         iso_block(d, cx, top_y, s, (120, 255, 255, 255), (70, 170, 190, 255), (50, 130, 150, 255))
         d.line([(cx, top_y - 20 * S), (cx, 240 * S)], fill=(150, 255, 255, 200), width=5 * S)
         rng = levels * 10 + 10
+        half = (60 + rng * 2.6) * S
+        arrow(d, (cx - half, 775 * S), (cx + half, 775 * S), C['beacon'] + (255,), 4, 16, True)
         d.text((cx, 840 * S), f'{levels} level' + ('s' if levels > 1 else ''), font=f(B.FS, 36), fill=MUTED, anchor='ms')
         d.text((cx, 920 * S), f'{rng} blocks', font=f(B.FB, 64), fill=C['beacon'], anchor='ms')
-    d.text((110 * S, 1010 * S), 'Range = 10 × levels + 10 blocks out from the beacon, from the ground up to the sky.', font=f(B.FS, 30), fill=MUTED, anchor='ls')
+    d.text((110 * S, 1010 * S), 'Arrows: how far the effects reach. Range = 10 × levels + 10 blocks out from the beacon, up to the sky.', font=f(B.FS, 30), fill=MUTED, anchor='ls')
     tag(im)
     finish(im, 'm03-beacon-levels.png')
 
@@ -167,6 +179,7 @@ def conduit_frames():
     y = 290 * S
     for label, r in rows:
         d.text((140 * S, y + 46 * S), label, font=f(B.FS, 36), fill=WHITE, anchor='ls')
+        arrow(d, (520 * S, y + 32 * S), (600 * S, y + 32 * S), (150, 160, 200, 255), 4, 14)
         bw = r / 96 * 980 * S
         d.rounded_rectangle([620 * S, y, 620 * S + bw, y + 64 * S], radius=14 * S, fill=C['conduit'] + (230,))
         d.text((640 * S + bw, y + 46 * S), f'{r} blocks', font=f(B.FB, 40), fill=C['conduit'], anchor='ls')
@@ -192,6 +205,7 @@ def sculk_rings():
             for k in range(0, 360, 6):
                 d.arc([cx - rr, cy - rr * 0.5, cx + rr, cy + rr * 0.5], k, k + 3.5, fill=col + (255,), width=5 * S)
             d.text((cx, cy - rr * 0.5 - 14 * S), label, font=f(B.FS, 30), fill=col, anchor='ms')
+            arrow(d, (cx + 30 * S, cy), (cx + rr - 6 * S, cy), col + (255,), 4, 16)
         d.rounded_rectangle([cx - 26 * S, cy - 26 * S, cx + 26 * S, cy + 26 * S], radius=7 * S, fill=(20, 60, 70, 255), outline=C['sculk'] + (255,), width=4 * S)
         d.text((cx, 930 * S), name, font=f(B.FB, 42), fill=WHITE, anchor='ms')
     d.text((110 * S, 1010 * S), 'Drawn as spheres in the game. The darker ring is how far a shrieker\'s Darkness reaches.', font=f(B.FS, 30), fill=MUTED, anchor='ls')
@@ -256,6 +270,8 @@ def only_you():
                     d.ellipse([px - 6 * S, py - 6 * S, px + 6 * S, py + 6 * S], fill=C['spawner'] + (255,))
         person(d, cx - 230 * S, 820 * S, (90, 170, 255) if sees else (150, 150, 170))
         d.text((cx, 360 * S), label, font=f(B.FB, 38), fill=WHITE, anchor='ms')
+        if sees:
+            arrow(d, (cx - 180 * S, 690 * S), (cx - 110 * S, 650 * S), C['spawner'] + (255,), 4, 16)
         d.text((cx, 850 * S), 'sees the range' if sees else 'sees nothing extra', font=f(B.FS, 32),
                fill=C['spawner'] if sees else MUTED, anchor='ms')
     d.text((110 * S, 1010 * S), 'Particle outlines are sent only to the player who asked. Permission: rangesight.use (everyone by default).', font=f(B.FS, 30), fill=MUTED, anchor='ls')

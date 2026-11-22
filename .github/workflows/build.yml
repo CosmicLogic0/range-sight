@@ -241,7 +241,7 @@ jobs:
           find jars -name "rangesight-neoforge-${MC}-*.jar" ! -name "*-sources.jar" ! -name "*-javadoc.jar" -exec cp {} run/mods/ \;
           echo '{"lineWidth":5.0}' > run/config/rangesight.json
           echo mod > run/config/rangesight-pageshots.txt
-          printf 'renderDistance:16\nsimulationDistance:12\ngraphicsMode:1\ntutorialStep:none\nskipMultiplayerWarning:true\njoinedFirstServer:true\nonboardAccessibility:false\nnarrator:0\n' > run/options.txt
+          printf 'renderDistance:16\nsimulationDistance:12\ngraphicsMode:1\ntutorialStep:none\nskipMultiplayerWarning:true\njoinedFirstServer:true\nnarrator:0\n' > run/options.txt
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -311,7 +311,7 @@ jobs:
           find jars -name "rangesight-neoforge-${MC}-*.jar" ! -name "*-sources.jar" ! -name "*-javadoc.jar" -exec cp {} run/mods/ \;
           echo '{"types":{"beacon":{"enabled":false},"conduit":{"enabled":false},"spawner":{"enabled":false},"raid":{"enabled":false},"sculk":{"enabled":false},"spawn_chunks":{"enabled":false}}}' > run/config/rangesight.json
           echo "plugin 127.0.0.1:25565" > run/config/rangesight-pageshots.txt
-          printf 'renderDistance:16\nsimulationDistance:12\ngraphicsMode:1\ntutorialStep:none\nskipMultiplayerWarning:true\njoinedFirstServer:true\nonboardAccessibility:false\nnarrator:0\n' > run/options.txt
+          printf 'renderDistance:16\nsimulationDistance:12\ngraphicsMode:1\ntutorialStep:none\nskipMultiplayerWarning:true\njoinedFirstServer:true\nnarrator:0\n' > run/options.txt
       - name: Run the Minecraft client, joining the Paper server
         uses: headlesshq/mc-runtime-test@5.0.0
         with:
