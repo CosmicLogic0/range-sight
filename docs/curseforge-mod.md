@@ -13,15 +13,17 @@ Is the spawner close enough to activate? Does the beacon reach your base? Will t
 ### 🔦 Beacon range
 See the exact area your beacon's effects reach, from the ground up to the sky. Range Sight counts the pyramid levels for you, so a 1-level beacon shows 20 blocks and a full pyramid shows 50.
 
-![A beacon, a spawner and sculk blocks with their ranges drawn](https://raw.githubusercontent.com/CosmicLogic0/range-sight/main/docs/images/overview.jpg)
+![A full beacon range drawn on a Superflat world](https://raw.githubusercontent.com/CosmicLogic0/range-sight/main/docs/images/gallery/mod-beacon-outside.jpg)
 
 ### 🌊 Conduit range
 See the sphere where a conduit gives Conduit Power. The size comes from your prismarine frame, from 32 up to 96 blocks.
 
+![A conduit's range](https://raw.githubusercontent.com/CosmicLogic0/range-sight/main/docs/images/gallery/mod-conduit.jpg)
+
 ### 🕷️ Spawner range
 See the 16-block sphere you have to be inside for a spawner to work, plus the box its mobs can spawn in. Perfect for building mob farms and AFK spots.
 
-![A spawner with its activation sphere and spawn box](https://raw.githubusercontent.com/CosmicLogic0/range-sight/main/docs/images/spawner.jpg)
+![A spawner with its activation sphere and spawn box](https://raw.githubusercontent.com/CosmicLogic0/range-sight/main/docs/images/gallery/mod-spawner.jpg)
 
 ### 🚩 Raid range
 See the 96-block area around a raid's center, so you know where raiders can come from (single player and LAN host).
@@ -40,7 +42,7 @@ Every type has its own color, so you always know what you're looking at. Change 
 ### ⚡ No lag
 Range Sight looks for range blocks once a second, not every frame, and draws all the outlines in one go. Only the closest 48 are drawn.
 
-![Range Sight in a jungle world](https://raw.githubusercontent.com/CosmicLogic0/range-sight/main/docs/images/jungle.jpg)
+![Sculk ranges](https://raw.githubusercontent.com/CosmicLogic0/range-sight/main/docs/images/gallery/mod-sculk.jpg)
 
 ### 💾 It remembers
 Which ranges are on and your colors are saved to `config/rangesight.json`.

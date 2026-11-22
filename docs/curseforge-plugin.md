@@ -23,6 +23,8 @@ Shows the sphere where a conduit gives Conduit Power, sized by its prismarine fr
 ### 🕷️ Spawner range
 Shows the 16-block sphere a player has to be inside for a spawner to work, plus the box its mobs spawn in.
 
+![A spawner's range as particles](https://raw.githubusercontent.com/CosmicLogic0/range-sight/main/docs/images/gallery/plugin-particles-close.jpg)
+
 ### 🚩 Raid range
 Shows the 96-block area around an active raid's center. Because the plugin runs on the server, this works for everyone (Minecraft 1.14 and up).
 
@@ -36,6 +38,8 @@ Shows which chunks stay loaded around world spawn (up to Minecraft 1.21.8, since
 
 ### ⚡ Light on your server
 Range blocks near each player are looked up every few seconds, not every tick, and only the closest ones are drawn.
+
+![/range list in chat](https://raw.githubusercontent.com/CosmicLogic0/range-sight/main/docs/images/gallery/plugin-chat-list.jpg)
 
 ## 🎮 Commands
 | Command | What it does |

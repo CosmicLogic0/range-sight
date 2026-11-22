@@ -1,0 +1,31 @@
+{
+  "mod": [
+    ["m01-title", "Range Sight", "See the invisible ranges of beacons, conduits, spawners, raids, sculk and spawn chunks."],
+    ["mod-beacon-outside", "Beacon range from outside", "A full 4-level beacon reaches 50 blocks out, from the ground up to the sky."],
+    ["m02-ranges", "Every range, its own color and key", "Six range types, each with its own color and numpad key."],
+    ["mod-beacon-inside", "Standing inside a beacon's range", "The ring at your height shows where the beacon's effects stop."],
+    ["m03-beacon-levels", "Beacon range grows with the pyramid", "1 to 4 levels = 20 to 50 blocks. Range Sight counts the levels for you."],
+    ["mod-spawner", "Spawner range", "The 16-block sphere you must be inside, plus the box its mobs spawn in."],
+    ["mod-conduit", "Conduit range", "A conduit with one prismarine ring gives Conduit Power in a 32-block sphere."],
+    ["m04-conduit-frames", "Conduit range comes from its frame", "16 to 42 frame blocks = 32 to 96 blocks of Conduit Power."],
+    ["mod-sculk", "Sculk ranges", "Sensor 8, calibrated sensor 16, and a shrieker's 8-block hearing plus its 40-block Darkness."],
+    ["m05-sculk-rings", "Sculk: who can hear you", "Every sculk sensor and shrieker gets its own ring."],
+    ["mod-spawn-chunks", "Spawn chunks", "The chunks that stay loaded around world spawn (Minecraft up to 1.21.8)."],
+    ["mod-hud-toggle", "One key per range", "Press Numpad 1-6 to switch a range; a message above the hotbar confirms it."],
+    ["mod-key-binds", "Change any key", "Every Range Sight key is in Options > Controls > Key Binds."],
+    ["m06-versions", "Every version, Forge and NeoForge", "Minecraft 1.12.2 to 26.3, every file tested automatically."]
+  ],
+  "plugin": [
+    ["p01-title", "Range Sight Plugin", "Type /range and see the invisible ranges, no mods needed."],
+    ["plugin-all-ranges", "/range all", "Every range near you as particle outlines on a Paper server."],
+    ["p02-commands", "Every range, its own color", "One /range command per type, plus all, off and list."],
+    ["plugin-spawner", "Spawner range", "The spawner's activation sphere and spawn box, drawn with particles."],
+    ["plugin-particles-close", "Spawn box up close", "The box a spawner's mobs can appear in, outlined around the spawner."],
+    ["plugin-sculk", "Sculk ranges", "How far sculk sensors and shriekers hear you."],
+    ["plugin-beacon", "Beacon range", "Particles mark where a beacon's effects end."],
+    ["plugin-chat-list", "/range list", "Every range type, its color and whether it's on for you."],
+    ["plugin-chat-all", "Clear chat messages", "Every /range command answers in chat."],
+    ["p03-only-you", "Only you see your outlines", "Particles are sent only to the player who asked."],
+    ["p04-versions", "One jar for every Paper version", "Paper 1.12.2 to 26.3. Requires LogicLib Plugin."]
+  ]
+}
