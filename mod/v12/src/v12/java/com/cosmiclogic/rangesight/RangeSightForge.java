@@ -6,8 +6,9 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 /** Range Sight for Forge 1.12.2. Client-side: on a server it only loads, and any server works with it. */
-@Mod(modid = RangeSight.MOD_ID, name = RangeSight.MOD_NAME, version = "0.1.0",
-        acceptedMinecraftVersions = "[1.12.2]", acceptableRemoteVersions = "*")
+@Mod(modid = RangeSight.MOD_ID, name = RangeSight.MOD_NAME, version = "1.1.0",
+        acceptedMinecraftVersions = "[1.12.2]", acceptableRemoteVersions = "*",
+        guiFactory = "com.cosmiclogic.rangesight.client.GuiFactory12")
 public class RangeSightForge {
 
     private static boolean client;

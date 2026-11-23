@@ -47,7 +47,7 @@ final class ClientSelfTest {
         if (hold == null) {
             hold = TestHooks.holdScreen();
         }
-        if (mc.screen == null) {
+        if (mc.screen == null && stage != 5) {
             mc.setScreen(hold); // also after the dimension change, which replaces it with a loading screen
         }
         ticks++;
@@ -127,9 +127,32 @@ final class ClientSelfTest {
                         + (noSpawnChunks ? "" : "spawn chunks shown outside the Overworld; ") + shapes.size() + " outlines");
                 return;
             }
+            RangeSight.LOG.info("Range Sight client self-test: Nether OK ({} outlines, no spawn chunks), going back", shapes.size());
+            // Back to the Overworld before the test runner closes the game, like a normal session would end.
+            TestHooks.runCommand(server, "execute in minecraft:overworld run tp @a ~ ~1 ~");
+            next(4);
+        } else if (stage == 4) {
+            if (mc.level.dimension() != Level.OVERWORLD) {
+                if (ticks > 1200) {
+                    fail(mc, "could not get back to the Overworld");
+                }
+                return;
+            }
+            if (ticks < 20) {
+                return;
+            }
+            // Last: open the settings screen and let it draw for a moment (catches screen crashes on every version).
+            mc.setScreen(new SettingsScreen(null));
+            next(5);
+        } else if (stage == 5 && ticks >= 20) {
+            if (!(mc.screen instanceof SettingsScreen)) {
+                fail(mc, "the settings screen did not stay open");
+                return;
+            }
+            mc.setScreen(hold);
             RangeSight.LOG.info("Range Sight client self-test PASS: found the beacon's 50-block range in the Overworld"
-                    + " and the Nether{} ({} outlines)", TrialScan.SUPPORTED ? ", plus trial spawner and vault ranges" : "",
-                    shapes.size());
+                    + " and the Nether{}, old outlines were cleared on the dimension change, and the settings screen works",
+                    TrialScan.SUPPORTED ? ", plus trial spawner and vault ranges" : "");
             finish(mc);
         }
     }

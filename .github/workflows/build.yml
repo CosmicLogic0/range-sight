@@ -20,6 +20,7 @@ jobs:
   # ---------------------------------------------------------------- Paper plugin
   plugin-build:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - uses: actions/checkout@v4
@@ -59,6 +60,7 @@ jobs:
   paper-test:
     needs: plugin-build
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
@@ -117,6 +119,7 @@ jobs:
   # ---------------------------------------------------------------- Forge + NeoForge mod
   mod-build:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -146,6 +149,7 @@ jobs:
   mod-server-test:
     needs: mod-build
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
@@ -190,6 +194,7 @@ jobs:
   mod-client-test:
     needs: mod-build
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
@@ -241,6 +246,7 @@ jobs:
   page-shots:
     needs: mod-build
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
       - uses: actions/download-artifact@v4
         with:
@@ -283,6 +289,7 @@ jobs:
   plugin-shots:
     needs: [mod-build, plugin-build]
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
@@ -350,6 +357,7 @@ jobs:
   # ---------------------------------------------------------------- Mod on 26.x (mod/v26)
   mod26-build:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
@@ -380,6 +388,9 @@ jobs:
           fi
           echo "Loader version: $F"; [ -n "$F" ] || { echo "::error::no ${{ matrix.loader }} for ${{ matrix.mc }}"; exit 1; }
           echo "loader=$F" >> "$GITHUB_OUTPUT"
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: false
       - name: Build
         working-directory: mod/v26/${{ matrix.loader }}
         run: |
@@ -390,7 +401,7 @@ jobs:
           # one retry: downloads from the loader mavens sometimes drop ("Connection reset")
           ./gradlew build --no-daemon --stacktrace -Pminecraft_version=${{ matrix.mc }} ${{ steps.v.outputs.args }} > $LOG 2>&1 \
             || { echo "retrying once"; sleep 75; ./gradlew build --no-daemon --stacktrace -Pminecraft_version=${{ matrix.mc }} ${{ steps.v.outputs.args }} > $LOG 2>&1; } \
-            || { tail -60 $LOG; exit 1; }
+            || { grep -E "What went wrong|Caused by|error:|> Could not" -A3 $LOG | head -60; tail -20 $LOG; exit 1; }
           tail -5 $LOG
       - name: Keep jar + loader version
         run: |
@@ -411,6 +422,7 @@ jobs:
   mod26-server-test:
     needs: mod26-build
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
@@ -460,6 +472,7 @@ jobs:
   mod26-client-test:
     needs: mod26-build
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
@@ -510,6 +523,7 @@ jobs:
   # ---------------------------------------------------------------- Mod on 1.16.5 - 1.21.11 (mod/legacy, Architectury Loom)
   legacy-build:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
@@ -545,6 +559,9 @@ jobs:
           fi
           echo "Loader $F, Loom $L"; [ -n "$F" ] || { echo "::error::no ${{ matrix.loader }} for ${{ matrix.mc }}"; exit 1; }
           echo "loader=$F" >> "$GITHUB_OUTPUT"
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: false
       - name: Build
         working-directory: mod/legacy
         run: |
@@ -573,6 +590,7 @@ jobs:
   legacy-server-test:
     needs: legacy-build
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
@@ -633,6 +651,7 @@ jobs:
   legacy-client-test:
     needs: legacy-build
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
@@ -689,6 +708,7 @@ jobs:
   # ---------------------------------------------------------------- Mod on Forge 1.12.2 (mod/v12, RetroFuturaGradle / CleanroomMC template)
   v12-build:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -699,6 +719,9 @@ jobs:
             17
             21
             25
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: false
       - name: Build
         working-directory: mod/v12
         run: |
@@ -726,6 +749,7 @@ jobs:
   v12-server-test:
     needs: v12-build
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -762,6 +786,7 @@ jobs:
   v12-client-test:
     needs: v12-build
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
       - uses: actions/download-artifact@v4
         with:
@@ -808,6 +833,7 @@ jobs:
   export:
     needs: [plugin-build, paper-test, mod-build, mod-server-test, mod-client-test, mod26-build, mod26-server-test, mod26-client-test, legacy-build, legacy-server-test, legacy-client-test, v12-build, v12-server-test, v12-client-test]
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
       - uses: actions/download-artifact@v4
         with:
@@ -829,6 +855,7 @@ jobs:
     needs: [plugin-build, paper-test, mod-build, mod-server-test, mod-client-test, page-shots, plugin-shots, mod26-build, mod26-server-test, mod26-client-test, legacy-build, legacy-server-test, legacy-client-test, v12-build, v12-server-test, v12-client-test]
     if: always()
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
       - uses: actions/download-artifact@v4
         with:

@@ -25,6 +25,7 @@ public final class RangeClient {
     private static RangeConfig config;
     private static final Map<RangeType, KeyMapping> TYPE_KEYS = new EnumMap<>(RangeType.class);
     private static KeyMapping allKey;
+    private static KeyMapping settingsKey;
     private static volatile List<RangeShape> shapes = Collections.emptyList();
     private static int ticks = SCAN_EVERY_TICKS;
     /** The world the outlines belong to; a new world or dimension clears them right away. */
@@ -43,6 +44,7 @@ public final class RangeClient {
             TYPE_KEYS.put(type, Mc.newKey(type.keyName(), type.defaultKey));
         }
         allKey = Mc.newKey(RangeType.KEY_ALL, RangeType.KEY_ALL_DEFAULT);
+        settingsKey = Mc.newKey(RangeType.KEY_SETTINGS, RangeType.KEY_SETTINGS_DEFAULT);
         int on = 0;
         for (RangeType type : RangeType.values()) {
             if (config.isEnabled(type)) {
@@ -56,6 +58,7 @@ public final class RangeClient {
     public static List<KeyMapping> keys() {
         List<KeyMapping> list = new ArrayList<>(TYPE_KEYS.values());
         list.add(allKey);
+        list.add(settingsKey);
         return list;
     }
 
@@ -72,6 +75,11 @@ public final class RangeClient {
                 config.setEnabled(type, on);
                 Mc.say(mc, type.labelKey(), on);
                 changed = true;
+            }
+        }
+        while (settingsKey.consumeClick()) {
+            if (mc.screen == null) {
+                mc.setScreen(new SettingsScreen(null));
             }
         }
         while (allKey.consumeClick()) {
@@ -138,6 +146,16 @@ public final class RangeClient {
     }
 
     /** Scan right now (used by the automatic test) and return the outlines. */
+    /** Settings changed: scan again on the next tick. */
+    static void rescanSoon() {
+        ticks = SCAN_EVERY_TICKS;
+    }
+
+    /** The Minecraft version this copy of Range Sight is built for. */
+    static int[] mcVersion() {
+        return Mc.VERSION;
+    }
+
     /** The outlines drawn right now (automatic test). */
     static List<RangeShape> current() {
         return shapes;

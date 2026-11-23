@@ -27,6 +27,7 @@ public final class RangeClient {
     private static RangeConfig config;
     private static final Map<RangeType, KeyMapping> TYPE_KEYS = new EnumMap<>(RangeType.class);
     private static KeyMapping allKey;
+    private static KeyMapping settingsKey;
     private static volatile List<RangeShape> shapes = Collections.emptyList();
     private static int ticks = SCAN_EVERY_TICKS;
     /** The world the outlines belong to; a new world or dimension clears them right away. */
@@ -47,6 +48,7 @@ public final class RangeClient {
             TYPE_KEYS.put(type, new KeyMapping(type.keyName(), keyboard, type.defaultKey, category));
         }
         allKey = new KeyMapping(RangeType.KEY_ALL, keyboard, RangeType.KEY_ALL_DEFAULT, category);
+        settingsKey = new KeyMapping(RangeType.KEY_SETTINGS, keyboard, RangeType.KEY_SETTINGS_DEFAULT, category);
         RangeSight.LOG.info("Range Sight client ready ({} range types on)", countEnabled());
     }
 
@@ -54,6 +56,7 @@ public final class RangeClient {
     public static List<KeyMapping> keys() {
         List<KeyMapping> list = new ArrayList<>(TYPE_KEYS.values());
         list.add(allKey);
+        list.add(settingsKey);
         return list;
     }
 
@@ -70,6 +73,11 @@ public final class RangeClient {
                 config.setEnabled(type, on);
                 say(mc, Component.translatable(type.labelKey()), on);
                 changed = true;
+            }
+        }
+        while (settingsKey.consumeClick()) {
+            if (mc.screen == null) {
+                mc.setScreen(new SettingsScreen(null));
             }
         }
         while (allKey.consumeClick()) {
@@ -115,6 +123,16 @@ public final class RangeClient {
     }
 
     /** Scan right now (used by the automatic test) and return the outlines. */
+    /** Settings changed: scan again on the next tick. */
+    static void rescanSoon() {
+        ticks = SCAN_EVERY_TICKS;
+    }
+
+    /** The Minecraft version this copy of Range Sight is built for. */
+    static int[] mcVersion() {
+        return RangeScanner.MC_VERSION;
+    }
+
     /** The outlines drawn right now (automatic test). */
     static List<RangeShape> current() {
         return shapes;

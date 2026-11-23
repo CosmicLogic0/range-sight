@@ -16,6 +16,10 @@ public final class RangeSightNeoForgeClient {
 
     public static void init(IEventBus modBus) {
         RangeClient.init(FMLPaths.CONFIGDIR.get());
+        // "Config" button in the mod list opens the Range Sight settings screen.
+        net.neoforged.fml.ModList.get().getModContainerById(com.cosmiclogic.rangesight.RangeSight.MOD_ID).ifPresent(c ->
+                c.registerExtensionPoint(net.neoforged.neoforge.client.gui.IConfigScreenFactory.class,
+                        (net.neoforged.neoforge.client.gui.IConfigScreenFactory) (container, parent) -> new SettingsScreen(parent)));
         PageShots.init(FMLPaths.CONFIGDIR.get());
         NeoForge.EVENT_BUS.addListener(ScreenEvent.Opening.class, PageShots::onScreenOpening);
         modBus.addListener(RegisterKeyMappingsEvent.class, event -> RangeClient.keys().forEach(event::register));

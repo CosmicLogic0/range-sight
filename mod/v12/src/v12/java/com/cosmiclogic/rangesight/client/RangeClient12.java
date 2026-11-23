@@ -54,6 +54,7 @@ public final class RangeClient12 {
     private static RangeConfig config;
     private static final Map<RangeType, KeyBinding> TYPE_KEYS = new EnumMap<>(RangeType.class);
     private static KeyBinding allKey;
+    private static KeyBinding settingsKey;
     private static volatile List<RangeShape> shapes = Collections.emptyList();
     private static int ticks = SCAN_EVERY_TICKS;
     /** The world the outlines belong to; a new world or dimension clears them right away. */
@@ -75,6 +76,16 @@ public final class RangeClient12 {
             TYPE_KEYS.put(type, new KeyBinding(type.keyName(), lwjgl2Key(type.defaultKey), RangeType.KEY_CATEGORY));
         }
         allKey = new KeyBinding(RangeType.KEY_ALL, lwjgl2Key(RangeType.KEY_ALL_DEFAULT), RangeType.KEY_CATEGORY);
+        settingsKey = new KeyBinding(RangeType.KEY_SETTINGS, lwjgl2Key(RangeType.KEY_SETTINGS_DEFAULT), RangeType.KEY_CATEGORY);
+    }
+
+    static RangeConfig config() {
+        return config;
+    }
+
+    /** Settings changed: scan again on the next tick. */
+    static void rescanSoon() {
+        ticks = SCAN_EVERY_TICKS;
     }
 
     public static void init() {
@@ -82,6 +93,7 @@ public final class RangeClient12 {
             ClientRegistry.registerKeyBinding(k);
         }
         ClientRegistry.registerKeyBinding(allKey);
+        ClientRegistry.registerKeyBinding(settingsKey);
         MinecraftForge.EVENT_BUS.register(new Events());
         RangeSight.LOG.info("Range Sight client ready");
     }
@@ -126,6 +138,11 @@ public final class RangeClient12 {
                 config.setEnabled(e.getKey(), on);
                 say(mc, e.getKey().labelKey(), on);
                 changed = true;
+            }
+        }
+        while (settingsKey.isPressed()) {
+            if (mc.currentScreen == null) {
+                mc.displayGuiScreen(new SettingsScreen12(null));
             }
         }
         while (allKey.isPressed()) {
@@ -326,7 +343,17 @@ public final class RangeClient12 {
     // ---------------------------------------------------------------- CI self-test
     /** Only with config/rangesight-selftest.txt (CI): builds a beacon pyramid in single player and checks it is found. */
     private static void selfTest(Minecraft mc) {
-        if (!config.selfTest || selfTestStage >= 2) {
+        if (!config.selfTest || selfTestStage >= 3) {
+            return;
+        }
+        if (selfTestStage == 2) {
+            // The settings screen was opened at the end of the test: close it again after a second of drawing.
+            if (++selfTestTicks >= 20) {
+                boolean open = mc.currentScreen instanceof SettingsScreen12;
+                mc.displayGuiScreen(null);
+                RangeSight.LOG.info("Range Sight client self-test: settings screen {}", open ? "OK" : "was closed early");
+                selfTestStage = 3;
+            }
             return;
         }
         final IntegratedServer server = mc.getIntegratedServer();
@@ -363,11 +390,14 @@ public final class RangeClient12 {
                 }
             }
             if (found) {
-                RangeSight.LOG.info("Range Sight client self-test PASS: found the beacon's 50-block range ({} outlines)", shapes.size());
+                mc.displayGuiScreen(new SettingsScreen12(null)); // builds every button: a crash here fails the test
+                RangeSight.LOG.info("Range Sight client self-test PASS: found the beacon's 50-block range ({} outlines),"
+                        + " settings screen opened", shapes.size());
             } else {
                 RangeSight.LOG.error("Range Sight client self-test FAIL: beacon range not found ({} outlines)", shapes.size());
             }
             selfTestStage = 2;
+            selfTestTicks = 0;
         }
     }
 }

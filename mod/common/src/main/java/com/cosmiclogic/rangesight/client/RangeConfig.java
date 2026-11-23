@@ -75,6 +75,45 @@ public final class RangeConfig {
         return colors.get(type);
     }
 
+    /** Colors the settings screen steps through: every type's default, then a few extra easy-to-see ones. */
+    static final int[] PALETTE = {
+            0xFF55FFFF, 0xFF3C8CFF, 0xFFFF5050, 0xFFFF9933, 0xFF1ED9C8, 0xFFFFE14D, 0xFFB06CFF,
+            0xFFFFFFFF, 0xFFFF55FF, 0xFF55FF55, 0xFF8888FF, 0xFFAA0000};
+
+    /** Steps the type's color to the next one in {@link #PALETTE} (a custom color goes back to the first). */
+    public void nextColor(RangeType type) {
+        int now = colors.get(type) | 0xFF000000;
+        int next = PALETTE[0];
+        for (int i = 0; i < PALETTE.length; i++) {
+            if (PALETTE[i] == now) {
+                next = PALETTE[(i + 1) % PALETTE.length];
+            }
+        }
+        colors.put(type, next);
+        save();
+    }
+
+    /** Line width 1 to 5, then back to 1. */
+    public void nextLineWidth() {
+        int w = Math.round(lineWidth);
+        lineWidth = w >= 5 ? 1f : w + 1f;
+        save();
+    }
+
+    /** Search distance in chunks: 2, 4, 6, 8, 12, 16, then back to 2. */
+    public void nextScanChunks() {
+        int[] steps = {2, 4, 6, 8, 12, 16};
+        int next = steps[0];
+        for (int step : steps) {
+            if (step > scanChunks) {
+                next = step;
+                break;
+            }
+        }
+        scanChunks = next;
+        save();
+    }
+
     @SuppressWarnings("deprecation") // new JsonParser().parse(...) also works with the old Gson in 1.16.5
     public void load() {
         selfTest = Files.exists(file.resolveSibling(RangeSight.MOD_ID + "-selftest.txt"));

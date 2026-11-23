@@ -15,6 +15,9 @@ public final class RangeSightForgeClient {
 
     public static void init() {
         RangeClient.init(FMLPaths.CONFIGDIR.get());
+        // "Config" button in the mod list opens the Range Sight settings screen.
+        net.minecraftforge.fml.ModLoadingContext.get().registerExtensionPoint(net.minecraftforge.client.ConfigScreenHandler.ConfigScreenFactory.class,
+                () -> new net.minecraftforge.client.ConfigScreenHandler.ConfigScreenFactory((mc, parent) -> new SettingsScreen(parent)));
         FMLJavaModLoadingContext.get().getModEventBus().addListener((RegisterKeyMappingsEvent e) -> RangeClient.keys().forEach(e::register));
         MinecraftForge.EVENT_BUS.addListener((TickEvent.ClientTickEvent e) -> {
             if (e.phase == TickEvent.Phase.END) {

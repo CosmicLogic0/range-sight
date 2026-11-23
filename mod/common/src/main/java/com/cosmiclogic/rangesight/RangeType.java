@@ -9,26 +9,30 @@ import java.util.List;
  * the GLFW library on the compile path (26.3 builds don't have it).
  */
 public enum RangeType {
-    BEACON("beacon", 0xFF55FFFF, 321, null),
-    CONDUIT("conduit", 0xFF3C8CFF, 322, new int[]{1, 13, 0}),
-    SPAWNER("spawner", 0xFFFF5050, 323, null),
-    RAID("raid", 0xFFFF9933, 324, new int[]{1, 14, 0}),
-    SCULK("sculk", 0xFF1ED9C8, 325, new int[]{1, 17, 0}),
-    SPAWN_CHUNKS("spawn_chunks", 0xFFFFE14D, 326, null),
+    BEACON("beacon", 0xFF55FFFF, 321, null, null),
+    CONDUIT("conduit", 0xFF3C8CFF, 322, new int[]{1, 13, 0}, null),
+    SPAWNER("spawner", 0xFFFF5050, 323, null, null),
+    RAID("raid", 0xFFFF9933, 324, new int[]{1, 14, 0}, null),
+    SCULK("sculk", 0xFF1ED9C8, 325, new int[]{1, 17, 0}, null),
+    /** Minecraft 1.21.9 removed spawn chunks. */
+    SPAWN_CHUNKS("spawn_chunks", 0xFFFFE14D, 326, null, new int[]{1, 21, 9}),
     /** Trial spawners and vaults (Minecraft 1.21+). */
-    TRIAL("trial", 0xFFB06CFF, 327, new int[]{1, 21, 0});
+    TRIAL("trial", 0xFFB06CFF, 327, new int[]{1, 21, 0}, null);
 
     public final String id;
     public final int defaultColor;
     public final int defaultKey;
     /** First Minecraft version that has this range, or null for every version. */
     private final int[] since;
+    /** First Minecraft version that no longer has it, or null. */
+    private final int[] until;
 
-    RangeType(String id, int defaultColor, int defaultKey, int[] since) {
+    RangeType(String id, int defaultColor, int defaultKey, int[] since, int[] until) {
         this.id = id;
         this.defaultColor = defaultColor;
         this.defaultKey = defaultKey;
         this.since = since;
+        this.until = until;
     }
 
     public String keyName() {
@@ -41,7 +45,7 @@ public enum RangeType {
 
     /** True if this Minecraft version (e.g. {1, 20, 1} or {26, 3, 0}) has this kind of block. */
     public boolean availableIn(int[] mc) {
-        return since == null || RangeMath.compare(mc, since) >= 0;
+        return (since == null || RangeMath.compare(mc, since) >= 0) && (until == null || RangeMath.compare(mc, until) < 0);
     }
 
     /** The range types this Minecraft version has: only these get a key and a settings row. */
