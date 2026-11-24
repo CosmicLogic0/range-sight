@@ -200,7 +200,7 @@ def ranges(plugin=False):
                             fill=(36, 42, 74, 255), outline=(90, 100, 150, 255), width=2 * S)
         d.text((1500 * S - 20 * S - kw / 2, y + 49 * S), k, font=font(FS, 26), fill=WHITE, anchor='mm')
         y += 96 * S
-    foot = ('/range all  ·  /range off  ·  /range list. Outlines are shown only to you.' if plugin
+    foot = ('/range all  ·  /range off  ·  /range list  ·  /range help. Outlines are shown only to you.' if plugin
             else 'Numpad 0: every range on/off  ·  Numpad . (period): settings screen  ·  keys can be changed')
     d.text((60 * S, H - 30 * S), foot, font=font(FS, 26), fill=MUTED, anchor='ls')
     finish(im, os.path.join(ART, 'features', 'ranges-plugin.png' if plugin else 'ranges.png'))

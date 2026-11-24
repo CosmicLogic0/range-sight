@@ -39,12 +39,8 @@ Shows which chunks stay loaded around world spawn (up to Minecraft 1.21.8, since
 ### ⏳ Trial spawners and vaults
 Shows how close a player has to get before a trial spawner wakes up (14 blocks) or a vault opens (4 blocks). Minecraft 1.21 and up.
 
-![A trial spawner and a vault as particles](https://raw.githubusercontent.com/CosmicLogic0/range-sight/main/docs/images/gallery/plugin-trial.jpg)
-
 ### 🔭 Visible from far away
 Outlines use long-distance particles, so a 50-block beacon range shows completely, not just the part within 32 blocks of you. Server owners can turn this off in `config.yml`.
-
-![A full beacon range seen from outside](https://raw.githubusercontent.com/CosmicLogic0/range-sight/main/docs/images/gallery/plugin-beacon-far.jpg)
 
 ![Every range, its own color](https://raw.githubusercontent.com/CosmicLogic0/range-sight/main/docs/images/ranges-plugin.png)
 

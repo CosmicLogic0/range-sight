@@ -113,7 +113,7 @@ def chart(plugin=False):
                             fill=(36, 42, 74, 255), outline=(90, 100, 150, 255), width=2 * S)
         d.text((1780 * S - 24 * S - kw / 2, y + 50 * S), lab, font=fo, fill=WHITE, anchor='mm')
         y += 97 * S
-    foot = ('/range all  ·  /range off  ·  /range list. Outlines are shown only to you.' if plugin
+    foot = ('/range all  ·  /range off  ·  /range list  ·  /range help. Outlines are shown only to you.' if plugin
             else 'Numpad 0: every range on/off  ·  Numpad . (period): settings screen with colors  ·  keys in Options → Controls')
     d.text((110 * S, 1000 * S), foot, font=f(B.FS, 30), fill=MUTED, anchor='ls')
     tag(im)
