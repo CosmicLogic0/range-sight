@@ -10,7 +10,7 @@
 ## Improved
 - Only the ranges your Minecraft version has get a key and a settings row (no more do-nothing keys for sculk on 1.16.5, or for spawn chunks on 1.21.9 and newer).
 - The plugin says so when a range doesn't exist on the server's Minecraft version, instead of drawing nothing.
-- Your choices in the plugin are kept when you log out and back in.
+- Your choices in the plugin are kept when you log out and back in (until the server restarts).
 - Clearer key names, help text and chat messages.
 - The plugin now requires LogicLib Plugin 0.2.0 or newer, and tells the server owner clearly if it's missing or too old.
 
