@@ -4,6 +4,8 @@
 
 Is the spawner close enough to activate? Does the beacon reach your base? Will the sculk sensor hear you? Minecraft never shows you, so you guess, walk, count blocks and guess again. **Range Sight draws every invisible range right in your world.**
 
+🆕 **1.1.0:** trial spawner and vault ranges, a settings screen (colors, line width, search distance), a one-time tip on your first world, and a safer settings file.
+
 ---
 
 🧩 **Works on any server.** Range Sight is client-side, so you can use it in single player and on servers that don't have it installed.
@@ -34,18 +36,28 @@ See how far a sculk sensor (8 blocks) and a calibrated sensor (16) can hear you,
 ### 🗺️ Spawn chunks
 See which chunks stay loaded around world spawn, for farms that keep running while you're away (Minecraft 1.12.2 to 1.21.8, since newer versions no longer have spawn chunks).
 
+### ⏳ Trial spawners and vaults
+See how close you have to get before a trial spawner wakes up (14 blocks) and before a vault opens for you (4 blocks). Minecraft 1.21 and newer, since older versions don't have these blocks.
+
+![A trial spawner and a vault with their ranges](https://raw.githubusercontent.com/CosmicLogic0/range-sight/main/docs/images/gallery/mod-trial.jpg)
+
 ![Every range, its own color and key](https://raw.githubusercontent.com/CosmicLogic0/range-sight/main/docs/images/ranges.png)
 
+### ⚙️ Settings screen
+Press **Numpad .** (or click **Config** in the mod list) to turn each range on or off, pick its color, and set the line width and how far Range Sight looks. Every button explains itself when you hover over it. Works on every version, 1.12.2 to 26.3.
+
+![The Range Sight settings screen](https://raw.githubusercontent.com/CosmicLogic0/range-sight/main/docs/images/gallery/mod-settings.jpg)
+
 ### 🎨 Its own color for every range
-Every type has its own color, so you always know what you're looking at. Change any color to the one you like.
+Every type has its own color, so you always know what you're looking at. Click **Color** in the settings screen to try another one, or type any `#RRGGBB` color into `config/rangesight.json`.
 
 ### ⚡ No lag
-Range Sight looks for range blocks once a second, not every frame, and draws all the outlines in one go. Only the closest 48 are drawn.
+Range Sight looks for range blocks once a second, not every frame, and draws all the outlines in one go. Only the closest 48 are drawn. On a slow computer, lower the search distance in the settings screen.
 
 ![Sculk ranges](https://raw.githubusercontent.com/CosmicLogic0/range-sight/main/docs/images/gallery/mod-sculk.jpg)
 
 ### 💾 It remembers
-Which ranges are on and your colors are saved to `config/rangesight.json`.
+Which ranges are on and your colors are saved to `config/rangesight.json`. If that file ever gets a typo, Range Sight keeps your file (as `rangesight.json.broken-<date>`), starts with the default settings and tells you in chat, instead of crashing or wiping it.
 
 ## 🎮 Controls
 | Key | What it does |
@@ -56,9 +68,13 @@ Which ranges are on and your colors are saved to `config/rangesight.json`.
 | **Numpad 4** | Raid range on / off |
 | **Numpad 5** | Sculk ranges on / off |
 | **Numpad 6** | Spawn chunks on / off |
+| **Numpad 7** | Trial spawner and vault ranges on / off |
 | **Numpad 0** | Every range on / off |
+| **Numpad .** | Open the settings screen |
 
-Change any key in Options → Controls → Key Binds. All ranges start off, so turn on the ones you need.
+Change any key in Options → Controls → Key Binds. All ranges start off; the first time you join a world, a chat tip tells you which key shows them all.
+
+Only the ranges your Minecraft version has get a key: conduits from 1.13, raids from 1.14, sculk from 1.17 (1.18.2 in this mod), trial spawners and vaults from 1.21, and spawn chunks up to 1.21.8.
 
 ## 📦 Requirements
 - **Forge:** Minecraft 1.12.2, 1.16.5, 1.18.2, 1.19.2, 1.20.1, 1.21.1, 1.21.11, 26.1, 26.2 and 26.3

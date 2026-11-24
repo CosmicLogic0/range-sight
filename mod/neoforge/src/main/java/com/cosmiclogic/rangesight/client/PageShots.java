@@ -177,6 +177,7 @@ final class PageShots {
         BlockPos calibrated = p.offset(19, 0, 30);
         BlockPos shrieker = p.offset(11, 0, 41);
         BlockPos tank = p.offset(260, 3, 26);
+        BlockPos trial = p.offset(-40, 0, 6);
 
         STEPS.add(mc -> {
             server(mc, level -> {
@@ -188,6 +189,8 @@ final class PageShots {
                 level.setBlock(calibrated, Blocks.CALIBRATED_SCULK_SENSOR.defaultBlockState(), 3);
                 level.setBlock(shrieker, Blocks.SCULK_SHRIEKER.defaultBlockState(), 3);
                 conduitTank(level, tank);
+                level.setBlock(trial, Blocks.TRIAL_SPAWNER.defaultBlockState(), 3);
+                level.setBlock(trial.offset(6, 0, 0), Blocks.VAULT.defaultBlockState(), 3);
                 ServerPlayer sp = player(mc);
                 sp.setGameMode(GameType.CREATIVE);
                 sp.getAbilities().flying = true;
@@ -201,6 +204,7 @@ final class PageShots {
         shot("spawner", EnumSet.of(RangeType.SPAWNER), spawner.offset(-14, 9, -22), spawner);
         shot("sculk", EnumSet.of(RangeType.SCULK), calibrated.offset(-46, 30, -40), calibrated.offset(-4, 0, 4));
         shot("spawn-chunks", EnumSet.of(RangeType.SPAWN_CHUNKS), p.offset(-46, 34, -60), p.offset(0, 6, 0));
+        shot("trial", EnumSet.of(RangeType.TRIAL), trial.offset(-16, 9, -20), trial.offset(3, 0, 0));
         STEPS.add(mc -> {
             view(mc, tank.offset(-34, 12, -38), tank);
             return 120; // new chunks load
@@ -222,6 +226,15 @@ final class PageShots {
             return 6;
         });
         STEPS.add(mc -> save(mc, "mod-hud-toggle"));
+        // The settings screen (numpad . or the mod list's Config button), over the world
+        STEPS.add(mc -> {
+            only(EnumSet.of(RangeType.BEACON, RangeType.SPAWNER, RangeType.SCULK, RangeType.TRIAL));
+            view(mc, beacon.offset(-40, 15, -46), beacon.offset(2, -4, 6));
+            mc.options.hideGui = false;
+            mc.setScreen(new SettingsScreen(null));
+            return 20;
+        });
+        STEPS.add(mc -> save(mc, "mod-settings"));
         // Controls: the Range Sight key binds
         STEPS.add(mc -> {
             mc.setScreen(keyBindsScreen(mc));
@@ -285,6 +298,7 @@ final class PageShots {
         BlockPos calibrated = p.offset(19, 0, 30);
         BlockPos shrieker = p.offset(11, 0, 41);
         BlockPos tank = p.offset(40, 3, -30);
+        BlockPos trial = p.offset(-40, 0, 6);
 
         List<String> build = new ArrayList<>();
         build.add("time set 6000");
@@ -307,6 +321,8 @@ final class PageShots {
         build.add(fill(tank.offset(-2, 0, -2), tank.offset(2, 0, 2), "prismarine_bricks"));
         build.add(fill(tank.offset(-1, 0, -1), tank.offset(1, 0, 1), "water"));
         build.add(set(tank, "conduit"));
+        build.add(set(trial, "trial_spawner"));
+        build.add(set(trial.offset(6, 0, 0), "vault"));
         STEPS.add(mc -> {
             for (String c : build) {
                 command(mc, c);
@@ -320,6 +336,9 @@ final class PageShots {
         pshot("conduit", "conduit", tank.offset(-18, 6, -20), tank);
         pshot("spawn-chunks", "spawnchunks", p.offset(-30, 6, -36), p.offset(-20, 2, -8));
         pshot("particles-close", "spawner", spawner.offset(-8, 4, -10), spawner.offset(0, 3, 0));
+        pshot("trial", "trial", trial.offset(-16, 7, -20), trial.offset(3, 0, 0));
+        // Long-distance particles (LogicLib 0.2.0): the whole 50-block beacon range from far outside it
+        pshot("beacon-far", "beacon", beacon.offset(-78, 22, -70), beacon.offset(0, 4, 0));
         // chat close-ups with a large GUI so the text fills the picture
         STEPS.add(mc -> {
             command(mc, "range off");

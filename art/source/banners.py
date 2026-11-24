@@ -12,7 +12,7 @@ WHITE = (240, 244, 255)
 MUTED = (160, 170, 205)
 COLS = {
     'beacon': (85, 255, 255), 'conduit': (60, 140, 255), 'spawner': (255, 80, 80),
-    'raid': (255, 153, 51), 'sculk': (30, 217, 200), 'spawn': (255, 225, 77)}
+    'raid': (255, 153, 51), 'sculk': (30, 217, 200), 'spawn': (255, 225, 77), 'trial': (176, 108, 255)}
 FB = '/usr/share/fonts/truetype/google-fonts/Poppins-Bold.ttf'
 FR = '/usr/share/fonts/opentype/inter/Inter-Regular.otf'
 FS = '/usr/share/fonts/opentype/inter/Inter-SemiBold.otf'
@@ -105,7 +105,7 @@ def header():
     im = shadow_text(im, (446 * S, 220 * S), 'See the invisible ranges in your world.', font(FS, 38), (200, 230, 255), 'ls')
     d = ImageDraw.Draw(im)
     chips = [('Beacons', 'beacon'), ('Conduits', 'conduit'), ('Spawners', 'spawner'),
-             ('Raids', 'raid'), ('Sculk', 'sculk'), ('Spawn chunks', 'spawn')]
+             ('Raids', 'raid'), ('Sculk', 'sculk'), ('Spawn chunks', 'spawn'), ('Trial spawners', 'trial')]
     f = font(FS, 27)
     x, y = 446 * S, 268 * S
     for i, (label, key) in enumerate(chips):
@@ -173,9 +173,11 @@ def ranges(plugin=False):
             ('spawner', 'Spawner', 'Activation sphere (16) + the box mobs spawn in', 'Numpad 3'),
             ('raid', 'Raid', 'Raid area: 96 blocks around the raid center', 'Numpad 4'),
             ('sculk', 'Sculk', 'Sensor 8 · calibrated 16 · shrieker 8 + Darkness 40', 'Numpad 5'),
-            ('spawn', 'Spawn chunks', 'Chunks that stay loaded (up to 1.21.8)', 'Numpad 6')]
+            ('spawn', 'Spawn chunks', 'Chunks that stay loaded (up to 1.21.8)', 'Numpad 6'),
+            ('trial', 'Trial spawner + vault', 'Wake-up range: trial spawner 14 · vault 4 (1.21+)', 'Numpad 7')]
     if plugin:
-        cmds = ['/range beacon', '/range conduit', '/range spawner', '/range raid', '/range sculk', '/range spawnchunks']
+        cmds = ['/range beacon', '/range conduit', '/range spawner', '/range raid', '/range sculk', '/range spawnchunks',
+                '/range trial']
         rows = [(r[0], r[1], r[2], c) for r, c in zip(rows, cmds)]
     W, H = 1600 * S, (150 + 96 * len(rows) + 120) * S
     im = background(W, H, 1350 * S, H // 2, [(260, COLS['conduit']), (190, COLS['sculk']), (120, COLS['beacon'])])
@@ -199,7 +201,7 @@ def ranges(plugin=False):
         d.text((1500 * S - 20 * S - kw / 2, y + 49 * S), k, font=font(FS, 26), fill=WHITE, anchor='mm')
         y += 96 * S
     foot = ('/range all  ·  /range off  ·  /range list. Outlines are shown only to you.' if plugin
-            else 'Numpad 0 turns every range on or off. Colors and keys can be changed.')
+            else 'Numpad 0: every range on/off  ·  Numpad . (period): settings screen  ·  keys can be changed')
     d.text((60 * S, H - 30 * S), foot, font=font(FS, 26), fill=MUTED, anchor='ls')
     finish(im, os.path.join(ART, 'features', 'ranges-plugin.png' if plugin else 'ranges.png'))
 

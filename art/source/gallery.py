@@ -77,7 +77,8 @@ def title_card(plugin=False):
     im = B.shadow_text(im, (636 * S, 500 * S), line, f(B.FS, 46), (200, 230, 255), 'ls')
     d = ImageDraw.Draw(im)
     chips(d, 636 * S, 560 * S, [('Beacons', 'beacon'), ('Conduits', 'conduit'), ('Spawners', 'spawner'),
-                                ('Raids', 'raid'), ('Sculk', 'sculk'), ('Spawn chunks', 'spawn')], 32, 1860)
+                                ('Raids', 'raid'), ('Sculk', 'sculk'), ('Spawn chunks', 'spawn'),
+                                ('Trial spawners', 'trial')], 32, 1860)
     sub = ('Paper 1.12.2 to 26.3  ·  one jar  ·  requires LogicLib Plugin' if plugin
            else 'Forge + NeoForge  ·  Minecraft 1.12.2 to 26.3  ·  client-side')
     d.text((636 * S, 780 * S), sub, font=f(B.FS, 34), fill=MUTED, anchor='ls')
@@ -91,7 +92,8 @@ def chart(plugin=False):
             ('spawner', 'Spawner', 'Activation sphere (16) + the box its mobs spawn in', 'Numpad 3', '/range spawner'),
             ('raid', 'Raid', 'Raid area: 96 blocks around the raid center', 'Numpad 4', '/range raid'),
             ('sculk', 'Sculk', 'Sensor 8 · calibrated 16 · shrieker 8 + Darkness 40', 'Numpad 5', '/range sculk'),
-            ('spawn', 'Spawn chunks', 'Chunks that stay loaded (up to 1.21.8)', 'Numpad 6', '/range spawnchunks')]
+            ('spawn', 'Spawn chunks', 'Chunks that stay loaded (up to 1.21.8)', 'Numpad 6', '/range spawnchunks'),
+            ('trial', 'Trial spawner + vault', 'Wake-up range: trial spawner 14 · vault 4 (Minecraft 1.21+)', 'Numpad 7', '/range trial')]
     im = canvas(1650, 560, [(300, C['conduit']), (220, C['sculk']), (140, C['beacon'])])
     im = title(im, 'Every range, its own color' + ('' if plugin else ' and key'),
                'Turn on only the ranges you need.' if not plugin else 'Each player picks their own ranges.')
@@ -100,19 +102,19 @@ def chart(plugin=False):
     y = 250 * S
     for key, name, desc, k, cmd in rows:
         col = C[key]
-        d.rounded_rectangle([140 * S, y + 22 * S, 210 * S, y + 92 * S], radius=14 * S, outline=col + (255,), width=6 * S)
-        d.rounded_rectangle([159 * S, y + 41 * S, 191 * S, y + 73 * S], radius=7 * S, fill=col + (255,))
-        d.text((250 * S, y + 50 * S), name, font=f(B.FB, 40), fill=col, anchor='ls')
-        d.text((250 * S, y + 96 * S), desc, font=f(B.FR, 30), fill=(205, 214, 240), anchor='ls')
+        d.rounded_rectangle([140 * S, y + 16 * S, 204 * S, y + 80 * S], radius=13 * S, outline=col + (255,), width=6 * S)
+        d.rounded_rectangle([157 * S, y + 33 * S, 187 * S, y + 63 * S], radius=7 * S, fill=col + (255,))
+        d.text((250 * S, y + 44 * S), name, font=f(B.FB, 38), fill=col, anchor='ls')
+        d.text((250 * S, y + 84 * S), desc, font=f(B.FR, 29), fill=(205, 214, 240), anchor='ls')
         lab = cmd if plugin else k
         fo = f(B.FS, 30)
         kw = d.textlength(lab, font=fo)
-        d.rounded_rectangle([1780 * S - kw - 48 * S, y + 32 * S, 1780 * S, y + 86 * S], radius=12 * S,
+        d.rounded_rectangle([1780 * S - kw - 48 * S, y + 24 * S, 1780 * S, y + 76 * S], radius=12 * S,
                             fill=(36, 42, 74, 255), outline=(90, 100, 150, 255), width=2 * S)
-        d.text((1780 * S - 24 * S - kw / 2, y + 59 * S), lab, font=fo, fill=WHITE, anchor='mm')
-        y += 113 * S
+        d.text((1780 * S - 24 * S - kw / 2, y + 50 * S), lab, font=fo, fill=WHITE, anchor='mm')
+        y += 97 * S
     foot = ('/range all  ·  /range off  ·  /range list. Outlines are shown only to you.' if plugin
-            else 'Numpad 0 turns every range on or off. Change keys in Options → Controls; colors in config/rangesight.json.')
+            else 'Numpad 0: every range on/off  ·  Numpad . (period): settings screen with colors  ·  keys in Options → Controls')
     d.text((110 * S, 1000 * S), foot, font=f(B.FS, 30), fill=MUTED, anchor='ls')
     tag(im)
     finish(im, 'p02-commands.png' if plugin else 'm02-ranges.png')

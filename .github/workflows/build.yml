@@ -225,7 +225,7 @@ jobs:
           java: 21
       - name: Check Range Sight scanned and drew outlines
         run: |
-          LOG=/tmp/all-client.log; (zcat -f run/logs/*.log.gz 2>/dev/null; cat run/logs/latest.log) > $LOG
+          LOG=/tmp/all-client.log; { zcat -f run/logs/*.log.gz 2>/dev/null || true; cat run/logs/latest.log; } > $LOG
           grep -E "Range Sight (loaded|client ready|drawing|rendered)" "$LOG" || true
           grep -q "Range Sight client ready" "$LOG" || { echo "::error::Range Sight client did not start"; exit 1; }
           grep -q "Range Sight client self-test PASS" "$LOG" || { echo "::error::client self-test did not pass"; grep "self-test" "$LOG"; exit 1; }
@@ -234,7 +234,7 @@ jobs:
           echo "PASS: client scanned and drew outlines."
       - name: Keep log
         if: always()
-        run: mkdir -p logs && { zcat -f run/logs/*.log.gz 2>/dev/null; cat run/logs/latest.log; } > "logs/mod-client-${{ matrix.loader }}.log" 2>/dev/null || true
+        run: mkdir -p logs && { zcat -f run/logs/*.log.gz 2>/dev/null || true; cat run/logs/latest.log; } > "logs/mod-client-${{ matrix.loader }}.log" 2>/dev/null || true
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -504,7 +504,7 @@ jobs:
           java: 25
       - name: Check Range Sight started in the client
         run: |
-          LOG=/tmp/all-client.log; (zcat -f run/logs/*.log.gz 2>/dev/null; cat run/logs/latest.log) > $LOG
+          LOG=/tmp/all-client.log; { zcat -f run/logs/*.log.gz 2>/dev/null || true; cat run/logs/latest.log; } > $LOG
           grep -E "Range Sight (loaded|client ready|drawing|rendered)" "$LOG" || true
           grep -q "Range Sight client ready" "$LOG" || { echo "::error::Range Sight client did not start"; exit 1; }
           grep -q "Range Sight client self-test PASS" "$LOG" || { echo "::error::client self-test did not pass"; grep "self-test" "$LOG"; exit 1; }
@@ -513,7 +513,7 @@ jobs:
           echo "PASS: client found the test beacon and drew outlines."
       - name: Keep log
         if: always()
-        run: mkdir -p logs && { zcat -f run/logs/*.log.gz 2>/dev/null; cat run/logs/latest.log; } > "logs/mod26-client-${{ matrix.loader }}-${{ matrix.mc }}.log" 2>/dev/null || true
+        run: mkdir -p logs && { zcat -f run/logs/*.log.gz 2>/dev/null || true; cat run/logs/latest.log; } > "logs/mod26-client-${{ matrix.loader }}-${{ matrix.mc }}.log" 2>/dev/null || true
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -689,7 +689,7 @@ jobs:
           java: ${{ matrix.java }}
       - name: Check Range Sight found the test beacon and drew outlines
         run: |
-          LOG=/tmp/all-client.log; (zcat -f run/logs/*.log.gz 2>/dev/null; cat run/logs/latest.log) > $LOG
+          LOG=/tmp/all-client.log; { zcat -f run/logs/*.log.gz 2>/dev/null || true; cat run/logs/latest.log; } > $LOG
           grep -E "Range Sight (loaded|client|drawing|rendered)" "$LOG" || true
           grep -q "Range Sight client ready" "$LOG" || { echo "::error::Range Sight client did not start"; exit 1; }
           grep -q "Range Sight client self-test PASS" "$LOG" || { echo "::error::client self-test did not pass"; grep "self-test" "$LOG"; exit 1; }
@@ -698,7 +698,7 @@ jobs:
           echo "PASS"
       - name: Keep log
         if: always()
-        run: mkdir -p logs && { zcat -f run/logs/*.log.gz 2>/dev/null; cat run/logs/latest.log; } > "logs/legacy-client-${{ matrix.loader }}-${{ matrix.mc }}.log" 2>/dev/null || true
+        run: mkdir -p logs && { zcat -f run/logs/*.log.gz 2>/dev/null || true; cat run/logs/latest.log; } > "logs/legacy-client-${{ matrix.loader }}-${{ matrix.mc }}.log" 2>/dev/null || true
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -753,8 +753,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
+        id: java8
+        continue-on-error: true
         with:
           distribution: temurin
+          java-version: 8
+      - uses: actions/setup-java@v4
+        if: steps.java8.outcome == 'failure'
+        with:
+          distribution: zulu
           java-version: 8
       - uses: actions/download-artifact@v4
         with:
@@ -800,8 +807,15 @@ jobs:
           printf '{"types":{"beacon":{"enabled":tru' > run/config/rangesight.json
           echo on > run/config/rangesight-selftest.txt
       - uses: actions/setup-java@v4
+        id: java8
+        continue-on-error: true
         with:
           distribution: temurin
+          java-version: 8
+      - uses: actions/setup-java@v4
+        if: steps.java8.outcome == 'failure'
+        with:
+          distribution: zulu
           java-version: 8
       - name: Run the Minecraft client
         uses: headlesshq/mc-runtime-test@5.0.0
@@ -812,7 +826,7 @@ jobs:
           java: 8
       - name: Check Range Sight found the test beacon and drew outlines
         run: |
-          LOG=/tmp/all-client.log; (zcat -f run/logs/*.log.gz 2>/dev/null; cat run/logs/latest.log) > $LOG
+          LOG=/tmp/all-client.log; { zcat -f run/logs/*.log.gz 2>/dev/null || true; cat run/logs/latest.log; } > $LOG
           grep -E "Range Sight (loaded|client|drawing|rendered)" "$LOG" || true
           grep -q "Range Sight client ready" "$LOG" || { echo "::error::Range Sight client did not start"; exit 1; }
           grep -q "Range Sight client self-test PASS" "$LOG" || { echo "::error::client self-test did not pass"; grep "self-test" "$LOG"; exit 1; }
@@ -821,7 +835,7 @@ jobs:
           echo "PASS"
       - name: Keep log
         if: always()
-        run: mkdir -p logs && { zcat -f run/logs/*.log.gz 2>/dev/null; cat run/logs/latest.log; } > logs/v12-client-forge-1.12.2.log 2>/dev/null || true
+        run: mkdir -p logs && { zcat -f run/logs/*.log.gz 2>/dev/null || true; cat run/logs/latest.log; } > logs/v12-client-forge-1.12.2.log 2>/dev/null || true
       - uses: actions/upload-artifact@v4
         if: always()
         with:
