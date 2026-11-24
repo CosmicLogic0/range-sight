@@ -235,6 +235,7 @@ jobs:
           LOG=/tmp/all-client.log; { zcat -f run/logs/*.log.gz 2>/dev/null || true; cat run/logs/latest.log; } > $LOG
           grep -E "Range Sight (loaded|client ready|drawing|rendered)" "$LOG" || true
           grep -q "Range Sight client ready" "$LOG" || { echo "::error::Range Sight client did not start"; exit 1; }
+          if grep -Eq "Error reading pack metadata|load mod.rangesight pack metadata" "$LOG"; then echo "::error::Range Sight resources (key names, text) did not load"; grep -i "pack metadata" "$LOG" | head -3; exit 1; fi
           grep -q "Range Sight client self-test PASS" "$LOG" || { echo "::error::client self-test did not pass"; grep "self-test" "$LOG"; exit 1; }
           grep -q "has a mistake" "$LOG" && ls run/config/ | grep -q "rangesight.json.broken-" || { echo "::error::broken config was not kept"; exit 1; }
           grep -q "Range Sight rendered its first frame" "$LOG" || { echo "::error::Range Sight never drew a frame"; exit 1; }
@@ -514,6 +515,7 @@ jobs:
           LOG=/tmp/all-client.log; { zcat -f run/logs/*.log.gz 2>/dev/null || true; cat run/logs/latest.log; } > $LOG
           grep -E "Range Sight (loaded|client ready|drawing|rendered)" "$LOG" || true
           grep -q "Range Sight client ready" "$LOG" || { echo "::error::Range Sight client did not start"; exit 1; }
+          if grep -Eq "Error reading pack metadata|load mod.rangesight pack metadata" "$LOG"; then echo "::error::Range Sight resources (key names, text) did not load"; grep -i "pack metadata" "$LOG" | head -3; exit 1; fi
           grep -q "Range Sight client self-test PASS" "$LOG" || { echo "::error::client self-test did not pass"; grep "self-test" "$LOG"; exit 1; }
           grep -q "has a mistake" "$LOG" && ls run/config/ | grep -q "rangesight.json.broken-" || { echo "::error::broken config was not kept"; exit 1; }
           grep -q "Range Sight rendered its first frame" "$LOG" || { echo "::error::Range Sight never drew a frame"; exit 1; }
@@ -713,6 +715,7 @@ jobs:
           LOG=/tmp/all-client.log; { zcat -f run/logs/*.log.gz 2>/dev/null || true; cat run/logs/latest.log; } > $LOG
           grep -E "Range Sight (loaded|client|drawing|rendered)" "$LOG" || true
           grep -q "Range Sight client ready" "$LOG" || { echo "::error::Range Sight client did not start"; exit 1; }
+          if grep -Eq "Error reading pack metadata|load mod.rangesight pack metadata" "$LOG"; then echo "::error::Range Sight resources (key names, text) did not load"; grep -i "pack metadata" "$LOG" | head -3; exit 1; fi
           grep -q "Range Sight client self-test PASS" "$LOG" || { echo "::error::client self-test did not pass"; grep "self-test" "$LOG"; exit 1; }
           grep -q "has a mistake" "$LOG" && ls run/config/ | grep -q "rangesight.json.broken-" || { echo "::error::broken config was not kept"; exit 1; }
           grep -q "Range Sight rendered its first frame" "$LOG" || { echo "::error::Range Sight never drew a frame"; exit 1; }
@@ -850,6 +853,7 @@ jobs:
           LOG=/tmp/all-client.log; { zcat -f run/logs/*.log.gz 2>/dev/null || true; cat run/logs/latest.log; } > $LOG
           grep -E "Range Sight (loaded|client|drawing|rendered)" "$LOG" || true
           grep -q "Range Sight client ready" "$LOG" || { echo "::error::Range Sight client did not start"; exit 1; }
+          if grep -Eq "Error reading pack metadata|load mod.rangesight pack metadata" "$LOG"; then echo "::error::Range Sight resources (key names, text) did not load"; grep -i "pack metadata" "$LOG" | head -3; exit 1; fi
           grep -q "Range Sight client self-test PASS" "$LOG" || { echo "::error::client self-test did not pass"; grep "self-test" "$LOG"; exit 1; }
           grep -q "has a mistake" "$LOG" && ls run/config/ | grep -q "rangesight.json.broken-" || { echo "::error::broken config was not kept"; exit 1; }
           grep -q "Range Sight rendered its first frame" "$LOG" || { echo "::error::Range Sight never drew a frame"; exit 1; }

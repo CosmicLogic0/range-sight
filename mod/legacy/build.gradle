@@ -50,6 +50,8 @@ tasks.register('rsSources', Sync) {
 def mcRange = project.findProperty('mc_range') ?: "[${mcv}]"
 def forgeMajor = (project.forge_version.split('\\.')[0]) as int
 def pack = ['1.16.5': 6, '1.18.2': 8, '1.19.2': 9, '1.20.1': 15, '1.21.11': 75][mcv] ?: 15
+// Minecraft 1.21.9+ wants min_format/max_format (and supported_formats for formats 15-81), or it won't load the pack.
+def packExtra = mcv == '1.21.11' ? ', "supported_formats": [75, 81], "min_format": 75, "max_format": 255' : ''
 tasks.register('rsResources', Sync) {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from("src/${era}/res")
@@ -60,8 +62,9 @@ tasks.register('rsResources', Sync) {
     inputs.property 'version', project.mod_version
     inputs.property 'mcRange', mcRange
     inputs.property 'pack', pack
+    inputs.property 'packExtra', packExtra
     filesMatching(['META-INF/mods.toml', 'META-INF/neoforge.mods.toml']) { expand 'version': project.mod_version, 'mcRange': mcRange, 'forgeMajor': forgeMajor }
-    filesMatching('pack.mcmeta') { expand 'pack': pack }
+    filesMatching('pack.mcmeta') { expand 'pack': pack, 'packExtra': packExtra }
 }
 sourceSets.main.java.srcDirs = [gen]
 sourceSets.main.resources.srcDirs = [res]

@@ -19,6 +19,7 @@
 - Outlines from the world or dimension you just left could stay on screen for a moment after changing dimension or opening another world.
 - Plugin outlines disappeared beyond 32 blocks, so large ranges (beacon, conduit, raid) were cut off.
 - Forge 1.16.5 and 1.18.2 showed Range Sight as missing in the server list on servers without it (it's client-side, so it's now marked as optional there).
+- Forge 1.21.11 and 26.x, and NeoForge 1.21.11: Minecraft refused the mod's resource pack info, so key names and messages showed as raw text (like `key.rangesight.beacon`).
 - Forge 1.21.1 used loader methods that are being removed.
 
 All 26 files were started in a real game (client and server) and tested automatically before release, including a broken settings file, the Nether, a dimension change, trial spawners and the settings screen.

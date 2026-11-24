@@ -37,7 +37,8 @@ tail -n 80 server.log
 echo "==================================================="
 if [ "$ok" != "1" ]; then echo "::error::Server did not finish starting"; exit 1; fi
 if ! grep -Eq "$EXPECT" server.log; then echo "::error::Expected log line not found: $EXPECT"; exit 1; fi
-if grep -iE "logiclib|rangesight|range sight" server.log | grep -Eiq "exception|error|could not load|failed"; then
+if grep -Eq "Error reading pack metadata|load .*pack metadata" server.log; then echo "::error::A pack (mod resources) could not be read"; grep -m3 -A1 "pack metadata" server.log; exit 1; fi
+if grep -iE "logiclib|rangesight|range sight" server.log | grep -Eiq "exception|error|could not load|couldn.t load|failed"; then
   echo "::error::Range Sight or LogicLib problem in the log:"; grep -iE "logiclib|rangesight|range sight" server.log | grep -Ei "exception|error|could not load|failed"; exit 1
 fi
 echo "PASS: server started, Range Sight loaded with no errors."

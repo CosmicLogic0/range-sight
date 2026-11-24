@@ -1,1 +1,1 @@
-{ "pack": { "description": "Range Sight resources", "pack_format": ${pack} } }
+{ "pack": { "description": "Range Sight resources", "pack_format": ${pack}${packExtra} } }
