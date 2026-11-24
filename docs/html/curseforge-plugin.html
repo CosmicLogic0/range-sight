@@ -1,0 +1,89 @@
+<p><img alt="Range Sight Plugin" src="https://raw.githubusercontent.com/CosmicLogic0/range-sight/main/docs/images/header.png" /></p>
+<p><strong>Type /range. See the range.</strong></p>
+<blockquote>
+<p>⚠️ <strong>Requires <a href="https://www.curseforge.com/minecraft/bukkit-plugins/logiclib-plugin">LogicLib Plugin</a> 0.2.0 or newer.</strong> Put it in your <code>plugins</code> folder too. The CurseForge app adds it for you automatically.</p>
+</blockquote>
+<p>Your players keep asking: is the spawner close enough? Does the beacon reach my house? Will the sculk sensor hear me? <strong>Range Sight Plugin lets every player see the invisible ranges with one command</strong>, no mods needed.</p>
+<p>This is the <strong>server plugin</strong> version of <a href="https://www.curseforge.com/minecraft/mc-mods/range-sight">Range Sight</a>. Players don't install anything.</p>
+<p>🆕 <strong>1.1.0:</strong> outlines are visible from far away, trial spawner and vault ranges, <code>/range help</code>, <code>/range reload</code> and a <code>config.yml</code> for owners.</p>
+<hr />
+<p>🧩 <strong>Only you see your outlines.</strong> Each player turns on their own ranges, and the particle outlines are shown only to them, so nobody else's screen gets busy.</p>
+<h2>🔥 What it does</h2>
+<h3>🔦 Beacon range</h3>
+<p>Shows the exact area a beacon's effects reach, from the ground up to the sky, based on how many pyramid levels it has.</p>
+<h3>🌊 Conduit range</h3>
+<p>Shows the sphere where a conduit gives Conduit Power, sized by its prismarine frame (Minecraft 1.13 and up).</p>
+<h3>🕷️ Spawner range</h3>
+<p>Shows the 16-block sphere a player has to be inside for a spawner to work, plus the box its mobs spawn in.</p>
+<p><img alt="A spawner's range as particles" src="https://raw.githubusercontent.com/CosmicLogic0/range-sight/main/docs/images/gallery/plugin-particles-close.jpg" /></p>
+<h3>🚩 Raid range</h3>
+<p>Shows the 96-block area around an active raid's center. Because the plugin runs on the server, this works for everyone (Minecraft 1.14 and up).</p>
+<h3>👂 Sculk ranges</h3>
+<p>Shows how far sculk sensors, calibrated sensors and shriekers can hear, and how far a shrieker's Darkness reaches (Minecraft 1.19 and up).</p>
+<h3>🗺️ Spawn chunks</h3>
+<p>Shows which chunks stay loaded around world spawn (up to Minecraft 1.21.8, since newer versions no longer have spawn chunks).</p>
+<h3>⏳ Trial spawners and vaults</h3>
+<p>Shows how close a player has to get before a trial spawner wakes up (14 blocks) or a vault opens (4 blocks). Minecraft 1.21 and up.</p>
+<h3>🔭 Visible from far away</h3>
+<p>Outlines use long-distance particles, so a 50-block beacon range shows completely, not just the part within 32 blocks of you. Server owners can turn this off in <code>config.yml</code>.</p>
+<p><img alt="Every range, its own color" src="https://raw.githubusercontent.com/CosmicLogic0/range-sight/main/docs/images/ranges-plugin.png" /></p>
+<h3>⚡ Light on your server</h3>
+<p>Range blocks near each player are looked up every few seconds, not every tick, and only the closest ones are drawn.</p>
+<p><img alt="/range list in chat" src="https://raw.githubusercontent.com/CosmicLogic0/range-sight/main/docs/images/gallery/plugin-chat-list.jpg" /></p>
+<h2>🎮 Commands</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>/range</strong></td>
+<td>Every range on, or off if some are on</td>
+</tr>
+<tr>
+<td><strong>/range beacon</strong></td>
+<td>Beacon range on / off (also: <code>conduit</code>, <code>spawner</code>, <code>raid</code>, <code>sculk</code>, <code>spawnchunks</code>, <code>trial</code>)</td>
+</tr>
+<tr>
+<td><strong>/range all</strong></td>
+<td>Every range on</td>
+</tr>
+<tr>
+<td><strong>/range off</strong></td>
+<td>Every range off</td>
+</tr>
+<tr>
+<td><strong>/range list</strong></td>
+<td>Shows every range type, its color and whether it's on</td>
+</tr>
+<tr>
+<td><strong>/range help</strong></td>
+<td>Explains every command and range type</td>
+</tr>
+<tr>
+<td><strong>/range reload</strong></td>
+<td>Reloads <code>config.yml</code> (admins only)</td>
+</tr>
+</tbody>
+</table>
+<p>Permissions: <code>rangesight.use</code> (everyone has it by default) and <code>rangesight.admin</code> for <code>/range reload</code> (operators by default). A range your Minecraft version doesn't have says so instead of drawing nothing.</p>
+<h2>🔧 Settings for server owners</h2>
+<p><code>plugins/RangeSight/config.yml</code> sets how far to look for range blocks, how many outlines each player gets, how often to look again, long-distance particles on or off, and every range's color. Change it and run <code>/range reload</code>. If the file gets a typo, it's kept as <code>config.yml.broken-&lt;date&gt;</code> and the defaults are used, so the plugin never stops working.</p>
+<h2>📦 Requirements</h2>
+<ul>
+<li><strong>Paper:</strong> Minecraft 1.12.2, 1.16.5, 1.18.2, 1.19.2, 1.20.1, 1.21.1, 1.21.11, 26.1, 26.2 and 26.3 (one file for all of them)</li>
+<li><strong>Requires <a href="https://www.curseforge.com/minecraft/bukkit-plugins/logiclib-plugin">LogicLib Plugin</a> 0.2.0 or newer</strong> (shared code for my plugins). Without it, or with an older one, Range Sight Plugin doesn't start and says why in the console.</li>
+<li>Server only. Players don't need to install anything.</li>
+<li>Playing with Forge or NeoForge instead? Get the mod: <strong><a href="https://www.curseforge.com/minecraft/mc-mods/range-sight">Range Sight</a></strong>.</li>
+</ul>
+<p>Source and bug reports: https://github.com/CosmicLogic0/range-sight</p>
+<hr />
+<h2>❤️ Support the plugin</h2>
+<p><img alt="Help keep this mod alive" src="https://raw.githubusercontent.com/CosmicLogic0/range-sight/main/docs/images/donate.png" /></p>
+<p>Range Sight is free. Donations keep it up to date with fixes, new Minecraft versions and new features. <a href="https://www.paypal.com/paypalme/DylanEMason">Donate with PayPal</a> - any amount helps. Thank you!</p>
+<hr />
+<h2>🎮 The creator's server</h2>
+<p><strong>Logic Survival</strong> (<code>play.logicsurvival.fyi</code>) is the survival server run by the maker of this plugin.</p>
