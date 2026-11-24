@@ -79,8 +79,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
+        id: javam
+        continue-on-error: true
         with:
           distribution: temurin
+          java-version: ${{ matrix.java }}
+      - uses: actions/setup-java@v4
+        if: steps.javam.outcome == 'failure'
+        with:
+          distribution: zulu
           java-version: ${{ matrix.java }}
       - uses: actions/download-artifact@v4
         with:
@@ -606,8 +613,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
+        id: javam
+        continue-on-error: true
         with:
           distribution: ${{ matrix.dist || 'temurin' }}
+          java-version: ${{ matrix.java }}
+      - uses: actions/setup-java@v4
+        if: steps.javam.outcome == 'failure'
+        with:
+          distribution: zulu
           java-version: ${{ matrix.java }}
       - uses: actions/download-artifact@v4
         with:
@@ -677,8 +691,15 @@ jobs:
           printf '{"types":{"beacon":{"enabled":tru' > run/config/rangesight.json
           echo on > run/config/rangesight-selftest.txt
       - uses: actions/setup-java@v4
+        id: javam
+        continue-on-error: true
         with:
           distribution: temurin
+          java-version: ${{ matrix.java }}
+      - uses: actions/setup-java@v4
+        if: steps.javam.outcome == 'failure'
+        with:
+          distribution: zulu
           java-version: ${{ matrix.java }}
       - name: Run the Minecraft client
         uses: headlesshq/mc-runtime-test@5.0.0

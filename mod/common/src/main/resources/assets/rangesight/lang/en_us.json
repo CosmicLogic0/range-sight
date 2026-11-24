@@ -17,7 +17,7 @@
   "rangesight.type.raid": "Raid range",
   "rangesight.type.sculk": "Sculk range",
   "rangesight.type.spawn_chunks": "Spawn chunks",
-  "rangesight.type.trial": "Trial spawner and vault range",
+  "rangesight.type.trial": "Trial spawner range",
   "rangesight.help.beacon": "How far a beacon's effects reach: 20 to 50 blocks out (by pyramid levels), up to the sky.",
   "rangesight.help.conduit": "Where a conduit gives Conduit Power: 32 to 96 blocks (by its prismarine frame).",
   "rangesight.help.spawner": "The sphere you must be inside for a spawner to work, plus the box its mobs spawn in.",
@@ -38,5 +38,5 @@
   "rangesight.settings.width.tip": "How thick the outlines are (1 to 5).",
   "rangesight.settings.distance": "Search distance: %s chunks",
   "rangesight.settings.distance.tip": "How far around you Range Sight looks for beacons, spawners and so on. Lower is lighter on slow computers.",
-  "rangesight.settings.keys": "Keys: numpad 0-7 (change them in Options > Controls > Key Binds)"
+  "rangesight.settings.keys": "Keys: numpad 0-7, numpad . opens this screen (change them in Options > Controls)"
 }

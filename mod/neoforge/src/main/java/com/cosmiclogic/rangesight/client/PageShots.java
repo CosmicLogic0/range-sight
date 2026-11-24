@@ -336,9 +336,10 @@ final class PageShots {
         pshot("conduit", "conduit", tank.offset(-18, 6, -20), tank);
         pshot("spawn-chunks", "spawnchunks", p.offset(-30, 6, -36), p.offset(-20, 2, -8));
         pshot("particles-close", "spawner", spawner.offset(-8, 4, -10), spawner.offset(0, 3, 0));
-        pshot("trial", "trial", trial.offset(-16, 7, -20), trial.offset(3, 0, 0));
-        // Long-distance particles (LogicLib 0.2.0): the whole 50-block beacon range from far outside it
-        pshot("beacon-far", "beacon", beacon.offset(-78, 22, -70), beacon.offset(0, 4, 0));
+        pshot("trial", "trial", trial.offset(-9, 1, -10), trial.offset(3, 0, 0));
+        // Long-distance particles (LogicLib 0.2.0): standing 10 blocks outside a full beacon's range, its sides
+        // stay visible all the way (over 100 blocks away), not just the first 32 blocks.
+        pshot("beacon-far", "beacon", beacon.offset(-60, -3, -12), beacon.offset(0, -3, 0));
         // chat close-ups with a large GUI so the text fills the picture
         STEPS.add(mc -> {
             command(mc, "range off");
