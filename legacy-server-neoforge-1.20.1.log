@@ -1,0 +1,147 @@
+[32m[08:08:05.307] [main/INFO] [Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgeserver, --fml.forgeVersion, 47.1.106, --fml.fmlVersion, 47.2.2, --fml.mcVersion, 1.20.1, --fml.mcpVersion, 20230612.114412, nogui] 
+[m[32m[08:08:05.311] [main/INFO] [Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.21 by Eclipse Adoptium; OS Linux arch amd64 version 7.0.0-1020-azure 
+[m[33m[08:08:05.417] [main/WARN] [loading.FMLConfig/CORE]: Configuration file /home/runner/work/range-sight/range-sight/server/config/fml.toml is not correct. Correcting 
+[m[32m[08:08:05.419] [main/INFO] [loading.FMLConfig/CORE]: Incorrect key [earlyWindowSkipGLVersions] was corrected from null to [] 
+[m[32m[08:08:05.419] [main/INFO] [loading.FMLConfig/CORE]: Incorrect key [earlyWindowSquir] was corrected from null to false 
+[m[32m[08:08:05.439] [main/INFO] [loading.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgeserver 
+[m[32m[08:08:05.490] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=union:/home/runner/work/range-sight/range-sight/server/libraries/org/spongepowered/mixin/0.8.5/mixin-0.8.5.jar%2368!/ Service=ModLauncher Env=SERVER 
+[m[32m[08:08:05.595] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found mod file "rangesight-forge-1.20.1-1.1.0.jar" of type MOD with provider {mods folder locator at /home/runner/work/range-sight/range-sight/server/mods} 
+[m[33m[08:08:05.729] [main/WARN] [loading.moddiscovery.ModFileParser/LOADING]: Mod file /home/runner/work/range-sight/range-sight/server/libraries/net/neoforged/fancymodloader/core/47.2.2/core-47.2.2.jar is missing mods.toml file 
+[m[33m[08:08:05.731] [main/WARN] [loading.moddiscovery.ModFileParser/LOADING]: Mod file /home/runner/work/range-sight/range-sight/server/libraries/net/neoforged/fancymodloader/language-java/47.2.2/language-java-47.2.2.jar is missing mods.toml file 
+[m[33m[08:08:05.732] [main/WARN] [loading.moddiscovery.ModFileParser/LOADING]: Mod file /home/runner/work/range-sight/range-sight/server/libraries/net/neoforged/fancymodloader/language-lowcode/47.2.2/language-lowcode-47.2.2.jar is missing mods.toml file 
+[m[33m[08:08:05.733] [main/WARN] [loading.moddiscovery.ModFileParser/LOADING]: Mod file /home/runner/work/range-sight/range-sight/server/libraries/net/neoforged/fancymodloader/language-minecraft/47.2.2/language-minecraft-47.2.2.jar is missing mods.toml file 
+[m[32m[08:08:05.741] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found mod file "core-47.2.2.jar" of type LIBRARY with provider net.minecraftforge.fml.loading.moddiscovery.MinecraftLocator@6b5176f2 
+[m[32m[08:08:05.741] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found mod file "language-java-47.2.2.jar" of type LANGPROVIDER with provider net.minecraftforge.fml.loading.moddiscovery.MinecraftLocator@6b5176f2 
+[m[32m[08:08:05.741] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found mod file "language-lowcode-47.2.2.jar" of type LANGPROVIDER with provider net.minecraftforge.fml.loading.moddiscovery.MinecraftLocator@6b5176f2 
+[m[32m[08:08:05.742] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found mod file "language-minecraft-47.2.2.jar" of type LANGPROVIDER with provider net.minecraftforge.fml.loading.moddiscovery.MinecraftLocator@6b5176f2 
+[m[32m[08:08:05.743] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found mod file "server-1.20.1-20230612.114412-srg.jar" of type MOD with provider net.minecraftforge.fml.loading.moddiscovery.MinecraftLocator@6b5176f2 
+[m[32m[08:08:05.743] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found mod file "forge-1.20.1-47.1.106-universal.jar" of type MOD with provider net.minecraftforge.fml.loading.moddiscovery.MinecraftLocator@6b5176f2 
+[m[32m[08:08:05.748] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found mod file "events-47.2.2.jar" of type GAMELIBRARY with provider net.minecraftforge.fml.loading.moddiscovery.BuiltinGameLibraryLocator@56e07a08 
+[m[32m[08:08:05.788] [main/INFO] [loading.moddiscovery.JarInJarDependencyLocator/]: No dependencies to load found. Skipping! 
+[m[32m[08:08:07.428] [main/INFO] [LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgeserver' with arguments [nogui] 
+[m2026-11-24 08:08:07,669 main WARN Advanced terminal features are not available in this environment
+[08:08:13] [modloading-worker-0/INFO] [Range Sight/]: Range Sight loaded on Forge
+[08:08:13] [modloading-worker-0/INFO] [ne.mi.co.ForgeMod/FORGEMOD]: NeoForge mod loading, version 47.1.106, for MC 1.20.1 with MCP 20230612.114412
+[08:08:13] [modloading-worker-0/INFO] [ne.mi.co.MinecraftForge/FORGE]: NeoForge v47.1.106 Initialized
+[08:08:15] [main/ERROR] [minecraft/Settings]: Failed to load properties from file: server.properties
+java.nio.file.NoSuchFileException: server.properties
+	at sun.nio.fs.UnixException.translateToIOException(UnixException.java:92) ~[?:?] {}
+	at sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106) ~[?:?] {}
+	at sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111) ~[?:?] {}
+	at sun.nio.fs.UnixFileSystemProvider.newByteChannel(UnixFileSystemProvider.java:218) ~[?:?] {}
+	at java.nio.file.Files.newByteChannel(Files.java:380) ~[?:?] {}
+	at java.nio.file.Files.newByteChannel(Files.java:432) ~[?:?] {}
+	at java.nio.file.spi.FileSystemProvider.newInputStream(FileSystemProvider.java:422) ~[?:?] {}
+	at java.nio.file.Files.newInputStream(Files.java:160) ~[?:?] {}
+	at net.minecraft.server.dedicated.Settings.m_139839_(Settings.java:36) ~[server-1.20.1-20230612.114412-srg.jar%23105!/:?] {re:classloading}
+	at net.minecraft.server.dedicated.DedicatedServerProperties.m_180929_(DedicatedServerProperties.java:137) ~[server-1.20.1-20230612.114412-srg.jar%23105!/:?] {re:classloading}
+	at net.minecraft.server.dedicated.DedicatedServerSettings.<init>(DedicatedServerSettings.java:12) ~[server-1.20.1-20230612.114412-srg.jar%23105!/:?] {re:classloading}
+	at net.minecraft.server.Main.main(Main.java:126) ~[server-1.20.1-20230612.114412-srg.jar%23105!/:?] {re:classloading}
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?] {}
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[?:?] {}
+	at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?] {}
+	at java.lang.reflect.Method.invoke(Method.java:569) ~[?:?] {}
+	at net.minecraftforge.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:126) ~[loader-47.2.2.jar%2351!/:47.2] {}
+	at net.minecraftforge.fml.loading.targets.CommonLaunchHandler.serverService(CommonLaunchHandler.java:118) ~[loader-47.2.2.jar%2351!/:47.2] {}
+	at net.minecraftforge.fml.loading.targets.CommonServerLaunchHandler.runService(CommonServerLaunchHandler.java:26) ~[loader-47.2.2.jar%2351!/:47.2] {}
+	at net.minecraftforge.fml.loading.targets.CommonLaunchHandler.lambda$launchService$4(CommonLaunchHandler.java:108) ~[loader-47.2.2.jar%2351!/:47.2] {}
+	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30) ~[modlauncher-10.0.9.jar%2358!/:?] {}
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53) ~[modlauncher-10.0.9.jar%2358!/:?] {}
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71) ~[modlauncher-10.0.9.jar%2358!/:?] {}
+	at cpw.mods.modlauncher.Launcher.run(Launcher.java:108) ~[modlauncher-10.0.9.jar%2358!/:?] {}
+	at cpw.mods.modlauncher.Launcher.main(Launcher.java:78) ~[modlauncher-10.0.9.jar%2358!/:?] {}
+	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) ~[modlauncher-10.0.9.jar%2358!/:?] {}
+	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) ~[modlauncher-10.0.9.jar%2358!/:?] {}
+	at cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141) ~[bootstraplauncher-1.1.2.jar:?] {}
+[08:08:15] [main/INFO] [mojang/YggdrasilAuthenticationService]: Environment: authHost='https://authserver.mojang.com', accountsHost='https://api.mojang.com', sessionHost='https://sessionserver.mojang.com', servicesHost='https://api.minecraftservices.com', name='PROD'
+[08:08:15] [main/WARN] [minecraft/VanillaPackResourcesBuilder]: Assets URL 'union:/home/runner/work/range-sight/range-sight/server/libraries/net/minecraft/server/1.20.1-20230612.114412/server-1.20.1-20230612.114412-srg.jar%23105!/assets/.mcassetsroot' uses unexpected schema
+[08:08:15] [main/WARN] [minecraft/VanillaPackResourcesBuilder]: Assets URL 'union:/home/runner/work/range-sight/range-sight/server/libraries/net/minecraft/server/1.20.1-20230612.114412/server-1.20.1-20230612.114412-srg.jar%23105!/data/.mcassetsroot' uses unexpected schema
+[08:08:17] [main/INFO] [minecraft/RecipeManager]: Loaded 7 recipes
+[08:08:17] [main/INFO] [minecraft/AdvancementList]: Loaded 1271 advancements
+[08:08:18] [Server thread/INFO] [minecraft/DedicatedServer]: Starting minecraft server version 1.20.1
+[08:08:18] [Server thread/INFO] [minecraft/DedicatedServer]: Loading properties
+[08:08:18] [Server thread/INFO] [minecraft/DedicatedServer]: Default game type: SURVIVAL
+[08:08:18] [Server thread/INFO] [minecraft/MinecraftServer]: Generating keypair
+[08:08:18] [Server thread/INFO] [minecraft/DedicatedServer]: Starting Minecraft server on *:25565
+[08:08:18] [Server thread/INFO] [minecraft/ServerConnectionListener]: Using epoll channel type
+[08:08:18] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Configuration file ./world/serverconfig/forge-server.toml is not correct. Correcting
+[08:08:18] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key server was corrected from null to its default, SimpleCommentedConfig:{}. 
+[08:08:18] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key server.removeErroringBlockEntities was corrected from null to its default, false. 
+[08:08:18] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key server.removeErroringEntities was corrected from null to its default, false. 
+[08:08:18] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key server.fullBoundingBoxLadders was corrected from null to its default, false. 
+[08:08:18] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key server.zombieBaseSummonChance was corrected from null to its default, 0.1. 
+[08:08:18] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key server.zombieBabyChance was corrected from null to its default, 0.05. 
+[08:08:18] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key server.permissionHandler was corrected from null to its default, forge:default_handler. 
+[08:08:18] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key server.advertiseDedicatedServerToLan was corrected from null to its default, true. 
+[08:08:18] [Server thread/INFO] [minecraft/DedicatedServer]: Preparing level "world"
+[08:08:24] [Server thread/INFO] [minecraft/MinecraftServer]: Preparing start region for dimension minecraft:overworld
+[08:08:25] [Worker-Main-2/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 0%
+[08:08:25] [Worker-Main-2/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 0%
+[08:08:25] [Worker-Main-1/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 0%
+[08:08:26] [Worker-Main-2/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 0%
+[08:08:26] [Worker-Main-1/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 0%
+[08:08:27] [Worker-Main-2/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 0%
+[08:08:27] [Worker-Main-1/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 1%
+[08:08:28] [Worker-Main-2/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 1%
+[08:08:28] [Worker-Main-3/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 1%
+[08:08:29] [Worker-Main-1/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 2%
+[08:08:29] [Worker-Main-3/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 3%
+[08:08:30] [Worker-Main-1/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 4%
+[08:08:30] [Worker-Main-3/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 5%
+[08:08:31] [Worker-Main-2/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 6%
+[08:08:31] [Worker-Main-1/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 9%
+[08:08:32] [Worker-Main-2/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 10%
+[08:08:32] [Worker-Main-3/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 11%
+[08:08:33] [Worker-Main-2/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 14%
+[08:08:33] [Worker-Main-3/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 15%
+[08:08:34] [Worker-Main-2/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 16%
+[08:08:34] [Worker-Main-3/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 18%
+[08:08:35] [Worker-Main-2/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 20%
+[08:08:35] [Worker-Main-2/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 22%
+[08:08:36] [Worker-Main-1/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 23%
+[08:08:36] [Worker-Main-2/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 25%
+[08:08:37] [Worker-Main-2/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 28%
+[08:08:37] [Worker-Main-2/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 31%
+[08:08:38] [Worker-Main-2/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 32%
+[08:08:38] [Worker-Main-1/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 34%
+[08:08:39] [Worker-Main-2/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 35%
+[08:08:39] [Worker-Main-3/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 38%
+[08:08:40] [Worker-Main-3/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 41%
+[08:08:40] [Worker-Main-1/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 42%
+[08:08:41] [Worker-Main-3/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 43%
+[08:08:41] [Worker-Main-1/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 47%
+[08:08:42] [Worker-Main-3/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 50%
+[08:08:42] [Worker-Main-2/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 53%
+[08:08:43] [Worker-Main-2/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 55%
+[08:08:43] [Worker-Main-3/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 56%
+[08:08:44] [Worker-Main-2/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 59%
+[08:08:44] [Worker-Main-1/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 62%
+[08:08:45] [Worker-Main-3/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 65%
+[08:08:45] [Worker-Main-3/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 68%
+[08:08:46] [Worker-Main-3/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 69%
+[08:08:46] [Worker-Main-2/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 71%
+[08:08:47] [Worker-Main-1/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 74%
+[08:08:47] [Worker-Main-3/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 76%
+[08:08:48] [Worker-Main-2/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 79%
+[08:08:48] [Worker-Main-3/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 82%
+[08:08:49] [Worker-Main-2/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 84%
+[08:08:49] [Worker-Main-2/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 85%
+[08:08:50] [Worker-Main-3/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 88%
+[08:08:50] [Worker-Main-2/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 91%
+[08:08:51] [Worker-Main-3/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 94%
+[08:08:51] [Worker-Main-2/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 97%
+[08:08:52] [Worker-Main-3/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 99%
+[08:08:52] [Server thread/INFO] [minecraft/LoggerChunkProgressListener]: Time elapsed: 27586 ms
+[08:08:52] [Server thread/INFO] [minecraft/DedicatedServer]: Done (33.943s)! For help, type "help"
+[08:08:52] [Server thread/INFO] [ne.mi.se.pe.PermissionAPI/]: Successfully initialized permission handler forge:default_handler
+[08:08:58] [Server thread/INFO] [minecraft/MinecraftServer]: Stopping the server
+[08:08:58] [Server thread/INFO] [minecraft/MinecraftServer]: Stopping server
+[08:08:58] [Server thread/INFO] [minecraft/MinecraftServer]: Saving players
+[08:08:58] [Server thread/INFO] [minecraft/MinecraftServer]: Saving worlds
+[08:08:59] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[world]'/minecraft:overworld
+[08:09:00] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[world]'/minecraft:the_nether
+[08:09:00] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[world]'/minecraft:the_end
+[08:09:00] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (world): All chunks are saved
+[08:09:00] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[08:09:00] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[08:09:00] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage: All dimensions are saved

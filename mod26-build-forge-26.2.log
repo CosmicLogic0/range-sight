@@ -1,0 +1,102 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.7.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+> Configure project :
+Range Sight (Forge): Minecraft 26.2, Forge 65.1.6
+Minecraft Mavenizer 0.5.21 by Forge Development LLC
+  Output:             /home/runner/work/range-sight/range-sight/mod/v26/forge/.gradle/mavenizer/repo
+  Output JSON:        /home/runner/work/range-sight/range-sight/mod/v26/forge/.gradle/mavenizer/dependencies/default.json
+  Dependencies Only:  false
+  Cache:              /home/runner/.gradle/caches/minecraftforge/forgegradle/mavenizer/caches
+  JDK Cache:          /home/runner/.gradle/caches/minecraftforge/forgegradle/mavenizer/caches
+  Offline:            false
+  Cache Only:         false
+  Ignore Cache:       false
+  Mappings:           auto
+  Foreign Repos:      [https://repo.maven.apache.org/maven2/, https://maven.minecraftforge.net/, https://libraries.minecraft.net/]
+  GradleVariantHack:  true
+  Disable Gradle:     false
+  Stub Jars:          false
+
+Processing Minecraft dependency: net.minecraftforge:forge:26.2-65.1.6
+Using Mappings: official-26.2
+Processing Minecraft Forge (userdev): 26.2-65.1.6
+Mappings Zip
+  srg2names[official-26.2][Empty]
+Mappings POM
+  pom[mappings_official]
+Client Extra
+  downloadLauncherManifest
+  downloadVersionJson[26.2]
+  download[26.2][client]
+  extra[client]
+Client Maven POM
+  pom[client-extra]
+Sources
+  listLibraries
+  download[26.2][server]
+  extractServer
+  stripServer
+  stripClient
+  merge
+  modifyAccess
+  stripSides
+  decompile
+  patch
+  patch[forge]
+  downloadSources
+  injectSources[forge]
+  remap[forge][official-26.2][javadoc]
+  remap[forge][official-26.2][javadoc][variants]
+Cache miss!
+java.lang.Exception: Cache miss! Stacktrace for Information Only
+	at net.minecraftforge.mcmaven.impl.Mavenizer.assertNotCacheOnly(Mavenizer.java:60)
+	at net.minecraftforge.mcmaven.impl.Mavenizer.checkCache(Mavenizer.java:94)
+	at net.minecraftforge.mcmaven.impl.MinecraftMaven.finalize(MinecraftMaven.java:416)
+	at net.minecraftforge.mcmaven.impl.MinecraftMaven.createForge(MinecraftMaven.java:241)
+	at net.minecraftforge.mcmaven.impl.MinecraftMaven.run(MinecraftMaven.java:119)
+	at net.minecraftforge.mcmaven.cli.MavenTask.run(MavenTask.java:218)
+	at net.minecraftforge.mcmaven.cli.Main.run(Main.java:70)
+	at net.minecraftforge.mcmaven.cli.Main.main(Main.java:23)
+Classes
+  recompile[forge][official-26.2]
+  injectData[forge][official-26.2]
+  injectData[forge][official-26.2][variants]
+Maven POM
+  pom[forge]
+Metadata
+  metadata[forge]
+  metadata[forge][variants]
+Minecraft Maven has finished, took 0:01.243
+
+> Task :rsSources
+
+> Task :compileJava
+/home/runner/work/range-sight/range-sight/mod/v26/forge/build/gen-src/com/cosmiclogic/rangesight/client/RangeSightForgeClient.java:16: warning: [removal] get() in ModLoadingContext has been deprecated and marked for removal
+        net.minecraftforge.fml.ModLoadingContext.get().registerExtensionPoint(net.minecraftforge.client.ConfigScreenHandler.ConfigScreenFactory.class,
+                                                ^
+1 warning
+
+> Task :rsResources
+> Task :processResources
+> Task :classes
+> Task :jar
+> Task :assemble
+> Task :compileTestJava NO-SOURCE
+> Task :processTestResources NO-SOURCE
+> Task :testClasses UP-TO-DATE
+> Task :test NO-SOURCE
+> Task :check UP-TO-DATE
+> Task :build
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run-1795507554512.json
+
+[Incubating] Problems report is available at: file:///home/runner/work/range-sight/range-sight/mod/v26/forge/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.7.1/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 12s
+5 actionable tasks: 5 executed

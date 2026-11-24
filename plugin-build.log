@@ -1,0 +1,44 @@
+
+> Task :compileJava
+Note: /home/runner/work/range-sight/range-sight/plugin/src/main/java/com/cosmiclogic/rangesight/paper/RangeDrawer.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+
+> Task :processResources
+> Task :classes
+> Task :jar
+> Task :sourcesJar
+> Task :assemble
+> Task :compileTestJava
+> Task :processTestResources NO-SOURCE
+> Task :testClasses
+
+> Task :test
+
+ColorTest > everyTypeHasAUniqueId() PASSED
+
+ColorTest > rejectsBrokenColors() PASSED
+
+ColorTest > readsHexColors() PASSED
+
+LibVersionTest > parsesOddVersionStrings() PASSED
+
+LibVersionTest > needsAtLeastTheRequiredVersion() PASSED
+
+RangeMathTest > conduitRanges() PASSED
+
+RangeMathTest > beaconRanges() PASSED
+
+RangeMathTest > sculk() PASSED
+
+RangeMathTest > slice() PASSED
+
+RangeMathTest > conduitHas42FramePositions() PASSED
+
+RangeMathTest > spawnChunks() PASSED
+
+> Task :check
+> Task :build
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run_2-1795507571056.json
+
+BUILD SUCCESSFUL in 3s
+6 actionable tasks: 6 executed

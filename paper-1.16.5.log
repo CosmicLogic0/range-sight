@@ -1,0 +1,78 @@
+Downloading vanilla jar...
+Patching vanilla jar...
+System Info: Java 11 (OpenJDK 64-Bit Server VM 11.0.33+10) Host: Linux 7.0.0-1020-azure (amd64)
+Loading libraries, please wait...
+2026-11-24 08:07:00,902 main WARN Advanced terminal features are not available in this environment
+[08:07:03 ERROR]: Failed to load properties from file: server.properties
+[08:07:04 INFO]: Environment: authHost='https://authserver.mojang.com', accountsHost='https://api.mojang.com', sessionHost='https://sessionserver.mojang.com', servicesHost='https://api.minecraftservices.com', name='PROD'
+[08:07:04 INFO]: Found new data pack file/bukkit, loading it automatically
+[08:07:04 INFO]: Reloading ResourceManager: Default, bukkit
+[08:07:04 INFO]: Loaded 7 recipes
+[08:07:05 INFO]: Starting minecraft server version 1.16.5
+[08:07:05 INFO]: Loading properties
+[08:07:06 INFO]: This server is running Paper version git-Paper-794 (MC: 1.16.5) (Implementing API version 1.16.5-R0.1-SNAPSHOT)
+[08:07:06 INFO]: Server Ping Player Sample Count: 12
+[08:07:06 INFO]: Using 4 threads for Netty based IO
+[08:07:06 INFO]: Debug logging is disabled
+[08:07:06 INFO]: Default game type: SURVIVAL
+[08:07:06 INFO]: Generating keypair
+[08:07:06 INFO]: Starting Minecraft server on *:25565
+[08:07:06 INFO]: Using epoll channel type
+[08:07:06 INFO]: [LogicLib] Loading LogicLib v0.2.0
+[08:07:06 INFO]: [RangeSight] Loading RangeSight v1.1.0
+[08:07:06 INFO]: Preparing level "world"
+[08:07:09 WARN]: Unable to find spawn biome
+[08:07:09 WARN]: Unable to find spawn biome
+[08:07:10 INFO]: Preparing start region for dimension minecraft:overworld
+[08:07:10 INFO]: Preparing spawn area: 0%
+[08:07:10 INFO]: Time elapsed: 393 ms
+[08:07:10 INFO]: Preparing start region for dimension minecraft:the_nether
+[08:07:10 INFO]: Preparing spawn area: 0%
+[08:07:10 INFO]: Time elapsed: 249 ms
+[08:07:10 INFO]: Preparing start region for dimension minecraft:the_end
+[08:07:11 INFO]: Preparing spawn area: 0%
+[08:07:11 INFO]: Time elapsed: 1038 ms
+[08:07:11 INFO]: [LogicLib] Enabling LogicLib v0.2.0
+[08:07:11 INFO]: [LogicLib] LogicLib for Paper 0.2.0 running on Minecraft 1.16.5
+[08:07:11 INFO]: [RangeSight] Enabling RangeSight v1.1.0
+[08:07:11 WARN]: [RangeSight] config.yml has a mistake (around line 1: while parsing a flow sequence). Using the default settings for now. Your file was kept as config.yml.broken-2026-11-24_08-07-11: fix it and rename it back to config.yml.
+[08:07:11 INFO]: [RangeSight] Range Sight 1.1.0 enabled on Minecraft 1.16.5 (long-distance particles on)
+[08:07:12 INFO]: Running delayed init tasks
+[08:07:12 INFO]: Done (6.095s)! For help, type "help"
+[08:07:12 WARN]: [io.papermc.paper.util.PaperJvmChecker] ************************************************************
+[08:07:12 WARN]: [io.papermc.paper.util.PaperJvmChecker] * WARNING - YOU ARE RUNNING AN OUTDATED VERSION OF JAVA.
+[08:07:12 WARN]: [io.papermc.paper.util.PaperJvmChecker] * PAPER WILL STOP BEING COMPATIBLE WITH THIS VERSION OF
+[08:07:12 WARN]: [io.papermc.paper.util.PaperJvmChecker] * JAVA WHEN MINECRAFT 1.17 IS RELEASED.
+[08:07:12 WARN]: [io.papermc.paper.util.PaperJvmChecker] *
+[08:07:12 WARN]: [io.papermc.paper.util.PaperJvmChecker] * Please update the version of Java you use to run Paper
+[08:07:12 WARN]: [io.papermc.paper.util.PaperJvmChecker] * to at least Java 16. When Paper for Minecraft 1.17 is
+[08:07:12 WARN]: [io.papermc.paper.util.PaperJvmChecker] * released support for versions of Java before 16 will
+[08:07:12 WARN]: [io.papermc.paper.util.PaperJvmChecker] * be dropped.
+[08:07:12 WARN]: [io.papermc.paper.util.PaperJvmChecker] *
+[08:07:12 WARN]: [io.papermc.paper.util.PaperJvmChecker] * Current Java version: 11.0.33
+[08:07:12 WARN]: [io.papermc.paper.util.PaperJvmChecker] *
+[08:07:12 WARN]: [io.papermc.paper.util.PaperJvmChecker] * Check this forum post for more information: 
+[08:07:12 WARN]: [io.papermc.paper.util.PaperJvmChecker] *   https://papermc.io/java16
+[08:07:12 WARN]: [io.papermc.paper.util.PaperJvmChecker] ************************************************************
+[08:07:12 INFO]: Timings Reset
+[08:07:17 INFO]: [RangeSight] Self-test: waiting for chunks near spawn to load...
+[08:07:23 INFO]: [RangeSight] Self-test on Minecraft 1.16.5: expected [beacon square 50, spawner sphere 16, spawner box 4, conduit sphere 96], found [conduit sphere 96, spawner sphere 16, spawner box 4, beacon square 50], spawn chunks [-13, -11, 5, 7]
+[08:07:23 INFO]: [RangeSight] Range Sight self-test PASS
+[08:07:24 INFO]: Stopping the server
+[08:07:24 INFO]: Stopping server
+[08:07:24 INFO]: [RangeSight] Disabling RangeSight v1.1.0
+[08:07:24 INFO]: [LogicLib] Disabling LogicLib v0.2.0
+[08:07:24 INFO]: Saving players
+[08:07:24 INFO]: Saving worlds
+[08:07:24 INFO]: Saving chunks for level 'ServerLevel[world]'/minecraft:overworld
+[08:07:29 INFO]: ThreadedAnvilChunkStorage (world): All chunks are saved
+[08:07:29 INFO]: Saving chunks for level 'ServerLevel[world_nether]'/minecraft:the_nether
+[08:07:30 INFO]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[08:07:30 INFO]: Saving chunks for level 'ServerLevel[world_the_end]'/minecraft:the_end
+[08:07:30 INFO]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[08:07:30 INFO]: ThreadedAnvilChunkStorage (world): All chunks are saved
+[08:07:30 INFO]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[08:07:30 INFO]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[08:07:30 INFO]: Flushing Chunk IO
+[08:07:30 INFO]: Closing Thread Pool
+[08:07:30 INFO]: Closing Server

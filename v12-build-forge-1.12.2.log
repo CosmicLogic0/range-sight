@@ -1,0 +1,103 @@
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by net.rubygrapefruit.platform.internal.NativeLibraryLoader in an unnamed module (file:/home/runner/.gradle/wrapper/dists/gradle-9.7.0-bin/d4tj7w02tcgubx9zk9hbippn6/gradle-9.7.0/lib/native-platform-0.22-milestone-29.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.7.0/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :compileInjectedInterfacesJava NO-SOURCE
+> Task :extractDependencyATs
+> Task :generateForgeSrgMappings SKIPPED
+> Task :downloadVanillaJars SKIPPED
+> Task :mergeVanillaSidedJars
+
+> Task :deobfuscateMergedJarToSrg
+Applying SpecialSource
+Loading 1 AccessTransformers
+Renamed 0 AT entries
+Applying Exceptor
+Cleaning up generated debuginfo
+
+> Task :downloadFernflower SKIPPED
+
+> Task :decompileSrgJar
+Using cached decompiled jar from /home/runner/.gradle/caches/retro_futura_gradle/fernflower-cache/1.0.342-3bcc7ff2caa3c44ef8a4ae34bd7503f35aae66fe83874c4549de26a264180930.jar
+
+> Task :cleanupDecompSrgJar
+Fixup stage 1 - applying FF patches
+  Stage 1 took 279 ms
+Fixup stage 2 - applying MCP patches
+  Stage 2 took 126 ms
+Fixup stage 3 - applying MCP cleanup
+  Stage 3 took 4515 ms
+Fixup stage 4 - injecting package-info
+  Injected 119 package-infos
+  Stage 4 took 4 ms
+Saving the fixed-up jar
+
+> Task :patchDecompiledJar
+Patching sources: 1 patch archives, 2 injection directories
+Applied 525 patches
+
+> Task :applyJST
+Applying access transformers: [/home/runner/work/range-sight/range-sight/mod/v12/build/rfg/dependency_at.cfg]
+
+> Task :remapDecompiledJar
+Applied 0 missing generics
+
+> Task :decompressDecompiledSources
+> Task :processInjectedInterfacesResources NO-SOURCE
+> Task :injectedInterfacesClasses UP-TO-DATE
+
+> Task :compilePatchedMcJava
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: Some input files use unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+
+> Task :processPatchedMcResources
+> Task :patchedMcClasses
+> Task :compileApiJava NO-SOURCE
+> Task :processApiResources NO-SOURCE
+> Task :apiClasses UP-TO-DATE
+> Task :rsSources
+> Task :injectTags SKIPPED
+> Task :compileInjectedTagsJava NO-SOURCE
+> Task :extractNatives2
+> Task :createMcLauncherFiles
+> Task :compileMcLauncherJava
+> Task :processInjectedTagsResources NO-SOURCE
+> Task :injectedTagsClasses UP-TO-DATE
+> Task :processMcLauncherResources NO-SOURCE
+> Task :mcLauncherClasses
+
+> Task :compileJava
+Jabel: initialized
+
+> Task :processResources
+> Task :classes
+> Task :jar
+> Task :packageMcLauncher
+> Task :packagePatchedMc
+> Task :reobfJar
+> Task :shadowJar SKIPPED
+> Task :assemble
+> Task :compileTestJava NO-SOURCE
+> Task :processTestResources NO-SOURCE
+> Task :testClasses UP-TO-DATE
+> Task :test NO-SOURCE
+> Task :check UP-TO-DATE
+> Task :build
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run-1795507562476.json
+
+[Incubating] Problems report is available at: file:///home/runner/work/range-sight/range-sight/mod/v12/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.7.0/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 1m 5s
+21 actionable tasks: 21 executed
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.7.0/userguide/configuration_cache_enabling.html
