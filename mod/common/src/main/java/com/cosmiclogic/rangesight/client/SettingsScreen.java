@@ -66,6 +66,6 @@ public final class SettingsScreen extends Screen {
 
     @Override
     public void onClose() {
-        minecraft.setScreen(parent);
+        Screens.open(minecraft, parent);
     }
 }

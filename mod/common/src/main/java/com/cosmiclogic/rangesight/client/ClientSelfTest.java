@@ -32,6 +32,8 @@ final class ClientSelfTest {
     private static int ticks;
     private static Screen hold;
     private static boolean checkedStale;
+    private static int arrivedTicks;
+    private static int loadingTicks;
 
     private ClientSelfTest() {
     }
@@ -47,8 +49,8 @@ final class ClientSelfTest {
         if (hold == null) {
             hold = TestHooks.holdScreen();
         }
-        if (mc.screen == null && stage != 5) {
-            mc.setScreen(hold); // also after the dimension change, which replaces it with a loading screen
+        if (Screens.current(mc) == null && stage != 5) {
+            Screens.open(mc, hold); // also after the dimension change, which replaces it with a loading screen
         }
         ticks++;
         if (stage == 0) {
@@ -77,6 +79,9 @@ final class ClientSelfTest {
             boolean beacon = has(shapes, RangeType.BEACON, 101);
             boolean trial = !TrialScan.SUPPORTED
                     || hasSphere(shapes, RangeMath.TRIAL_SPAWNER_DEFAULT_RANGE) && hasSphere(shapes, RangeMath.VAULT_DEFAULT_RANGE);
+            if ((!beacon || !trial) && ticks < 240) {
+                return; // a beacon only counts its pyramid every 4 seconds: look again next tick
+            }
             if (!beacon || !trial) {
                 fail(mc, (beacon ? "" : "beacon range not found; ") + (trial ? "" : "trial spawner/vault range not found; ")
                         + shapes.size() + " outlines");
@@ -102,8 +107,8 @@ final class ClientSelfTest {
                     }
                 }
             }
-            if (ticks < 60) {
-                return; // let the Nether chunks arrive
+            if (!arrived(mc)) {
+                return;
             }
             BlockPos beacon = mc.player.blockPosition().offset(3, 7, 3);
             server.execute(() -> {
@@ -122,6 +127,9 @@ final class ClientSelfTest {
                     noSpawnChunks = false;
                 }
             }
+            if (!beacon && noSpawnChunks && ticks < 240) {
+                return; // look again next tick
+            }
             if (!beacon || !noSpawnChunks) {
                 fail(mc, "Nether: " + (beacon ? "" : "beacon range not found; ")
                         + (noSpawnChunks ? "" : "spawn chunks shown outside the Overworld; ") + shapes.size() + " outlines");
@@ -138,23 +146,42 @@ final class ClientSelfTest {
                 }
                 return;
             }
-            if (ticks < 20) {
+            if (!arrived(mc)) {
                 return;
             }
             // Last: open the settings screen and let it draw for a moment (catches screen crashes on every version).
-            mc.setScreen(new SettingsScreen(null));
+            Screens.open(mc, new SettingsScreen(null));
             next(5);
         } else if (stage == 5 && ticks >= 20) {
-            if (!(mc.screen instanceof SettingsScreen)) {
+            if (!(Screens.current(mc) instanceof SettingsScreen)) {
                 fail(mc, "the settings screen did not stay open");
                 return;
             }
-            mc.setScreen(hold);
+            Screens.open(mc, hold);
             RangeSight.LOG.info("Range Sight client self-test PASS: found the beacon's 50-block range in the Overworld"
                     + " and the Nether{}, old outlines were cleared on the dimension change, and the settings screen works",
                     TrialScan.SUPPORTED ? ", plus trial spawner and vault ranges" : "");
             finish(mc);
         }
+    }
+
+    /**
+     * True once the new dimension's loading screen is gone and the player has been there for 3 seconds. A loading
+     * screen that never closes by itself (seen on 1.16.5 when the test runner keeps its own screen open) is closed
+     * after 10 seconds.
+     */
+    private static boolean arrived(Minecraft mc) {
+        Screen now = Screens.current(mc);
+        if (now != null && now != hold) {
+            if (++loadingTicks > 200) {
+                RangeSight.LOG.warn("Range Sight client self-test: closing a loading screen that stayed open ({})",
+                        now.getClass().getSimpleName());
+                Screens.open(mc, hold);
+            }
+            return false;
+        }
+        loadingTicks = 0;
+        return ++arrivedTicks >= 60;
     }
 
     private static void buildBeacon(ServerLevel level, BlockPos beacon) {
@@ -189,6 +216,8 @@ final class ClientSelfTest {
     private static void next(int s) {
         stage = s;
         ticks = 0;
+        arrivedTicks = 0;
+        loadingTicks = 0;
     }
 
     private static void fail(Minecraft mc, String why) {
@@ -198,8 +227,6 @@ final class ClientSelfTest {
 
     private static void finish(Minecraft mc) {
         stage = DONE;
-        if (mc.screen == hold) {
-            mc.setScreen(null);
-        }
+        Screens.open(mc, null); // let the test runner close the game (also after a failure in a loading screen)
     }
 }

@@ -76,8 +76,8 @@ public final class RangeClient {
             }
         }
         while (settingsKey.consumeClick()) {
-            if (mc.screen == null) {
-                mc.setScreen(new SettingsScreen(null));
+            if (Screens.current(mc) == null) {
+                Screens.open(mc, new SettingsScreen(null));
             }
         }
         while (allKey.consumeClick()) {

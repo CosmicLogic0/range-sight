@@ -225,16 +225,16 @@ jobs:
           java: 21
       - name: Check Range Sight scanned and drew outlines
         run: |
-          LOG=run/logs/latest.log
+          LOG=/tmp/all-client.log; (zcat -f run/logs/*.log.gz 2>/dev/null; cat run/logs/latest.log) > $LOG
           grep -E "Range Sight (loaded|client ready|drawing|rendered)" "$LOG" || true
           grep -q "Range Sight client ready" "$LOG" || { echo "::error::Range Sight client did not start"; exit 1; }
           grep -q "Range Sight client self-test PASS" "$LOG" || { echo "::error::client self-test did not pass"; grep "self-test" "$LOG"; exit 1; }
-          grep -q "has a mistake" "$LOG" && ls "$(dirname "$LOG")/../config/" | grep -q "rangesight.json.broken-" || { echo "::error::broken config was not kept"; exit 1; }
+          grep -q "has a mistake" "$LOG" && ls run/config/ | grep -q "rangesight.json.broken-" || { echo "::error::broken config was not kept"; exit 1; }
           grep -q "Range Sight rendered its first frame" "$LOG" || { echo "::error::Range Sight never drew a frame"; exit 1; }
           echo "PASS: client scanned and drew outlines."
       - name: Keep log
         if: always()
-        run: mkdir -p logs && cp run/logs/latest.log "logs/mod-client-${{ matrix.loader }}.log" 2>/dev/null || true
+        run: mkdir -p logs && { zcat -f run/logs/*.log.gz 2>/dev/null; cat run/logs/latest.log; } > "logs/mod-client-${{ matrix.loader }}.log" 2>/dev/null || true
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -504,16 +504,16 @@ jobs:
           java: 25
       - name: Check Range Sight started in the client
         run: |
-          LOG=run/logs/latest.log
+          LOG=/tmp/all-client.log; (zcat -f run/logs/*.log.gz 2>/dev/null; cat run/logs/latest.log) > $LOG
           grep -E "Range Sight (loaded|client ready|drawing|rendered)" "$LOG" || true
           grep -q "Range Sight client ready" "$LOG" || { echo "::error::Range Sight client did not start"; exit 1; }
           grep -q "Range Sight client self-test PASS" "$LOG" || { echo "::error::client self-test did not pass"; grep "self-test" "$LOG"; exit 1; }
-          grep -q "has a mistake" "$LOG" && ls "$(dirname "$LOG")/../config/" | grep -q "rangesight.json.broken-" || { echo "::error::broken config was not kept"; exit 1; }
+          grep -q "has a mistake" "$LOG" && ls run/config/ | grep -q "rangesight.json.broken-" || { echo "::error::broken config was not kept"; exit 1; }
           grep -q "Range Sight rendered its first frame" "$LOG" || { echo "::error::Range Sight never drew a frame"; exit 1; }
           echo "PASS: client found the test beacon and drew outlines."
       - name: Keep log
         if: always()
-        run: mkdir -p logs && cp run/logs/latest.log "logs/mod26-client-${{ matrix.loader }}-${{ matrix.mc }}.log" 2>/dev/null || true
+        run: mkdir -p logs && { zcat -f run/logs/*.log.gz 2>/dev/null; cat run/logs/latest.log; } > "logs/mod26-client-${{ matrix.loader }}-${{ matrix.mc }}.log" 2>/dev/null || true
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -689,16 +689,16 @@ jobs:
           java: ${{ matrix.java }}
       - name: Check Range Sight found the test beacon and drew outlines
         run: |
-          LOG=run/logs/latest.log
+          LOG=/tmp/all-client.log; (zcat -f run/logs/*.log.gz 2>/dev/null; cat run/logs/latest.log) > $LOG
           grep -E "Range Sight (loaded|client|drawing|rendered)" "$LOG" || true
           grep -q "Range Sight client ready" "$LOG" || { echo "::error::Range Sight client did not start"; exit 1; }
           grep -q "Range Sight client self-test PASS" "$LOG" || { echo "::error::client self-test did not pass"; grep "self-test" "$LOG"; exit 1; }
-          grep -q "has a mistake" "$LOG" && ls "$(dirname "$LOG")/../config/" | grep -q "rangesight.json.broken-" || { echo "::error::broken config was not kept"; exit 1; }
+          grep -q "has a mistake" "$LOG" && ls run/config/ | grep -q "rangesight.json.broken-" || { echo "::error::broken config was not kept"; exit 1; }
           grep -q "Range Sight rendered its first frame" "$LOG" || { echo "::error::Range Sight never drew a frame"; exit 1; }
           echo "PASS"
       - name: Keep log
         if: always()
-        run: mkdir -p logs && cp run/logs/latest.log "logs/legacy-client-${{ matrix.loader }}-${{ matrix.mc }}.log" 2>/dev/null || true
+        run: mkdir -p logs && { zcat -f run/logs/*.log.gz 2>/dev/null; cat run/logs/latest.log; } > "logs/legacy-client-${{ matrix.loader }}-${{ matrix.mc }}.log" 2>/dev/null || true
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -812,16 +812,16 @@ jobs:
           java: 8
       - name: Check Range Sight found the test beacon and drew outlines
         run: |
-          LOG=run/logs/latest.log
+          LOG=/tmp/all-client.log; (zcat -f run/logs/*.log.gz 2>/dev/null; cat run/logs/latest.log) > $LOG
           grep -E "Range Sight (loaded|client|drawing|rendered)" "$LOG" || true
           grep -q "Range Sight client ready" "$LOG" || { echo "::error::Range Sight client did not start"; exit 1; }
           grep -q "Range Sight client self-test PASS" "$LOG" || { echo "::error::client self-test did not pass"; grep "self-test" "$LOG"; exit 1; }
-          grep -q "has a mistake" "$LOG" && ls "$(dirname "$LOG")/../config/" | grep -q "rangesight.json.broken-" || { echo "::error::broken config was not kept"; exit 1; }
+          grep -q "has a mistake" "$LOG" && ls run/config/ | grep -q "rangesight.json.broken-" || { echo "::error::broken config was not kept"; exit 1; }
           grep -q "Range Sight rendered its first frame" "$LOG" || { echo "::error::Range Sight never drew a frame"; exit 1; }
           echo "PASS"
       - name: Keep log
         if: always()
-        run: mkdir -p logs && cp run/logs/latest.log logs/v12-client-forge-1.12.2.log 2>/dev/null || true
+        run: mkdir -p logs && { zcat -f run/logs/*.log.gz 2>/dev/null; cat run/logs/latest.log; } > logs/v12-client-forge-1.12.2.log 2>/dev/null || true
       - uses: actions/upload-artifact@v4
         if: always()
         with:

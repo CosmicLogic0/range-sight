@@ -35,6 +35,9 @@ artifacts {
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    // Minecraft brings these at game time; plain unit tests need them on their own.
+    testImplementation 'com.google.code.gson:gson:2.10.1'
+    testImplementation 'org.slf4j:slf4j-api:2.0.9'
 }
 
 test {
