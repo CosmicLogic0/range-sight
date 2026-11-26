@@ -12,6 +12,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.Level;
@@ -47,12 +48,12 @@ final class Mc {
         return key.getTranslatedKeyMessage().getString();
     }
 
-    static void say(Minecraft mc, String labelKey, boolean on) {
+    static void say(Minecraft mc, String labelKey, boolean on, int labelRgb, int stateRgb) {
         if (mc.player != null) {
             mc.player.displayClientMessage(Component.empty()
-                    .append(Component.translatable(labelKey).withStyle(ChatFormatting.AQUA))
+                    .append(Component.translatable(labelKey).withStyle(st -> st.withColor(TextColor.fromRgb(labelRgb))))
                     .append(Component.literal(": "))
-                    .append(Component.translatable(on ? "options.on" : "options.off").withStyle(on ? ChatFormatting.GREEN : ChatFormatting.RED)), true);
+                    .append(Component.translatable(on ? "options.on" : "options.off").withStyle(st -> st.withColor(TextColor.fromRgb(stateRgb)))), true);
         }
     }
 
@@ -116,6 +117,6 @@ final class Mc {
     }
 
     static void line(VertexConsumer vc, PoseStack.Pose p, float x, float y, float z, float nx, float ny, float nz, int argb, float width) {
-        vc.vertex(p.pose(), x, y, z).color(argb >> 16 & 255, argb >> 8 & 255, argb & 255, 255).normal(p.normal(), nx, ny, nz).endVertex();
+        vc.vertex(p.pose(), x, y, z).color(argb >> 16 & 255, argb >> 8 & 255, argb & 255, argb >>> 24).normal(p.normal(), nx, ny, nz).endVertex();
     }
 }

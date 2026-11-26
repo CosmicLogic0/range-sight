@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.Level;
@@ -52,12 +53,12 @@ final class Mc {
         return key.getTranslatedKeyMessage().getString();
     }
 
-    static void say(Minecraft mc, String labelKey, boolean on) {
+    static void say(Minecraft mc, String labelKey, boolean on, int labelRgb, int stateRgb) {
         if (mc.player != null) {
             mc.player.displayClientMessage(Component.empty()
-                    .append(Component.translatable(labelKey).withStyle(ChatFormatting.AQUA))
+                    .append(Component.translatable(labelKey).withStyle(st -> st.withColor(TextColor.fromRgb(labelRgb))))
                     .append(Component.literal(": "))
-                    .append(Component.translatable(on ? "options.on" : "options.off").withStyle(on ? ChatFormatting.GREEN : ChatFormatting.RED)), true);
+                    .append(Component.translatable(on ? "options.on" : "options.off").withStyle(st -> st.withColor(TextColor.fromRgb(stateRgb)))), true);
         }
     }
 

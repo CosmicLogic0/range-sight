@@ -38,8 +38,6 @@ public final class RangeScanner {
     /** The Minecraft version this build is for (spawn chunk rules changed over time). */
     static final int[] MC_VERSION = {1, 21, 1};
 
-    /** Never keep more than this many outlines, so huge bases stay smooth. */
-    public static final int MAX_SHAPES = 48;
 
     private static final Set<Block> CONDUIT_FRAME = Set.of(
             Blocks.PRISMARINE, Blocks.PRISMARINE_BRICKS, Blocks.SEA_LANTERN, Blocks.DARK_PRISMARINE);
@@ -77,7 +75,7 @@ public final class RangeScanner {
         }
 
         shapes.sort(Comparator.comparingDouble(s -> s.distanceSq(at.x, at.y, at.z)));
-        return shapes.size() > MAX_SHAPES ? new ArrayList<>(shapes.subList(0, MAX_SHAPES)) : shapes;
+        return shapes; // RangeClient keeps the nearest config.maxOutlines (and counts all of them for the HUD)
     }
 
     private static void addBlockEntity(ClientLevel level, BlockEntity be, RangeConfig config, List<RangeShape> out) {
@@ -118,7 +116,7 @@ public final class RangeScanner {
             }
             int color = config.color(RangeType.SPAWNER);
             out.add(RangeShape.sphere(RangeType.SPAWNER, color, x, y, z, playerRange));
-            out.add(RangeShape.box(RangeType.SPAWNER, color, x - spawnRange, p.getY() - 1, z - spawnRange,
+            out.add(RangeShape.box(RangeType.SPAWNER, config.spawnBoxColor(), x - spawnRange, p.getY() - 1, z - spawnRange,
                     x + spawnRange, p.getY() + 2, z + spawnRange));
         } else if (config.isEnabled(RangeType.SCULK)) {
             int color = config.color(RangeType.SCULK);
@@ -128,7 +126,7 @@ public final class RangeScanner {
                 out.add(RangeShape.sphere(RangeType.SCULK, color, x, y, z, RangeMath.sculkSensorRange(false)));
             } else if (be instanceof SculkShriekerBlockEntity) {
                 out.add(RangeShape.sphere(RangeType.SCULK, color, x, y, z, RangeMath.SHRIEKER_LISTEN_RANGE));
-                out.add(RangeShape.sphere(RangeType.SCULK, darker(color), x, y, z, RangeMath.SHRIEKER_DARKNESS_RANGE));
+                out.add(RangeShape.sphere(RangeType.SCULK, config.darknessColor(), x, y, z, RangeMath.SHRIEKER_DARKNESS_RANGE));
             }
         }
     }
@@ -212,10 +210,4 @@ public final class RangeScanner {
         }
     }
 
-    private static int darker(int argb) {
-        int r = (argb >> 16 & 0xFF) * 3 / 5;
-        int g = (argb >> 8 & 0xFF) * 3 / 5;
-        int b = (argb & 0xFF) * 3 / 5;
-        return 0xFF000000 | r << 16 | g << 8 | b;
-    }
 }

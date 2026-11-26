@@ -73,4 +73,7 @@ public enum RangeType {
     public static final int KEY_ALL_DEFAULT = 320; // numpad 0
     public static final String KEY_SETTINGS = "key." + RangeSight.MOD_ID + ".settings";
     public static final int KEY_SETTINGS_DEFAULT = 330; // numpad . (decimal)
+    /** Show or hide the HUD (1.2.0). */
+    public static final String KEY_HUD = "key." + RangeSight.MOD_ID + ".hud";
+    public static final int KEY_HUD_DEFAULT = 329; // numpad 9
 }

@@ -20,14 +20,14 @@ import java.util.Map;
  */
 public final class RangeClient {
 
-    private static final int SCAN_EVERY_TICKS = 20;
-
     private static RangeConfig config;
     private static final Map<RangeType, KeyMapping> TYPE_KEYS = new EnumMap<>(RangeType.class);
     private static KeyMapping allKey;
     private static KeyMapping settingsKey;
+    private static KeyMapping hudKey;
     private static volatile List<RangeShape> shapes = Collections.emptyList();
-    private static int ticks = SCAN_EVERY_TICKS;
+    /** Ticks since the last scan; starts "due" so the first scan happens right away. */
+    private static int ticks = Integer.MAX_VALUE - 1;
     /** The world the outlines belong to; a new world or dimension clears them right away. */
     private static Object shapesLevel;
     private static boolean loggedFirstDraw;
@@ -45,6 +45,7 @@ public final class RangeClient {
         }
         allKey = Mc.newKey(RangeType.KEY_ALL, RangeType.KEY_ALL_DEFAULT);
         settingsKey = Mc.newKey(RangeType.KEY_SETTINGS, RangeType.KEY_SETTINGS_DEFAULT);
+        hudKey = Mc.newKey(RangeType.KEY_HUD, RangeType.KEY_HUD_DEFAULT);
         int on = 0;
         for (RangeType type : RangeType.values()) {
             if (config.isEnabled(type)) {
@@ -59,6 +60,7 @@ public final class RangeClient {
         List<KeyMapping> list = new ArrayList<>(TYPE_KEYS.values());
         list.add(allKey);
         list.add(settingsKey);
+        list.add(hudKey);
         return list;
     }
 
@@ -73,7 +75,8 @@ public final class RangeClient {
                 RangeType type = entry.getKey();
                 boolean on = !config.isEnabled(type);
                 config.setEnabled(type, on);
-                Mc.say(mc, type.labelKey(), on);
+                say(mc, type.labelKey(), on);
+                Features.switched(mc, config, on);
                 changed = true;
             }
         }
@@ -85,28 +88,44 @@ public final class RangeClient {
         while (allKey.consumeClick()) {
             boolean on = !config.anyEnabled();
             config.setAll(on);
-            Mc.say(mc, RangeSight.MOD_ID + ".all", on);
+            say(mc, RangeSight.MOD_ID + ".all", on);
+            Features.switched(mc, config, on);
             changed = true;
+        }
+        while (hudKey.consumeClick()) {
+            config.hudEnabled = !config.hudEnabled;
+            config.save();
+            say(mc, RangeType.KEY_HUD, config.hudEnabled);
+            Features.switched(mc, config, config.hudEnabled);
         }
         if (mc.level == null || mc.player == null) {
             shapes = Collections.emptyList();
-            ticks = SCAN_EVERY_TICKS;
+            Features.clearStats();
+            ticks = Integer.MAX_VALUE - 1;
             return;
         }
         if (mc.level != shapesLevel) {
             shapesLevel = mc.level;
             shapes = Collections.emptyList(); // never draw the old dimension's outlines in the new one
-            ticks = SCAN_EVERY_TICKS;
+            Features.clearStats();
+            ticks = Integer.MAX_VALUE - 1;
         }
         showHints(mc);
         ClientSelfTest.tick(mc, config);
-        if (changed || ++ticks >= SCAN_EVERY_TICKS) {
+        if (changed || ++ticks >= config.updateTicks) {
             ticks = 0;
-            shapes = config.anyEnabled() ? RangeScanner.scan(mc, config) : Collections.<RangeShape>emptyList();
+            scanNow(mc);
             if (!loggedFirstDraw && !shapes.isEmpty()) {
                 loggedFirstDraw = true;
                 RangeSight.LOG.info("Range Sight drawing " + shapes.size() + " outlines");
             }
+        }
+        Features.tickParticles(mc, config, shapes, mc.player.getY());
+    }
+
+    private static void say(Minecraft mc, String labelKey, boolean on) {
+        if (config.messages) {
+            Mc.say(mc, labelKey, on, config.messageColor & 0xFFFFFF, (on ? config.messageOnColor : config.messageOffColor) & 0xFFFFFF);
         }
     }
 
@@ -117,7 +136,7 @@ public final class RangeClient {
     public static void onRender(PoseStack poseStack, Vec3 camera) {
         Minecraft mc = Minecraft.getInstance();
         List<RangeShape> current = shapes;
-        if (current.isEmpty() || mc.player == null || config == null) {
+        if (current.isEmpty() || mc.player == null || config == null || !Features.lines(config)) {
             return;
         }
         RangeRenderer.render(poseStack, camera, current, config.lineWidth, mc.player.getY());
@@ -129,7 +148,7 @@ public final class RangeClient {
 
     /** Once per install: how to use Range Sight. Once per broken config: where the old file went. */
     private static void showHints(Minecraft mc) {
-        if (!config.hintShown && mc.player.tickCount > 40) {
+        if (!config.hintShown && config.tip && mc.player.tickCount > 40) {
             config.hintShown = true;
             config.save();
             Mc.chat(mc, RangeSight.MOD_ID + ".hint", Mc.keyText(allKey), false);
@@ -137,6 +156,10 @@ public final class RangeClient {
         if (config.brokenFileNote != null && mc.player.tickCount > 40) {
             Mc.chat(mc, RangeSight.MOD_ID + ".broken_config", config.brokenFileNote, true);
             config.brokenFileNote = null;
+        }
+        if (!config.badValues.isEmpty() && mc.player.tickCount > 40) {
+            Mc.chat(mc, RangeSight.MOD_ID + ".bad_values", String.join(", ", config.badValues), true);
+            config.badValues.clear();
         }
     }
 
@@ -148,7 +171,7 @@ public final class RangeClient {
     /** Scan right now (used by the automatic test) and return the outlines. */
     /** Settings changed: scan again on the next tick. */
     static void rescanSoon() {
-        ticks = SCAN_EVERY_TICKS;
+        ticks = Integer.MAX_VALUE - 1;
     }
 
     /** The Minecraft version this copy of Range Sight is built for. */
@@ -162,8 +185,31 @@ public final class RangeClient {
     }
 
     static List<RangeShape> rescanNow() {
-        Minecraft mc = Minecraft.getInstance();
-        shapes = config.anyEnabled() ? RangeScanner.scan(mc, config) : Collections.<RangeShape>emptyList();
+        scanNow(Minecraft.getInstance());
         return shapes;
+    }
+
+    private static void scanNow(Minecraft mc) {
+        if (!config.anyEnabled()) {
+            shapes = Collections.emptyList();
+            Features.clearStats();
+            return;
+        }
+        shapes = Features.afterScan(RangeScanner.scan(mc, config), config, mc.player.getX(), mc.player.getY(), mc.player.getZ());
+    }
+
+    /** Called by the loader when the HUD is drawn; {@code context} is that version's drawing object. */
+    public static void onHud(Object context) {
+        HudDraw.draw(context);
+    }
+
+    /** HUD numbers from the last scan. */
+    static RangeStats stats() {
+        return Features.stats();
+    }
+
+    /** The range types this version has, in order. */
+    static List<RangeType> types() {
+        return RangeType.availableTypes(mcVersion());
     }
 }

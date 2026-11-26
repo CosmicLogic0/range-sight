@@ -7,6 +7,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.Identifier;
 
 import java.nio.file.Path;
@@ -22,14 +23,14 @@ import java.util.Map;
  */
 public final class RangeClient {
 
-    private static final int SCAN_EVERY_TICKS = 20;
-
     private static RangeConfig config;
     private static final Map<RangeType, KeyMapping> TYPE_KEYS = new EnumMap<>(RangeType.class);
     private static KeyMapping allKey;
     private static KeyMapping settingsKey;
+    private static KeyMapping hudKey;
     private static volatile List<RangeShape> shapes = Collections.emptyList();
-    private static int ticks = SCAN_EVERY_TICKS;
+    /** Ticks since the last scan; starts "due" so the first scan happens right away. */
+    private static int ticks = Integer.MAX_VALUE - 1;
     /** The world the outlines belong to; a new world or dimension clears them right away. */
     private static Object shapesLevel;
     private static boolean loggedFirstDraw;
@@ -49,6 +50,7 @@ public final class RangeClient {
         }
         allKey = new KeyMapping(RangeType.KEY_ALL, keyboard, RangeType.KEY_ALL_DEFAULT, category);
         settingsKey = new KeyMapping(RangeType.KEY_SETTINGS, keyboard, RangeType.KEY_SETTINGS_DEFAULT, category);
+        hudKey = new KeyMapping(RangeType.KEY_HUD, keyboard, RangeType.KEY_HUD_DEFAULT, category);
         RangeSight.LOG.info("Range Sight client ready ({} range types on)", countEnabled());
     }
 
@@ -57,6 +59,7 @@ public final class RangeClient {
         List<KeyMapping> list = new ArrayList<>(TYPE_KEYS.values());
         list.add(allKey);
         list.add(settingsKey);
+        list.add(hudKey);
         return list;
     }
 
@@ -72,6 +75,7 @@ public final class RangeClient {
                 boolean on = !config.isEnabled(type);
                 config.setEnabled(type, on);
                 say(mc, Component.translatable(type.labelKey()), on);
+                Features.switched(mc, config, on);
                 changed = true;
             }
         }
@@ -84,35 +88,45 @@ public final class RangeClient {
             boolean on = !config.anyEnabled();
             config.setAll(on);
             say(mc, Component.translatable(RangeSight.MOD_ID + ".all"), on);
+            Features.switched(mc, config, on);
             changed = true;
+        }
+        while (hudKey.consumeClick()) {
+            config.hudEnabled = !config.hudEnabled;
+            config.save();
+            say(mc, Component.translatable(RangeType.KEY_HUD), config.hudEnabled);
+            Features.switched(mc, config, config.hudEnabled);
         }
         if (mc.level == null || mc.player == null) {
             shapes = Collections.emptyList();
-            ticks = SCAN_EVERY_TICKS; // scan right away when a world opens
+            Features.clearStats();
+            ticks = Integer.MAX_VALUE - 1; // scan right away when a world opens
             return;
         }
         if (mc.level != shapesLevel) {
             shapesLevel = mc.level;
             shapes = Collections.emptyList(); // never draw the old dimension's outlines in the new one
-            ticks = SCAN_EVERY_TICKS;
+            Features.clearStats();
+            ticks = Integer.MAX_VALUE - 1;
         }
         showHints(mc);
         ClientSelfTest.tick(mc, config);
-        if (changed || ++ticks >= SCAN_EVERY_TICKS) {
+        if (changed || ++ticks >= config.updateTicks) {
             ticks = 0;
-            shapes = config.anyEnabled() ? RangeScanner.scan(mc, config) : Collections.emptyList();
+            scanNow(mc);
             if (!loggedFirstDraw && !shapes.isEmpty()) {
                 loggedFirstDraw = true;
                 RangeSight.LOG.info("Range Sight drawing {} outlines", shapes.size());
             }
         }
+        Features.tickParticles(mc, config, shapes, mc.player.getY());
     }
 
     /** Called by the loader while Minecraft collects the frame's gizmos (outlines). */
     public static void onGizmos() {
         Minecraft mc = Minecraft.getInstance();
         List<RangeShape> current = shapes;
-        if (current.isEmpty() || mc.player == null || config == null) {
+        if (current.isEmpty() || mc.player == null || config == null || !Features.lines(config)) {
             return;
         }
         RangeRenderer.render(current, config.lineWidth, mc.player.getX(), mc.player.getY(), mc.player.getZ());
@@ -125,7 +139,7 @@ public final class RangeClient {
     /** Scan right now (used by the automatic test) and return the outlines. */
     /** Settings changed: scan again on the next tick. */
     static void rescanSoon() {
-        ticks = SCAN_EVERY_TICKS;
+        ticks = Integer.MAX_VALUE - 1;
     }
 
     /** The Minecraft version this copy of Range Sight is built for. */
@@ -139,9 +153,32 @@ public final class RangeClient {
     }
 
     static List<RangeShape> rescanNow() {
-        Minecraft mc = Minecraft.getInstance();
-        shapes = config.anyEnabled() ? RangeScanner.scan(mc, config) : Collections.emptyList();
+        scanNow(Minecraft.getInstance());
         return shapes;
+    }
+
+    private static void scanNow(Minecraft mc) {
+        if (!config.anyEnabled()) {
+            shapes = Collections.emptyList();
+            Features.clearStats();
+            return;
+        }
+        shapes = Features.afterScan(RangeScanner.scan(mc, config), config, mc.player.getX(), mc.player.getY(), mc.player.getZ());
+    }
+
+    /** Called by the loader when the HUD is drawn; {@code context} is that version's drawing object. */
+    public static void onHud(Object context) {
+        HudDraw.draw(context);
+    }
+
+    /** HUD numbers from the last scan. */
+    static RangeStats stats() {
+        return Features.stats();
+    }
+
+    /** The range types this version has, in order. */
+    static List<RangeType> types() {
+        return RangeType.availableTypes(mcVersion());
     }
 
     /** Number of outlines currently drawn (used by the automatic tests). */
@@ -161,7 +198,7 @@ public final class RangeClient {
 
     /** Once per install: how to use Range Sight. Once per broken config: where the old file went. */
     private static void showHints(Minecraft mc) {
-        if (!config.hintShown && mc.player.tickCount > 40) {
+        if (!config.hintShown && config.tip && mc.player.tickCount > 40) {
             config.hintShown = true;
             config.save();
             mc.player.sendSystemMessage(Component.translatable(RangeSight.MOD_ID + ".hint",
@@ -172,6 +209,11 @@ public final class RangeClient {
                     Component.literal(config.brokenFileNote).withStyle(ChatFormatting.WHITE)).withStyle(ChatFormatting.GOLD));
             config.brokenFileNote = null;
         }
+        if (!config.badValues.isEmpty() && mc.player.tickCount > 40) {
+            mc.player.sendSystemMessage(Component.translatable(RangeSight.MOD_ID + ".bad_values",
+                    Component.literal(String.join(", ", config.badValues)).withStyle(ChatFormatting.WHITE)).withStyle(ChatFormatting.GOLD));
+            config.badValues.clear();
+        }
     }
 
     /** CI tests only. */
@@ -180,12 +222,14 @@ public final class RangeClient {
     }
 
     private static void say(Minecraft mc, Component what, boolean on) {
-        if (mc.player != null) {
+        if (mc.player != null && config.messages) {
+            int label = config.messageColor & 0xFFFFFF;
+            int state = (on ? config.messageOnColor : config.messageOffColor) & 0xFFFFFF;
             mc.player.sendOverlayMessage(Component.empty()
-                    .append(what.copy().withStyle(ChatFormatting.AQUA))
+                    .append(what.copy().withStyle(st -> st.withColor(TextColor.fromRgb(label))))
                     .append(Component.literal(": "))
                     .append(Component.translatable(on ? "options.on" : "options.off")
-                            .withStyle(on ? ChatFormatting.GREEN : ChatFormatting.RED)));
+                            .withStyle(st -> st.withColor(TextColor.fromRgb(state)))));
         }
     }
 }

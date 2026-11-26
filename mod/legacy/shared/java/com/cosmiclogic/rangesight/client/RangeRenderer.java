@@ -24,6 +24,9 @@ public final class RangeRenderer {
         Mc.lineWidth(lineWidth);
         VertexConsumer lines = buffers.getBuffer(Mc.lineType());
         PoseStack.Pose pose = poseStack.last();
+        RangeConfig config = RangeClient.config();
+        int alpha = config == null ? 255 : Math.round(255 * config.lineOpacity / 100f);
+        boolean ring = config == null || config.playerRing;
         double ringY = playerY + 0.05;
         for (RangeShape shape : shapes) {
             double reach = shape.kind == RangeShape.Kind.SPHERE ? shape.d : 0;
@@ -31,8 +34,11 @@ public final class RangeRenderer {
                     && shape.distanceSq(camera.x, camera.y, camera.z) > (maxDistance + reach) * (maxDistance + reach)) {
                 continue;
             }
-            emit(lines, pose, shape.segments, camera, shape.color, lineWidth);
-            emit(lines, pose, shape.playerRing(ringY), camera, shape.color, lineWidth);
+            int argb = alpha << 24 | shape.color & 0xFFFFFF;
+            emit(lines, pose, shape.segments, camera, argb, lineWidth);
+            if (ring) {
+                emit(lines, pose, shape.playerRing(ringY), camera, argb, lineWidth);
+            }
         }
         buffers.endBatch(Mc.lineType());
         Mc.lineWidth(1.0f);

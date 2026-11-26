@@ -35,20 +35,25 @@ public final class RangeRenderer {
         VertexConsumer lines = buffers.getBuffer(RenderType.lines());
         PoseStack.Pose pose = poseStack.last();
         double ringY = playerY + 0.05;
+        RangeConfig config = RangeClient.config();
+        int alpha = config == null ? 255 : Math.round(255 * config.lineOpacity / 100f);
+        boolean ring = config == null || config.playerRing;
 
         for (RangeShape shape : shapes) {
             double reach = shape.kind == RangeShape.Kind.SPHERE ? shape.d : 0;
             if (shape.distanceSq(camera.x, camera.y, camera.z) > (maxDistance + reach) * (maxDistance + reach) && shape.kind != RangeShape.Kind.COLUMN) {
                 continue;
             }
-            emit(lines, pose, shape.segments, camera, shape.color);
-            emit(lines, pose, shape.playerRing(ringY), camera, shape.color);
+            emit(lines, pose, shape.segments, camera, shape.color, alpha);
+            if (ring) {
+                emit(lines, pose, shape.playerRing(ringY), camera, shape.color, alpha);
+            }
         }
         buffers.endBatch(RenderType.lines());
         RenderSystem.lineWidth(1.0f);
     }
 
-    private static void emit(VertexConsumer lines, PoseStack.Pose pose, double[] seg, Vec3 cam, int argb) {
+    private static void emit(VertexConsumer lines, PoseStack.Pose pose, double[] seg, Vec3 cam, int argb, int alpha) {
         int r = argb >> 16 & 0xFF;
         int g = argb >> 8 & 0xFF;
         int b = argb & 0xFF;
@@ -69,8 +74,8 @@ public final class RangeRenderer {
             nx /= len;
             ny /= len;
             nz /= len;
-            lines.addVertex(pose, x1, y1, z1).setColor(r, g, b, 255).setNormal(pose, nx, ny, nz);
-            lines.addVertex(pose, x2, y2, z2).setColor(r, g, b, 255).setNormal(pose, nx, ny, nz);
+            lines.addVertex(pose, x1, y1, z1).setColor(r, g, b, alpha).setNormal(pose, nx, ny, nz);
+            lines.addVertex(pose, x2, y2, z2).setColor(r, g, b, alpha).setNormal(pose, nx, ny, nz);
         }
     }
 }

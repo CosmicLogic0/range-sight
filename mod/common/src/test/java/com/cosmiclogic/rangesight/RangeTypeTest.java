@@ -34,7 +34,8 @@ class RangeTypeTest {
     @Test
     void everyTypeHasItsOwnKeyAndColor() {
         for (RangeType a : RangeType.values()) {
-            assertTrue(a.defaultKey != RangeType.KEY_ALL_DEFAULT && a.defaultKey != RangeType.KEY_SETTINGS_DEFAULT);
+            assertTrue(a.defaultKey != RangeType.KEY_ALL_DEFAULT && a.defaultKey != RangeType.KEY_SETTINGS_DEFAULT
+                    && a.defaultKey != RangeType.KEY_HUD_DEFAULT);
             for (RangeType b : RangeType.values()) {
                 if (a != b) {
                     assertTrue(a.defaultKey != b.defaultKey, a + " and " + b + " share a key");

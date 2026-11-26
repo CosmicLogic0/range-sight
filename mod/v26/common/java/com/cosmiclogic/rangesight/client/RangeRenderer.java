@@ -23,6 +23,9 @@ public final class RangeRenderer {
         Minecraft mc = Minecraft.getInstance();
         double maxDistance = (mc.options.getEffectiveRenderDistance() + 2) * 16.0;
         int budget = MAX_SEGMENTS_PER_FRAME;
+        RangeConfig config = RangeClient.config();
+        int alpha = config == null ? 255 : Math.round(255 * config.lineOpacity / 100f);
+        boolean ring = config == null || config.playerRing;
         double ringY = py + 0.05;
         for (RangeShape shape : shapes) {
             double reach = shape.kind == RangeShape.Kind.SPHERE ? shape.d : 0;
@@ -30,8 +33,11 @@ public final class RangeRenderer {
                     && shape.distanceSq(px, py, pz) > (maxDistance + reach) * (maxDistance + reach)) {
                 continue;
             }
-            budget = emit(shape.segments, shape.color, lineWidth, budget);
-            budget = emit(shape.playerRing(ringY), shape.color, lineWidth, budget);
+            int argb = alpha << 24 | shape.color & 0xFFFFFF;
+            budget = emit(shape.segments, argb, lineWidth, budget);
+            if (ring) {
+                budget = emit(shape.playerRing(ringY), argb, lineWidth, budget);
+            }
             if (budget <= 0) {
                 break;
             }
